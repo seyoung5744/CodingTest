@@ -1,9 +1,9 @@
 class Solution {
-    public long solution(int a, int b) {
-        long answer = 0;
-        for (int i = Math.min(a, b); i <= Math.max(a, b); i++) {
-            answer+=i;
-        }
-        return answer;
+    public long solution(long a, long b) {
+        long min = Math.min(a, b);
+        long max = Math.max(b, a);
+
+        return (max - min + 1) * (min + max) /2;
     }
+    
 }
