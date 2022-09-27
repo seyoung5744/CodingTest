@@ -5,11 +5,10 @@ class Solution {
         for (int num: nums){
             set.add(num);
         }
-        int choiceNum = nums.length/2;
-        if(choiceNum > set.size()){
+        
+        if(nums.length/2 > set.size()){
             return set.size();
-        }else {
-            return choiceNum;
         }
+        return nums.length/2;
     }
 }
