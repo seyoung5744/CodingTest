@@ -11,32 +11,22 @@ class Solution {
                 }
             }
         }
+        System.out.println("맞힌 개수 : " + Arrays.toString(count));
 
-
-        int[] indexs = new int[3];
         int max = count[0];
-        int idx = 0;
         for (int i = 0; i < count.length; i++) {
             if(count[i] > max){
                 max = count[i];
-                idx = i;
-            }
-        }
-
-        for (int i = 0; i < count.length; i++) {
-            if(max == count[i]){
-                indexs[i] = i+1;
             }
         }
 
         ArrayList<Integer> an = new ArrayList<>();
-
-        for (int i = 0; i < indexs.length; i++) {
-            if(indexs[i] != 0) {
-                an.add(indexs[i]);
+        for (int i = 0; i < count.length; i++) {
+            if(max == count[i]){
+                an.add(i+1);
             }
         }
-
+        
         int[] answer = an.stream()
                 .mapToInt(i -> i)
                 .toArray();
