@@ -29,11 +29,9 @@ class Solution {
 
         if(new_id.length() <= 2){
             char last = new_id.charAt(new_id.length()-1);
-            StringBuilder new_idBuilder = new StringBuilder(new_id);
-            while(new_idBuilder.length() < 3){
-                new_idBuilder.append(last);
+            while(new_id.length() < 3){
+                new_id += last;
             }
-            new_id = new_idBuilder.toString();
         }
 
         return new_id;
