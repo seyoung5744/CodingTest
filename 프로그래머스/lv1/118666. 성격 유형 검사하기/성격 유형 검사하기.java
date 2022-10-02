@@ -1,6 +1,6 @@
 import java.util.HashMap;
 class Solution {
-     HashMap<Character,Integer> personality = new HashMap<>() {{
+      HashMap<Character,Integer> personality = new HashMap<>() {{
         put('R',0);
         put('T',0);
         put('C',0);
@@ -10,6 +10,7 @@ class Solution {
         put('A',0);
         put('N',0);
     }};
+
     public char compare(char c1, char c2){
         char person;
         if(this.personality.get(c1) > this.personality.get(c2)){
@@ -23,7 +24,6 @@ class Solution {
     }
     public String solution(String[] survey, int[] choices) {
         String answer = "";
-
         for (int i = 0; i < survey.length; i++) {
             char disagree = survey[i].charAt(0);
             char agree = survey[i].charAt(1);
@@ -35,10 +35,10 @@ class Solution {
             }
         }
 
-       answer+= compare('T','R');
-       answer+= compare('C','F');
-       answer+= compare('J','M');
-       answer+= compare('A','N');
+        answer+= compare('T','R');
+        answer+= compare('C','F');
+        answer+= compare('J','M');
+        answer+= compare('A','N');
         return answer;
     }
 }
