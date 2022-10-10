@@ -17,22 +17,12 @@ class Solution {
         
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < arr1.length; i++) {
+        for (int i = arr1.length-1; i >= 0 ; i--) {
             if(arr1[i] >= 1 && arr2[i] >= 1){
                 if(arr1[i] <= arr2[i])
-                    sb.append(String.valueOf(i).repeat(Math.max(0, arr1[i])));
-                else if(arr1[i] >= arr2[i])
-                    sb.append(String.valueOf(i).repeat(Math.max(0, arr2[i])));
-            }
-        }
-     
-        if(sb.length() != 0){
-            char[] chars = sb.toString().toCharArray();
-            Arrays.sort(chars);
-            
-            sb = new StringBuilder();
-            for (int i = chars.length-1; i >=0 ; i--) {
-                sb.append(chars[i]);
+                    sb.append(String.valueOf(i).repeat(arr1[i]));
+                else
+                    sb.append(String.valueOf(i).repeat(arr2[i]));
             }
         }
 
