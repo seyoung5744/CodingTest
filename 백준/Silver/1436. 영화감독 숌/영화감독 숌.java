@@ -9,18 +9,14 @@ public class Main {
 
         int num = 666;
         int cnt = 0;
-        while(true){
-            if(String.valueOf(num).contains("666")){
+        while (cnt != n) {
+            if (String.valueOf(num).contains("666")) {
                 cnt++;
-            }
-
-            if(cnt == n){
-                break;
             }
             num++;
         }
 
-        bw.write(num + "\n");
+        bw.write((num - 1) + "\n");
 
         bw.flush();
         br.close();
