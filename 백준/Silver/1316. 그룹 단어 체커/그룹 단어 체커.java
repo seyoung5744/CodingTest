@@ -24,17 +24,17 @@ public class Main {
                 char next = chars[i + 1];
 
                 if (cur != next) {
-                    if(!visited[next - 'a']) {
-                        visited[cur - 'a'] = true;
-                    }else{
+                    if(visited[next - 'a']) {
                         flag = false;
                         break;
                     }
+                    visited[cur - 'a'] = true;
                 }
             }
             if(flag){
                 answer++;
             }
+
         }
 
         bw.write(answer + "\n");
