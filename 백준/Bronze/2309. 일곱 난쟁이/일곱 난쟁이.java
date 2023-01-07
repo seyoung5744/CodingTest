@@ -14,33 +14,31 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        List<Integer> heights = new ArrayList<>();
+        int total = 9;
+        int[] heights = new int[total];
         int sum = 0;
         for (int i = 0; i < 9; i++) {
-            heights.add(Integer.parseInt(br.readLine()));
-            sum += heights.get(i);
+            heights[i] = Integer.parseInt(br.readLine());
+            sum += heights[i];
         }
 
-        List<int[]> notIdx = new ArrayList<>();
-        for (int i = 0; i < heights.size(); i++) {
-            for (int j = i + 1; j < heights.size(); j++) {
-                if (sum - heights.get(i) - heights.get(j) == 100) {
-                    notIdx.add(new int[]{i, j});
+        for (int i = 0; i < heights.length - 1; i++) {
+            boolean flag = false;
+            for (int j = i + 1; j < heights.length; j++) {
+                if (sum - heights[i] - heights[j] == 100) {
+                    heights[i] = -1;
+                    heights[j] = -1;
+                    flag = true;
+                    break;
                 }
             }
+            if (flag) break;
         }
 
 
-        int[] answer = new int[7];
-        int cnt = 6;
-        for (int i = 0; i < heights.size(); i++) {
-            if(i != notIdx.get(0)[0] && i != notIdx.get(0)[1])
-                answer[cnt--] = heights.get(i);
-        }
-
-        Arrays.sort(answer);
-        for(int an : answer){
-            bw.write(an + "\n");
+        Arrays.sort(heights);
+        for (int i = 2; i < heights.length; i++) {
+            bw.write(heights[i] + "\n");
         }
 
         bw.flush();
