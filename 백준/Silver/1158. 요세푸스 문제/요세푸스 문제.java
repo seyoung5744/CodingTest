@@ -11,41 +11,27 @@ public class Main {
         int n = Integer.parseInt(st.nextToken());
         int k = Integer.parseInt(st.nextToken());
 
-        int[] nums = new int[n];
-        boolean[] visited = new boolean[n];
-
-        List<Integer> answer = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
 
         for (int i = 1; i < n + 1; i++) {
-            nums[i - 1] = i;
+            list.add(i);
         }
 
-        int count = 0;
         int idx = 0;
-        while (answer.size() < n) {
-            idx %= n;
-
-            if (!visited[idx]) {
-                count++;
-                if (count == k) {
-                    answer.add(nums[idx]);
-                    visited[idx] = true;
-                    count= 0;
-                }
-            }
-
-            idx += 1;
-        }
-
-
+        
         StringBuilder sb = new StringBuilder();
         sb.append("<");
-        for (int i = 0; i < answer.size(); i++) {
-            sb.append(answer.get(i));
+        
+        while (!list.isEmpty()) {
+            idx = (idx + k - 1) % n;
 
-            if (i < answer.size() - 1) {
+            sb.append(list.get(idx));
+            if (n > 1) {
                 sb.append(", ");
             }
+
+            list.remove(idx);
+            n--;
         }
         sb.append(">");
 
