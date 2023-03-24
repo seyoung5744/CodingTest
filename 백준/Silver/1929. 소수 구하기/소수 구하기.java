@@ -7,40 +7,50 @@ import java.util.StringTokenizer;
 
 public class Main {
 
+    static boolean[] prime;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         StringTokenizer st = new StringTokenizer(br.readLine());
         int M = Integer.parseInt(st.nextToken());
         int N = Integer.parseInt(st.nextToken());
 
+        makePrime(N);
+
         for (int i = M; i <= N; i++) {
-            if(isPrime(i)){
+            if (!prime[i]) {
                 System.out.println(i);
             }
         }
-
-        bw.flush();
         br.close();
-        bw.close();
     }
 
-    public static boolean isPrime(int num) {
-        if (num < 2) {
-            return false;
+    public static void makePrime(int N) {
+        prime = new boolean[N + 1];
+
+       /*
+		소수가 아닌 index = true
+		소수인 index = false
+		*/
+
+        // 2 미만의 N 을 입력받으면 소수는 판별할 필요 없으므로 바로 return
+        if (N < 2) {
+            return;
         }
 
-        if (num == 2) {
-            return true;
-        }
+        prime[0] = prime[1] = true;
 
-        for (int i = 2; i <= Math.sqrt(num); i++) {
-            if (num % i == 0) {
-                return false;
+        for (int i = 2; i <= Math.sqrt(N); i++) {
+            if (prime[i] == true) {
+                continue;
             }
-        }
 
-        return true;
+            for (int j = i * i; j < prime.length; j = j + i) {
+                prime[j] = true;
+            }
+
+        }
     }
+
 }
