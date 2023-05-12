@@ -6,16 +6,17 @@ public class 삽입정렬 {
 
     public static void main(String[] args) {
         int[] array = {7, 5, 9, 0, 3, 1, 6, 2, 4, 8};
-        int n = array.length;
 
-        for (int i = 1; i < n; i++) {
-            for (int j = i; j > 0; j--) {
-                if (array[j] < array[j - 1]) {
-                    swap(array, j, j - 1);
-                } else {
-                    break;
-                }
+        for (int i = 1; i < array.length; i++) {
+            int target = array[i];
+            
+            int j = i - 1;
+            while (j >= 0 && target < array[j]) {
+                array[j + 1] = array[j];
+                j--;
             }
+
+            array[j + 1] = target;
         }
 
         System.out.println(Arrays.toString(array));
