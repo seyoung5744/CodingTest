@@ -1,44 +1,57 @@
+
 import java.util.*;
+
+class Node implements Comparable<Node> {
+
+    int stage;
+    double fail;
+
+    public Node(int stage, double fail) {
+        this.stage = stage;
+        this.fail = fail;
+    }
+
+    public int getStage(){
+        return stage;
+    }
+
+    @Override
+    public int compareTo(Node other) {
+        if (this.fail == other.fail) {
+            return Integer.compare(this.stage, other.stage);
+        }
+        return Double.compare(other.fail, this.fail);
+    }
+}
+
 class Solution {
     public int[] solution(int N, int[] stages) {
         int[] answer = new int[N];
-        Map<Integer, Double> fail = new TreeMap<>();
-        Arrays.sort(stages);
-//        System.out.println(Arrays.toString(stages));
-
-        int idx = 0;
+        ArrayList<Node> nodes = new ArrayList<>();
         int length = stages.length;
+
         for (int i = 1; i <= N; i++) {
             int count = 0;
-            for (int j = idx; j < stages.length; j++) {
-                if(i == stages[j]){
-                    count++;
+            for (int stage : stages) {
+                if (stage == i) {
+                    count += 1;
                 }
             }
-  
-            if(length-idx == 0)
-                fail.put(i, 0.0);
-            else
-                fail.put(i, (double) count / (length-idx));
-            length -= idx;
-            idx = count;
-        }
-
-        // Map.Entry 리스트 작성
-        List<Map.Entry<Integer, Double>> list_entries = new ArrayList<>(fail.entrySet());
-        // 비교함수 Comparator를 사용하여 오름차순으로 정렬
-        Collections.sort(list_entries, new Comparator<Map.Entry<Integer, Double>>() {
-            // compare로 값을 비교
-            public int compare(Map.Entry<Integer, Double> obj1, Map.Entry<Integer, Double> obj2) {
-                // 오름 차순 정렬
-                return obj2.getValue().compareTo(obj1.getValue());
+            double fail = 0;
+            if(length >= 1){
+                fail = (double) count / length;
             }
-        });
 
-        int index = 0;
-        for(Map.Entry<Integer, Double> entry : list_entries) {
-            answer[index++] = entry.getKey();
+            nodes.add(new Node(i, fail));
+            length -= count;
         }
+
+        Collections.sort(nodes);
+
+        for (int i = 0; i < N; i++) {
+            answer[i] = nodes.get(i).getStage();
+        }
+
         return answer;
     }
 }
