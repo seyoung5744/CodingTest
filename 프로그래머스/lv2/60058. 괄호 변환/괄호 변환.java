@@ -10,7 +10,7 @@ class Solution {
         String u = p.substring(0, index + 1);
         String v = p.substring(index + 1);
 
-        if (check(u)) {
+        if (checkProper(u)) {
             answer += u + solution(v);
         } else {
             answer += "(";
@@ -48,23 +48,19 @@ class Solution {
     }
 
     // "올바른 괄호 문자열"인지 판단
-    public static boolean check(String p) {
-        Stack<Character> stack = new Stack<>();
-
+    public static boolean checkProper(String p) {
+        int count = 0;
         for (int i = 0; i < p.length(); i++) {
-            char c = p.charAt(i);
-
-            if (c == '(') {
-                stack.push(c);
+            if (p.charAt(i) == '(') {
+                count += 1;
             } else {
-                if (stack.isEmpty()) {
+                if(count == 0){
                     return false;
-                } else {
-                    stack.pop();
                 }
+                count -= 1;
             }
         }
 
-        return stack.isEmpty();
+        return true;
     }
 }
