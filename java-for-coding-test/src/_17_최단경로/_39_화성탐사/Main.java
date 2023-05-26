@@ -23,7 +23,6 @@ import java.util.*;
 5 8 3 2 4 8 3
 7 4 8 4 8 3 4
  */
-
 class Node implements Comparable<Node> {
 
     private int x;
@@ -50,29 +49,29 @@ class Node implements Comparable<Node> {
 
     @Override
     public int compareTo(Node o) {
-        if (this.distance < o.distance) {
-            return -1;
-        }
-
-        return 1;
+        return Integer.compare(this.distance, o.distance);
     }
 }
 
 public class Main {
 
-    public static final int INF = (int) 1e9; // 무한을 의미하는 값으로 10억을 설정
+    public static final int INF = (int) 1e9;
+
+    public static int testcase, n;
     public static int[][] graph = new int[125][125];
     public static int[][] d = new int[125][125];
-    public static int testCase, n;
-    public static int[] dx = {-1, 0, 1, 0};
+
+    public static int[] dx = {1, 0, -1, 0};
     public static int[] dy = {0, 1, 0, -1};
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        testCase = sc.nextInt();
-        while(testCase-- > 0) {
-            int n = sc.nextInt();
+        testcase = sc.nextInt();
+
+        while (testcase-- > 0) {
+            n = sc.nextInt();
+
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
                     graph[i][j] = sc.nextInt();
@@ -84,37 +83,36 @@ public class Main {
             }
 
             int x = 0, y = 0;
+
             PriorityQueue<Node> pq = new PriorityQueue<>();
             pq.offer(new Node(x, y, graph[x][y]));
             d[x][y] = graph[x][y];
 
-            while (!pq.isEmpty()) {
+            while(!pq.isEmpty()){
                 Node now = pq.poll();
-                int distance = now.getDistance();
                 x = now.getX();
                 y = now.getY();
+                int distance = now.getDistance();
 
-                if (d[x][y] < distance) {
-                    continue;
-                }
+                if(d[x][y] < distance) continue;
+
                 for (int i = 0; i < 4; i++) {
                     int nx = x + dx[i];
                     int ny = y + dy[i];
 
-                    if (nx >= 0 && nx < n && ny >= 0 && ny < n) {
-                        int cost = distance + graph[nx][ny];
+                    if(nx < 0 || ny < 0 || nx >= n || ny >= n) continue;
 
-                        if (cost < d[nx][ny]) {
-                            d[nx][ny] = cost;
-                            pq.offer(new Node(nx, ny, cost));
-                        }
+                    int cost = distance + graph[nx][ny];
+                    if(cost < d[nx][ny]){
+                        d[nx][ny] = cost;
+                        pq.offer(new Node(nx, ny, cost));
                     }
                 }
             }
 
             System.out.println(d[n-1][n-1]);
-        }
 
+        }
 
     }
 
