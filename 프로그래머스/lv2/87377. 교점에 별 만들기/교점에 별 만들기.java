@@ -1,9 +1,7 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 class Solution {
-     private static class Point {
+    private static class Point {
         public final long x, y;
 
         private Point(long x, long y) {
