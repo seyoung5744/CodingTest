@@ -1,27 +1,21 @@
 class Solution {
-    public String solution(String s, int n) {
-        char[] chars = s.toCharArray();
-        char[] shiftChars = new char[s.length()];
-        int start, end;
-
-        for (int i = 0; i < s.length(); i++) {
-            if(chars[i] >= 'a' && chars[i] <= 'z'){
-                start = 'a';
-                end = 'z';
-            }else{
-                start = 'A';
-                end = 'Z';
-            }
-
-            if (chars[i] + n > end) {
-                shiftChars[i] = (char) (((chars[i] + n) % end) + (start - 1));
-            }else if(chars[i] == ' '){
-                shiftChars[i] = chars[i];
-            }else{
-                shiftChars[i] = (char)(chars[i] + n);
-            }
+    public String solution(String s, int n){
+        StringBuilder sb = new StringBuilder();
+        
+        for(char c : s.toCharArray()){
+            sb.append(push(c, n));
         }
-
-        return String.valueOf(shiftChars);
+        
+        return sb.toString();
+    }
+    
+    private char push(char c, int n){
+//        if(!Character.isAlphabetic(c)) return c;
+        if(!(c >= 'A' && c <= 'Z') && !(c >= 'a' && c <= 'z')) return c;
+        
+        int offset = Character.isUpperCase(c)? 'A' : 'a';
+        int position = c - offset;
+        position = (position + n) % ('Z' - 'A' + 1);
+        return (char)(offset + position);
     }
 }
