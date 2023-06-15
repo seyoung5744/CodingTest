@@ -1,11 +1,12 @@
 class Solution {
     public int[] solution(long n) {
-        int length = String.valueOf(n).length();
-        int[] answer = new int[length];
+        String str = Long.toString(n);
 
-        for (int i = 0; i < length; i++) {
-            answer[i] = (int)(n % 10);
-            n /= 10;
+        String reversed = new StringBuilder(str).reverse().toString();
+
+        int[] answer = new int[reversed.length()];
+        for (int i = 0; i < reversed.length(); i++) {
+            answer[i] = reversed.charAt(i) - '0';
         }
         return answer;
     }
