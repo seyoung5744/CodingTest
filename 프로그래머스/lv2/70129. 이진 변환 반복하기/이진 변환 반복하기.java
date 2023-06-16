@@ -1,16 +1,22 @@
 class Solution {
     public int[] solution(String s) {
-        int zeroCnt = 0;
-        int cnt = 0;
-        int length;
-
+        int removed = 0;
+        int loop = 0;
+        
         while(!s.equals("1")){
-            length = s.length();
-            s = s.replaceAll("[^1]", "");
-            zeroCnt += (length - s.length());
-            s = Integer.toBinaryString(s.length());
-            cnt++;
+            int zeros = countZero(s);
+            loop+=1;
+            removed += zeros;
+            s = Integer.toString(s.length() - zeros, 2);            
         }
-        return new int[]{cnt, zeroCnt};
+        return new int[]{loop, removed};
+    }
+    
+    private int countZero(String s){
+        int zeros = 0;
+        for(char c : s.toCharArray()){
+            if(c == '0') zeros++;
+        }
+        return zeros;
     }
 }
