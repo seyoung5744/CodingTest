@@ -1,8 +1,10 @@
 class Solution {
     boolean solution(String s) {
         s = s.toLowerCase();
-        long pCount = s.chars().filter(c -> c=='p').count();
-        long yCount = s.chars().filter(c -> c=='y').count();
-        return pCount == yCount;
+        
+        int p = s.length() - s.replace("p","").length();
+        int y = s.length() - s.replace("y","").length();
+
+        return p == y;
     }
 }
