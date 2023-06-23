@@ -1,0 +1,6 @@
+-- 코드를 입력하세요
+SELECT AOUT.ANIMAL_ID, AOUT.NAME
+from ANIMAL_OUTS as AOUT
+left join ANIMAL_INS as AINS
+on AOUT.ANIMAL_ID = AINS.ANIMAL_ID
+where AINS.ANIMAL_ID is null
