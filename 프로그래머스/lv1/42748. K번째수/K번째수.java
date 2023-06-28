@@ -3,13 +3,21 @@ import java.util.*;
 class Solution {
     public int[] solution(int[] array, int[][] commands) {
         int[] answer = new int[commands.length];
-        ArrayList<int[]> list = new ArrayList<>();
-        for (int i = 0; i < commands.length; i++) {
-            int[] copyArray = Arrays.copyOfRange(array, commands[i][0]-1,commands[i][1]);
-            Arrays.sort(copyArray);
-            answer[i] = (copyArray.length != 1)?copyArray[commands[i][2]-1]: copyArray[0];
-        }
 
+        for (int i = 0; i < commands.length; i++) {
+            int start = commands[i][0];
+            int end = commands[i][1];
+            int fix = commands[i][2];
+            int[] nums = new int[end - start + 1];
+
+            int idx = 0;
+            for (int j = start; j <= end; j++) {
+                nums[idx++] = array[j-1];
+            }
+
+            Arrays.sort(nums);
+            answer[i] = nums[fix - 1];
+        }
         return answer;
     }
 }
