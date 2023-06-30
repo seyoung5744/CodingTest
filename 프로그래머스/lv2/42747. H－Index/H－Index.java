@@ -1,22 +1,17 @@
 import java.util.*;
 
 class Solution {
+    private boolean isValid(int[] citations, int h){
+        int idx = citations.length - h;
+        return citations[idx] >= h;
+    }
     public int solution(int[] citations) {
         Arrays.sort(citations);
-        int answer = 0;
-        for (int i = citations.length - 1; i >= 0; i--) {
-            int h = 0;
-            
-            for (int j = citations.length - 1; j >= 0; j--) {
-                if (citations[i] <= citations[j]) {
-                    h++;
-                }
-            }
-
-            if(citations[i] >= h && citations.length - h <= h){
-                answer = h;
-            }
+        
+        for (int h = citations.length; h >= 1; h--) {
+            if(isValid(citations, h)) return h;
         }
-        return answer;
+        
+        return 0;
     }
 }
