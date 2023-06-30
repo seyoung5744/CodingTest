@@ -9,7 +9,7 @@ class Solution {
                 set.add(numbers[i] + numbers[j]);
             }
         }
-
+        
         return set.stream().mapToInt(Integer::intValue).sorted().toArray();
     }
 }
