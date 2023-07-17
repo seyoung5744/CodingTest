@@ -7,17 +7,13 @@ class Solution {
             map.putIfAbsent(name, 0);
             map.put(name, map.get(name) + 1);
         }
-        
+
         for(String name : completion){
-            map.put(name, map.get(name) - 1);
+            int value = map.get(name) - 1;
+            map.put(name, value);
+            if(value == 0) map.remove(name);
         }
         
-        
-        for(Map.Entry<String, Integer> entry : map.entrySet()){
-            if(entry.getValue() != 0){
-                return entry.getKey();
-            }
-        }
-        return "";
+        return map.keySet().iterator().next();
     }
 }
