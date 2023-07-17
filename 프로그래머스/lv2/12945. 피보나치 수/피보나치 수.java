@@ -1,18 +1,17 @@
+import java.util.Arrays;
+
 class Solution {
+    private static final int[] mem = new int[100_001];
+
     public int solution(int n) {
-        int a = 0;
-        int b = 1;
-        int temp = 0;
-        if(n <= 1){
-            return n;
-        }
-        for (int i = 1; i < n; i++) {
-            temp = a+b;
-            a = b  % 1234567;
-            b = temp  % 1234567;
+        Arrays.fill(mem, -1);
+        return fibonacci(n);
+    }
 
-        }
+    private static int fibonacci(int n){
+        if(mem[n] != -1) return mem[n];
+        if(n == 0 || n == 1) return n;
 
-        return temp % 1234567;
+        return mem[n] = (fibonacci(n-1) + fibonacci(n-2) ) % 1234567;
     }
 }
