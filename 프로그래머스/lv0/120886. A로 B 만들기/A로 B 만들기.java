@@ -2,20 +2,14 @@ import java.util.*;
 
 class Solution {
     public int solution(String before, String after) {
+        return toMap(before).equals(toMap(after)) ? 1 : 0;
+    }
+    private static Map<Character, Integer> toMap(String word){
         Map<Character, Integer> map = new HashMap<>();
-
-        for(char c : before.toCharArray()){
-            map.put(c, map.getOrDefault(c, 0) + 1);
+        for(char c : word.toCharArray()){
+            map.putIfAbsent(c, 0);
+            map.put(c, map.get(c) + 1);
         }
-        for(char c : after.toCharArray()){
-            map.put(c, map.getOrDefault(c, 0) - 1);
-        }
-        
-        for(int num : map.values()){
-            if(num != 0){
-                return 0;
-            }
-        }
-        return 1;
+        return map;
     }
 }
