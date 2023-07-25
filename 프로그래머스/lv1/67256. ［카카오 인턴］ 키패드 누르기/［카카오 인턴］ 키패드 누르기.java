@@ -1,66 +1,69 @@
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+class Hand{
+    private final int baseX; 
+    private final String hand;
+    private final float preference;
+    private int x;
+    private int y;
+
+    public Hand(String hand, boolean isPreferred, int x) {
+        this.baseX = x;
+        this.hand = hand;
+        this.preference = isPreferred? 0.5f: 0;
+        this.x = x;
+        this.y = 3;
+    }
+
+    public String getHand() {
+        return hand;
+    }
+
+    public float distance(int x, int y){
+        if(x == baseX) return 0;
+        int distance = Math.abs(x - this.x) + Math.abs(y - this.y);
+        return distance - preference;
+    }
+
+    public void move(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+}
 class Solution {
-    
-    public static int[] findIndex(int number){
-        char[][] keyPad = {{'1','2','3'},{'4','5','6'},{'7','8','9'},{'*','0','#'}};
-        int x = 0, y = 0;
-        
-        if(number == 42){ // '*'
-            return new int[]{3, 0};
-        }else if(number == 35){// '#'
-            return new int[]{3,2};
-        }
-        
-        for (int i = 0; i < keyPad.length ; i++) {
-            for (int j = 0; j < keyPad[0].length; j++) {
-                if(number == Character.getNumericValue(keyPad[i][j])){
-                    x = i;
-                    y = j;
-                    break;
-                }
-            }
-        }
-        return new int[]{x, y};
+
+    private int getX(int number) {
+        if(number == 0) return 1;
+        return (number - 1) % 3;
     }
 
-    public static double getDistance(int[] number, int[] currentHand){
-        int yd = Math.abs(currentHand[0]-number[0]);
-        int xd = Math.abs(currentHand[1]-number[1]);
-        return yd + xd;
+    private int getY(int number) {
+        if(number == 0) return 3;
+        return (number - 1) / 3;
     }
-    
+
+    private Hand press(int number, Hand right, Hand left){
+        int x = getX(number);
+        int y = getY(number);
+
+        float rDistance = right.distance(x, y);
+        float lDistance = left.distance(x, y);
+
+        Hand hand = right;
+        if(lDistance < rDistance){
+            hand = left;
+        }
+
+        hand.move(x, y);
+        return hand;
+    }
     public String solution(int[] numbers, String hand) {
-       StringBuilder answer = new StringBuilder();
-         int leftHand = '*';
-        int rightHand = '#';
-
-        for (int number : numbers){
-            if(number == 1 || number == 4 || number == 7){ // 왼손
-                leftHand = number; // 왼손 해당 위치로
-                answer.append("L");
-            }else if ((number == 3 || number == 6 || number == 9)){ // 오른손
-                rightHand = number; // 오른손 해당 위치로
-                answer.append("R");
-            }else{ // 거리상 가까운 손이 먼저
-                double rightDistance = getDistance(findIndex(number), findIndex(rightHand));
-                double leftDistance = getDistance(findIndex(number), findIndex(leftHand));
-                if(rightDistance < leftDistance){
-                    rightHand = number;
-                    answer.append("R");
-                }else if (rightDistance > leftDistance){
-                    leftHand = number;
-                    answer.append("L");
-                }else{
-                    if(hand.equals("right")){
-                        rightHand = number;
-                        answer.append("R");
-                    }else{
-                        leftHand = number;
-                        answer.append("L");
-                    }
-                }
-            }
-        }
-
-        return answer.toString();
+        Hand right = new Hand("R", hand.equals("right"), 2);
+        Hand left = new Hand("L", hand.equals("left"), 0);
+        
+        return Arrays.stream(numbers)
+            .mapToObj(n -> press(n, right, left).getHand())
+            .collect(Collectors.joining());
     }
 }
