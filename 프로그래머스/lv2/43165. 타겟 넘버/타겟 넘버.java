@@ -1,12 +1,8 @@
 class Solution {
     public static int result;
-    public static boolean[] isVisited;
 
     public int solution(int[] numbers, int target) {
-        isVisited = new boolean[numbers.length];
-
         dfs(0, numbers, target, 0);
-
         return result;
     }
 
