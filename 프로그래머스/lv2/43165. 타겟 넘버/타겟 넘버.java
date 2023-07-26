@@ -1,21 +1,37 @@
+import java.util.*;
+
 class Solution {
-    public static int result;
+    private static class State {
 
-    public int solution(int[] numbers, int target) {
-        dfs(0, numbers, target, 0);
-        return result;
+        public final int index;
+        public final int acc;
+
+        State(int index, int acc) {
+            this.index = index;
+            this.acc = acc;
+        }
     }
+    
+    public int solution(int[] numbers, int target) {
+        Stack<State> s = new Stack<>();
+        s.push(new State(0, 0));
 
-    private static void dfs(int start, int[] numbers, int target, int count) {
+        int count = 0;
 
-        if (start == numbers.length) {
-            if (count == target) {
-                result += 1;
+        while (!s.isEmpty()) {
+            State state = s.pop();
+
+            if (state.index == numbers.length) {
+                if (state.acc == target) {
+                    count++;
+                }
+                continue;
             }
-            return;
+
+            s.push(new State(state.index + 1, state.acc + numbers[state.index]));
+            s.push(new State(state.index + 1, state.acc - numbers[state.index]));
         }
 
-        dfs(start + 1, numbers, target, count + numbers[start]);
-        dfs(start + 1, numbers, target, count - numbers[start]);
+        return count;
     }
 }
