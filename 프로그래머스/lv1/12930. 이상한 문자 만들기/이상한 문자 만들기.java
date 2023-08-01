@@ -1,23 +1,22 @@
-import java.util.*;
-
 class Solution {
     public String solution(String s) {
         StringBuilder sb = new StringBuilder();
-        boolean toUpper = true;
-        
-        for(char c : s.toCharArray()){
-            if(!Character.isAlphabetic(c)){
+
+        int idx = 0;
+        for (char c : s.toCharArray()) {
+            if (c == ' ') {
                 sb.append(c);
-                toUpper = true;
-            }else{
-                if(toUpper){
+                idx = 0;
+            } else {
+                if (idx % 2 == 0) {
                     sb.append(Character.toUpperCase(c));
-                }else{
+                } else {
                     sb.append(Character.toLowerCase(c));
                 }
-                toUpper = !toUpper;
+                idx++;
             }
         }
+
         return sb.toString();
     }
 }
