@@ -1,19 +1,19 @@
 class Solution {
     public String solution(String s) {
         StringBuilder sb = new StringBuilder();
-
-        int idx = 0;
+        boolean isUpper = true;
+        
         for (char c : s.toCharArray()) {
-            if (c == ' ') {
+            if(!Character.isAlphabetic(c)){
                 sb.append(c);
-                idx = 0;
-            } else {
-                if (idx % 2 == 0) {
+                isUpper = true;
+            }else{
+                if(isUpper){
                     sb.append(Character.toUpperCase(c));
-                } else {
+                }else{
                     sb.append(Character.toLowerCase(c));
                 }
-                idx++;
+                isUpper = !isUpper;
             }
         }
 
