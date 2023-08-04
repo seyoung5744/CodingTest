@@ -1,5 +1,9 @@
 class Solution {
     public boolean solution(String s) {
-        return s.matches("[0-9]{4}|[0-9]{6}");
+        if(s.length() != 4 && s.length() != 6) return false;
+        
+        if(!s.matches("[0-9]*")) return false;
+        
+        return true;
     }
 }
