@@ -1,13 +1,11 @@
 class Solution {
-    private final static String[] words = {
-        "zero","one","two","three","four","five","six","seven","eight","nine"
+    public static final String[] words = {
+      "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"  
     };
     
     public int solution(String s) {
-        int answer = 0;
-        
-        for(int num = 0; num < words.length; num++){
-            s = s.replace(words[num], Integer.toString(num));
+        for(int i = 0; i < words.length; i++) {
+            s = s.replace(words[i], Integer.toString(i));
         }
         
         return Integer.parseInt(s);
