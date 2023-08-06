@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.StringTokenizer;
 import java.util.List;
 
 public class Solution {
@@ -15,26 +15,19 @@ public class Solution {
         };
 
     public long solution(String expression) {
+        StringTokenizer st = new StringTokenizer(expression, "-+*", true);
         List<String> tokens = new ArrayList<>();
-
-        String strNum = "";
-        for (char c : expression.toCharArray()) {
-            if (Character.isDigit(c)) {
-                strNum += c;
-            } else {
-                tokens.add(strNum);
-                tokens.add(String.valueOf(c));
-                strNum = "";
-            }
-        }
-        tokens.add(strNum);
-
-        long answer = 0;
-        for(String[] precedence : precedences) {
-            answer = Math.max(answer, Math.abs(calculate(new ArrayList<>(tokens), precedence)));
+        
+        while  (st.hasMoreTokens()) {
+            tokens.add(st.nextToken());
         }
 
-        return answer;
+        long max = 0;
+        for (String[] precedence : precedences) {
+            max = Math.max(max, Math.abs(calculate(new ArrayList<>(tokens), precedence)));
+        }
+
+        return max;
     }
 
     private static long calculate(List<String> tokens, String[] precedence) {
@@ -49,7 +42,7 @@ public class Solution {
                     tokens.remove(i - 1);
 
                     tokens.add(i - 1, String.valueOf(result));
-                    i -= 2;
+                    i -= 1;
                 }
             }
         }
