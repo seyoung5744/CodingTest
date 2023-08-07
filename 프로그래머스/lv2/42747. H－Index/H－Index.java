@@ -12,10 +12,7 @@ class Solution {
     }
 
     private boolean isValid(int[] citations, int h) {
-        int count = 0;
-        for(int citation : citations){
-            if(citation >= h) count++;
-        }
-        return count >= h;
+        int idx = citations.length - h;
+        return citations[idx] >= h;
     }
 }
