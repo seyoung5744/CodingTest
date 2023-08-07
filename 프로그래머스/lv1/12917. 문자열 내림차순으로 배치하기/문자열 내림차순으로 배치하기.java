@@ -1,9 +1,12 @@
 class Solution {
     public String solution(String s) {
-        return s.chars()
+       return s.chars()
             .boxed()
-            .sorted((v1, v2) -> v2 - v1)
-            .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-            .toString();
+            .sorted((c1, c2)-> c2 - c1)
+            .collect(
+                StringBuilder::new,
+                StringBuilder::appendCodePoint,
+                StringBuilder::append
+            ).toString();
     }
 }
