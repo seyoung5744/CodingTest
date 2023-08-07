@@ -1,22 +1,11 @@
 import java.util.*;
+import java.util.stream.Collectors;
 class Solution {
     public String solution(int[] numbers) {
-        String[] strArr = new String[numbers.length];
-        for (int i = 0; i < numbers.length; i++) {
-            strArr[i] = numbers[i] + "";
-        }
-
-        Arrays.sort(strArr, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return (o2 + o1).compareTo(o1 + o2);
-            }
-        });
-
-        if(strArr[0].equals("0")){
-            return "0";
-        }
-
-        return String.join("", strArr);
+        return Arrays.stream(numbers)
+            .mapToObj(String::valueOf)
+            .sorted((s1, s2) -> (s2 + s1).compareTo(s1 + s2))
+            .collect(Collectors.joining())
+            .replaceAll("^0+","0");
     }
 }
