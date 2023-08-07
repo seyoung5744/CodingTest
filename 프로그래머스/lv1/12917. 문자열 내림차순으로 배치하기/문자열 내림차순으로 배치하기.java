@@ -1,12 +1,9 @@
+import java.util.Arrays;
 class Solution {
     public String solution(String s) {
-       return s.chars()
-            .boxed()
-            .sorted((c1, c2)-> c2 - c1)
-            .collect(
-                StringBuilder::new,
-                StringBuilder::appendCodePoint,
-                StringBuilder::append
-            ).toString();
+        char[] cArr = s.toCharArray();
+        Arrays.sort(cArr);
+        
+        return new StringBuffer(new String(cArr)).reverse().toString();
     }
 }
