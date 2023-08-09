@@ -1,53 +1,52 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        long answer = 0;
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        String[] NM = br.readLine().split(" ");
-        int N = Integer.parseInt(NM[0]);
-        int M = Integer.parseInt(NM[1]);
+        int k = Integer.parseInt(st.nextToken());
+        int n = Integer.parseInt(st.nextToken());
 
-        long left = 1;
-        long right = 0;
-                
-        int[] lans = new int[N];
-        for (int i = 0; i < N; i++) {
-            lans[i] = Integer.parseInt(br.readLine());
-            right = Math.max(lans[i], right);
-        }
-        
+        int[] lines = new int[k];
 
-        while (left <= right) {
-            long mid = left + (right - left) / 2;
+        int maxLine = Integer.MIN_VALUE;
 
-            int count = 0;
-
-            for (int lan : lans) {
-                count += (lan / mid);
-            }
-
-            if (count >= M) {
-                answer = Math.max(mid, answer);
-                left = mid + 1;
-            } else {
-                right = mid - 1;
+        for (int i = 0; i < k; i++) {
+            lines[i] = Integer.parseInt(br.readLine());
+            if (maxLine < lines[i]) {
+                maxLine = lines[i];
             }
         }
 
-        bw.write(answer + "\n");
-
-        bw.flush();
-        br.close();
-        bw.close();
+        System.out.println(binarySearch(n, maxLine, lines));
     }
+
+    public static long binarySearch(int target, int maxLine, int[] lines) {
+        long start = 1;
+        long end = maxLine;
+
+        while (start <= end) {
+            long mid = (end + start) / 2;
+            long count = 0;
+
+            for (int line : lines) {
+                count += line / mid;
+            }
+
+            if (count < target) {
+                end = mid - 1;
+            } else {
+                start = mid + 1;
+            }
+        }
+
+        return start - 1;
+    }
+
 }
