@@ -26,7 +26,8 @@ public class Main {
             }
         }
 
-        bw.write(binarySearch(nums, target, maxLen) + "");
+        //bw.write(binarySearch(nums, target, maxLen) + "");
+        System.out.println(binarySearch(nums, target, maxLen));
         
         bw.flush();
         bw.close();
