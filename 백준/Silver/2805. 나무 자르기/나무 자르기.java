@@ -29,9 +29,9 @@ public class Main {
         //bw.write(binarySearch(nums, target, maxLen) + "");
         System.out.println(binarySearch(nums, target, maxLen));
         
-        bw.flush();
-        bw.close();
-        br.close();
+        //bw.flush();
+        //bw.close();
+        //br.close();
     }
 
     private static int binarySearch(int[] nums, int target, int maxLen){
