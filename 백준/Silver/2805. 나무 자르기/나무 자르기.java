@@ -3,48 +3,57 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.StringTokenizer;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        String[] NM = br.readLine().split(" ");
-        int N = Integer.parseInt(NM[0]);
-        int M = Integer.parseInt(NM[1]);
+        int n = Integer.parseInt(st.nextToken());
+        int target = Integer.parseInt(st.nextToken());
 
-        // 높이를 domain으로
-        long left = 0;
-        long right = 0;
-
-        int[] heights = new int[N];
-        String[] strHeight = br.readLine().split(" ");
-
-        for (int i = 0; i < strHeight.length; i++) {
-            heights[i] = Integer.parseInt(strHeight[i]);
-            right = Math.max(heights[i], right);
+        int[] nums = new int[n];
+        int maxLen = 0;
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < n; i++) {
+            nums[i] = Integer.parseInt(st.nextToken());
+            if(maxLen < nums[i]){
+                maxLen = nums[i];
+            }
         }
 
-        while (left <= right) {
-            long mid = left + (right - left) / 2;
-            long length = 0; // 가져갈 나무 길이
-            for (long wood : heights) {
-                if (wood >= mid) {
-                    length += wood - mid;
+        bw.write(binarySearch(nums, target, maxLen) + "");
+        
+        bw.flush();
+        bw.close();
+        br.close();
+    }
+
+    private static int binarySearch(int[] nums, int target, int maxLen){
+        int start = 0;
+        int end = maxLen;
+
+        while(start < end){
+            int mid = (end + start) / 2;
+            long count = 0;
+            for(int num : nums){
+                if(num > mid) {
+                    count += num - mid;
                 }
             }
-            if (length >= M) { // 짤린 길이가 가져가려는 것보다 더 길면 높혀야함
-                left = mid + 1;
-            } else {
-                right = mid - 1;
+
+            if(count < target){
+                end = mid;
+            }else{
+                start = mid + 1;
             }
         }
 
-        bw.write(right + "\n");
-
-        bw.flush();
-        br.close();
-        bw.close();
+        return end - 1;
     }
+
 }
