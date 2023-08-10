@@ -1,50 +1,51 @@
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
 
 public class Main {
 
-    public static void main(String[] args) {
-        //  집의 개수(N)와 공유기의 개수(C)를 입력받기
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int c = sc.nextInt();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String[] nc = br.readLine().split(" ");
+        int n = Integer.parseInt(nc[0]);
+        int target = Integer.parseInt(nc[1]);
 
-        // 전체 집의 좌표 정보를 입력받기
-        ArrayList<Integer> arr = new ArrayList<>();
+        int[] points = new int[n];
         for (int i = 0; i < n; i++) {
-            arr.add(sc.nextInt());
+            points[i] = Integer.parseInt(br.readLine());
         }
 
-        // 이진 탐색을 위해 정렬 수행
-        Collections.sort(arr);
+        Arrays.sort(points);
 
-        int start = 1; // 가능한 최소 거리(min gap)
-        int end = arr.get(n - 1) - arr.get(0); // 가능한 최대 거리(max gap)
-        int result = 0;
+        System.out.println(binarySearch(points, target));
+    }
 
-        while (start <= end) {
-            // mid는 가장 인접한 두 공유기 사이의 거리(gap)을 의미
-            int mid = (start + end) / 2;
-            // 첫째 집에는 무조건 공유기를 설치한다고 가정
-            int value = arr.get(0);
-            int cnt = 1;
-            // 현재의 mid 값을 이용해 공유기를 설치하기
-            for (int i = 1; i < n; i++) { // 앞에서부터 차근차근 설치
-                if (arr.get(i) >= value + mid) {
-                    value = arr.get(i);
-                    cnt += 1;
+    private static int binarySearch(int[] points, int target) {
+        int start = 1;
+        int end = points[points.length - 1] - points[0] + 1;
+
+        while (start < end) {
+            int mid = (end + start) / 2;
+
+            int count = 1;
+            int value = points[0];
+
+            for (int i = 1; i < points.length; i++) {
+                if(points[i] >= value + mid){
+                    value = points[i];
+                    count += 1;
                 }
             }
-            // C개 이상의 공유기를 설치할 수 있는 경우, 거리를 증가시키기
-            if (cnt >= c) {
+
+            if(count < target){
+                end = mid;
+            }else{
                 start = mid + 1;
-                result = mid; // 최적의 결과를 저장
-            }
-            // C개 이상의 공유기를 설치할 수 없는 경우, 거리를 감소시키기
-            else {
-                end = mid - 1;
             }
         }
-        System.out.println(result);
+
+        return end - 1;
     }
 
 }
