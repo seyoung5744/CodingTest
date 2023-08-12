@@ -5,6 +5,9 @@ class Solution {
 
     public int solution(int n) {
         Arrays.fill(mem, -1);
+        for(int i = 0; i <= n; i++){
+            fibo(n);
+        }
         return fibo(n);
     }
 
