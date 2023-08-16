@@ -2,29 +2,31 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int[] progresses, int[] speeds) {
-        Deque<Integer> q = new ArrayDeque<>();
+        ArrayList<Integer> result = new ArrayList<>();
+
+        Queue<Integer> queue = new LinkedList<>();
         for (int i = 0; i < progresses.length; i++) {
-            q.add(i);
+            queue.add(i);
         }
 
-        List<Integer> result = new ArrayList<>();
-        int days = 0;
-        int count = 0;
-        while (!q.isEmpty()) {
-            int idx = q.poll();
-            int expiration = (int) Math.ceil((double) (100 - progresses[idx]) / speeds[idx]);
-            System.out.println("완료 일 : " + expiration);
-            if(expiration > days){
-                if(days != 0){
-                    result.add(count);
-                    count = 0;
+        int cnt = 0;
+        while (!queue.isEmpty()) {
+
+            for (int i = 0; i < speeds.length; i++) {
+                progresses[i] += speeds[i];
+
+                if (progresses[queue.peek()] >= 100) {
+                    cnt += 1;
+                    queue.poll();
                 }
-                days = expiration;
             }
-            count++;
-        }
 
-        result.add(count);
+            if(cnt != 0){
+                result.add(cnt);
+                cnt = 0;
+            }
+        }
+        
         return result.stream().mapToInt(Integer::intValue).toArray();
     }
 }
