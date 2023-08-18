@@ -1,82 +1,81 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-class Node {
+public class Solution {
 
-    public final int data;
-    public final int x;
-    public final int y;
+    static class Node2 {
 
-    public Node left;
-    public Node right;
+        int x;
+        int y;
+        int data;
 
-    public Node(int data, int x, int y) {
-        this.data = data;
-        this.x = x;
-        this.y = y;
+        Node2 left;
+        Node2 right;
+
+        public Node2(int data, int x, int y) {
+            this.data = data;
+            this.x = x;
+            this.y = y;
+        }
     }
 
-}
+    public static int[][] solution(int[][] nodeinfo) {
+        int[][] answer = {};
 
-class Solution {
-    public int[][] solution(int[][] nodeinfo) {
-
-        Node[] nodes = new Node[nodeinfo.length];
-        for (int i = 0; i < nodes.length; i++) {
-            nodes[i] = new Node(i + 1, nodeinfo[i][0], nodeinfo[i][1]);
+        Node2[] nodes = new Node2[nodeinfo.length];
+        for (int i = 0; i < nodeinfo.length; i++) {
+            nodes[i] = new Node2(i + 1, nodeinfo[i][0], nodeinfo[i][1]);
         }
 
         Arrays.sort(nodes, (a, b) -> b.y - a.y);
 
-        Node root = constructTree(nodes);
+        Node2 root = constructTree(nodes);
 
-        List<Integer> preorder = new ArrayList<>();
-        pre(root, preorder);
+        ArrayList<Integer> pre = new ArrayList<>();
+        pre(root, pre);
 
-        List<Integer> postorder = new ArrayList<>();
-        post(root, postorder);
+        ArrayList<Integer> post = new ArrayList<>();
+        post(root, post);
 
-        return new int[][] {
-            preorder.stream().mapToInt(Integer::intValue).toArray(),
-            postorder.stream().mapToInt(Integer::intValue).toArray()
+        return new int[][]{
+            pre.stream().mapToInt(Integer::intValue).toArray(),
+            post.stream().mapToInt(Integer::intValue).toArray(),
         };
     }
 
-    private void pre(Node node, List<Integer> visits){
-        if(node == null) return;
+    private static void pre(Node2 root, ArrayList<Integer> visited) {
+        if(root == null) return;
 
-        visits.add(node.data);
-        pre(node.left, visits);
-        pre(node.right, visits);
+        visited.add(root.data);
+        pre(root.left, visited);
+        pre(root.right, visited);
     }
 
-    private void post(Node node, List<Integer> visits){
-        if(node == null) return;
+    private static void post(Node2 root, ArrayList<Integer> visited) {
+        if(root == null) return;
 
-        post(node.left, visits);
-        post(node.right, visits);
-        visits.add(node.data);
+        post(root.left, visited);
+        post(root.right, visited);
+        visited.add(root.data);
     }
 
-    private Node constructTree(Node[] nodes) {
-        Node root = nodes[0];
+    private static Node2 constructTree(Node2[] nodes) {
+        Node2 root = nodes[0];
 
         for (int i = 1; i < nodes.length; i++) {
             insert(root, nodes[i]);
         }
-
         return root;
     }
 
-    private void insert(Node root, Node node) {
-        if (node.x < root.x) {
-            // left
+    private static void insert(Node2 root, Node2 node) {
+        if (root.x > node.x) {
             if (root.left == null) {
                 root.left = node;
             } else {
                 insert(root.left, node);
             }
         } else {
-            // right
             if (root.right == null) {
                 root.right = node;
             } else {
@@ -84,5 +83,4 @@ class Solution {
             }
         }
     }
-
 }
