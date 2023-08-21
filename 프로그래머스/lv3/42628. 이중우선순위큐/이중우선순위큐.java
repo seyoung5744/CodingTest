@@ -1,61 +1,57 @@
 import java.util.PriorityQueue;
-class Solution {
-    private static class DoublyPriorityQueue{
-        private int size = 0;
-        private PriorityQueue<Integer> minPq = new PriorityQueue<>();
-        private PriorityQueue<Integer> maxPq = new PriorityQueue<>((a, b) -> b - a);
+import java.util.Queue;
 
-        public void add(int data){
-            minPq.add(data);
-            maxPq.add(data);
+public class Solution {
+    static class DoublyPriorityQueue {
+        Queue<Integer> minPq = new PriorityQueue<>();
+        Queue<Integer> maxPq = new PriorityQueue<>((a, b) -> b - a);
+        int size;
+        
+        public void add(int num){
+            maxPq.add(num);
+            minPq.add(num);
             size++;
         }
-
-        public void removeMax(){
+        
+        public void removeMax() {
             if(size == 0) return;
             maxPq.poll();
-
-            if(--size == 0){
+            
+            if(--size == 0) {
                 maxPq.clear();
                 minPq.clear();
             }
         }
-
-        public void removeMin(){
+        
+        public void removeMin() {
             if(size == 0) return;
             minPq.poll();
-
+            
             if(--size == 0){
                 minPq.clear();
                 maxPq.clear();
             }
         }
-
-        public int max(){
-            if(size == 0) return 0;
-            return maxPq.peek();
-        }
-
-        public int min(){
-            if(size == 0) return 0;
-            return minPq.peek();
+        
+        public int[] print() {
+            if(size == 0){
+                return new int[]{0, 0};
+            }else{
+                return new int[]{maxPq.peek(), minPq.peek()};
+            }
         }
     }
     public int[] solution(String[] operations) {
-
         DoublyPriorityQueue dpq = new DoublyPriorityQueue();
-
+        
         for(String operation : operations){
-            String[] tokens = operation.split(" ");
-            String command = tokens[0];
-            String value = tokens[1];
-
-            switch (command){
+            String[] op = operation.split(" ");
+            switch(op[0]){
                 case "I":
-                    dpq.add(Integer.parseInt(value));
+                    dpq.add(Integer.parseInt(op[1]));            
                     break;
                 case "D":
-                    if(value.equals("1")){
+                    if(op[1].equals("1")){
                         dpq.removeMax();
                     }else{
                         dpq.removeMin();
@@ -64,6 +60,7 @@ class Solution {
             }
         }
         
-        return new int[]{dpq.max(), dpq.min()};
+        return dpq.print();
     }
+
 }
