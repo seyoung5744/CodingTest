@@ -54,10 +54,16 @@ public class Solution {
 
     public int solution(int n, int[][] costs) {
 
-        Edge[] edges = Arrays.stream(costs)
-            .map(c -> new Edge(c[0], c[1], c[2]))
-            .sorted(Comparator.comparingInt(e -> e.cost))
-            .toArray(Edge[]::new);
+        Edge[] edges = new Edge[costs.length];
+
+        for (int i = 0; i < costs.length; i++) {
+            int u = costs[i][0];
+            int v = costs[i][1];
+            int cost = costs[i][2];
+            edges[i] = new Edge(u, v, cost);
+        }
+
+        Arrays.sort(edges, (a, b) -> a.cost - b.cost);
 
         Node[] nodes = new Node[n];
 
