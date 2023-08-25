@@ -1,91 +1,83 @@
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
+import java.util.stream.*;
 
-class Node implements Comparable<Node>{
-    private int distance;
-    private int nodeA;
-    private int nodeB;
+public class Solution {
 
-    public Node(int distance, int nodeA, int nodeB) {
-        this.distance = distance;
-        this.nodeA = nodeA;
-        this.nodeB = nodeB;
-    }
+    private static class Node {
 
-    public int getDistance() {
-        return distance;
-    }
+        private int depth = 1;
+        private Node parent = null;
 
-    public int getNodeA() {
-        return nodeA;
-    }
-
-    public int getNodeB() {
-        return nodeB;
-    }
-
-    @Override
-    public int compareTo(Node o) {
-        if(this.distance < o.distance){
-            return -1;
+        public boolean isConnected(Node o) {
+            return root() == o.root();
         }
-        return 1;
+
+        public void merge(Node o) {
+            if (isConnected(o)) {
+                return;
+            }
+            
+            Node root1 = root();
+            Node root2 = o.root();
+            
+            if(root1.depth < root2.depth) {
+                root1.parent = root2;
+            }else if(root1.depth > root2.depth) {
+                root2.parent = root1;
+            }else {
+                root2.parent = root1;
+                root1.depth += 1;
+            }
+            
+        }
+
+        private Node root() {
+            if (parent == null) {
+                return this;
+            }
+            return parent.root();
+        }
     }
-}
-class Solution {
-    public static int[] parent;
-    public static ArrayList<Node> nodes = new ArrayList<>();
-    public static int result = 0;
+
+    public static class Edge {
+
+        public final int u;
+        public final int v;
+        public final int cost;
+
+        public Edge(int u, int v, int cost) {
+            this.u = u;
+            this.v = v;
+            this.cost = cost;
+        }
+    }
 
     public int solution(int n, int[][] costs) {
-        parent = new int[n];
+
+        Edge[] edges = Arrays.stream(costs)
+            .map(c -> new Edge(c[0], c[1], c[2]))
+            .sorted(Comparator.comparingInt(e -> e.cost))
+            .toArray(Edge[]::new);
+
+        Node[] nodes = new Node[n];
+
         for (int i = 0; i < n; i++) {
-            parent[i] = i;
+            nodes[i] = new Node();
         }
 
-        for(int[] cost : costs){
-            int a = cost[0];
-            int b = cost[1];
-            int distance = cost[2];
-            nodes.add(new Node(distance, a, b));
-        }
+        int totalCount = 0;
 
-        Collections.sort(nodes);
+        for (Edge edge : edges) {
+            Node node1 = nodes[edge.u];
+            Node node2 = nodes[edge.v];
 
-        for (int i = 0; i < nodes.size(); i++) {
-            Node node = nodes.get(i);
-            int cost = node.getDistance();
-            int a = node.getNodeA();
-            int b = node.getNodeB();
-
-            if(findParent(a) != findParent(b)){
-                result += cost;
-                unionParent(a, b);
-            }
+            if (node1.isConnected(node2)) continue;
+            
+            node1.merge(node2);
+            totalCount += edge.cost;
         }
         
-        return result;
-    }
-
-    private static void unionParent(int a, int b){
-        a = findParent(a);
-        b = findParent(b);
-
-        if(a < b){
-            parent[b] = a;
-        }else{
-            parent[a] = b;
-        }
-    }
-
-    private static int findParent(int a){
-        if(a != parent[a]){
-            parent[a] = findParent(parent[a]);
-        }
-        return parent[a];
-    }
-    public static void main(String[] args) {
-
+        return totalCount;
     }
 
 }
