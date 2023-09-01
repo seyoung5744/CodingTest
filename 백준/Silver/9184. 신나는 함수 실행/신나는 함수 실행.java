@@ -1,51 +1,54 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
 
-    public static int a, b, c;
+    public static int[][][] dp;
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        dp = new int[21][21][21];
 
         while (true) {
-            a = sc.nextInt();
-            b = sc.nextInt();
-            c = sc.nextInt();
+            StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            int c = Integer.parseInt(st.nextToken());
             if (a == -1 && b == -1 && c == -1) {
                 break;
             }
 
-            System.out.printf("w(%d, %d, %d) = ", a, b, c);
-            if (a <= 0 || b <= 0 || c <= 0) {
-                System.out.println(1);
-                continue;
-            }
-            if (a > 20 || b > 20 || c > 20) {
-                a = b = c = 20;
-            }
-            int[][][] dp = new int[a + 1][b + 1][c + 1];
-            System.out.println(w(dp, a, b, c));
+            System.out.printf("w(%d, %d, %d) = %d\n", a, b, c, w(a, b, c));
         }
 
     }
 
-    public static int w(int[][][] dp, int a, int b, int c) {
-        for (int i = 0; i <= a; i++) {
-            for (int j = 0; j <= b; j++) {
-                for (int k = 0; k <= c; k++) {
-                    if (i == 0 || j == 0 || k == 0) {
-                        dp[i][j][k] = 1;
-                    } else if (i < j && j < k) {
-                        dp[i][j][k] = dp[i][j][k - 1] + dp[i][j - 1][k - 1] - dp[i][j - 1][k];
-                    } else {
-                        dp[i][j][k] =
-                            dp[i - 1][j][k] + dp[i - 1][j - 1][k] + dp[i - 1][j][k - 1] - dp[i - 1][j - 1][k - 1];
-                    }
-                }
-
-            }
+    private static int w(int a, int b, int c) {
+        if (inRange(a, b, c) && dp[a][b][c] != 0) {
+            return dp[a][b][c];
         }
-        return dp[a][b][c];
+
+        if (a <= 0 || b <= 0 || c <= 0) {
+            return 1;
+        }
+
+        if (a > 20 || b > 20 || c > 20) {
+            return dp[20][20][20] = w(20, 20, 20);
+        }
+
+        if (a < b && b < c) {
+            return dp[a][b][c] = w(a, b, c - 1) + w(a, b - 1, c - 1) - w(a, b - 1, c);
+        }
+
+        return dp[a][b][c] = w(a - 1, b, c) + w(a - 1, b - 1, c) + w(a - 1, b, c - 1) - w(a - 1, b - 1, c - 1);
+    }
+
+    private static boolean inRange(int a, int b, int c) {
+        return 0 <= a && a <= 20 && 0 <= b && b <= 20 && 0 <= c && c <= 20;
     }
 
 }
