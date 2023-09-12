@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Solution {
 
-    private static class Point {
+    public static class Point {
 
         public final long x, y;
 
@@ -21,39 +21,39 @@ public class Solution {
         if (x % 1 != 0 || y % 1 != 0) {
             return null;
         }
-
         return new Point((long) x, (long) y);
     }
 
-    private static Point getMinimumPoint(List<Point> points){
-        long x = Long.MAX_VALUE;
-        long y = Long.MAX_VALUE;
+    private static Point getMaxPoint(List<Point> points) {
+        long x = points.get(0).x;
+        long y = points.get(0).y;
 
-        for(Point p : points){
-            if(p.x < x) x = p.x;
-            if(p.y < y) y = p.y;
+        for (int i = 1; i < points.size(); i++) {
+            x = Math.max(x, points.get(i).x);
+            y = Math.max(y, points.get(i).y);
         }
 
         return new Point(x, y);
     }
 
-    private static Point getMaximumPoint(List<Point> points){
-        long x = Long.MIN_VALUE;
-        long y = Long.MIN_VALUE;
+    private static Point getMinPoint(List<Point> points) {
+        long x = points.get(0).x;
+        long y = points.get(0).y;
 
-        for(Point p : points){
-            if(p.x > x) x = p.x;
-            if(p.y > y) y = p.y;
+        for (int i = 1; i < points.size(); i++) {
+            x = Math.min(x, points.get(i).x);
+            y = Math.min(y, points.get(i).y);
         }
 
         return new Point(x, y);
     }
+
     public String[] solution(int[][] line) {
         List<Point> points = new ArrayList<>();
         for (int i = 0; i < line.length; i++) {
             for (int j = i + 1; j < line.length; j++) {
                 Point intersection = intersection(line[i][0], line[i][1], line[i][2],
-                                                  line[j][0], line[j][1], line[j][2]);
+                    line[j][0], line[j][1], line[j][2]);
 
                 if (intersection != null) {
                     points.add(intersection);
@@ -61,28 +61,28 @@ public class Solution {
             }
         }
 
-        Point minimum = getMinimumPoint(points);
-        Point maximum = getMaximumPoint(points);
+        Point max = getMaxPoint(points);
+        Point min = getMinPoint(points);
 
-        int width = (int) (maximum.x - minimum.x + 1);
-        int height = (int) (maximum.y - minimum.y + 1);
+        int width = (int) (max.x - min.x + 1);
+        int height = (int) (max.y - min.y + 1);
 
-        char[][] arr = new char[height][width];
-        for(char[] row : arr){
-            Arrays.fill(row, '.');
+        char[][] map = new char[height][width];
+        for (char[] arr : map) {
+            Arrays.fill(arr, '.');
         }
 
-        for(Point p : points){
-            int x = (int) (p.x - minimum.x);
-            int y = (int) (maximum.y - p.y);
-            arr[y][x] = '*';
+        for (Point point : points) {
+            int x = (int) (point.x - min.x);
+            int y = (int) (max.y - point.y);
+            map[y][x] = '*';
         }
-        
-        String[] result = new String[arr.length];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = new String(arr[i]);
+
+        String[] answer = new String[map.length];
+        for (int i = 0; i < map.length; i++) {
+            answer[i] = new String(map[i]);
         }
-        
-        return result;
+
+        return answer;
     }
 }
