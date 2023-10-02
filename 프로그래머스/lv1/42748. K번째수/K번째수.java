@@ -1,20 +1,19 @@
-import java.util.*;
+import java.util.Arrays;
 
-class Solution {
-    public int[] solution(int[] array, int[][] commands) {
+public class Solution {
+    public static int[] solution(int[] array, int[][] commands) {
         int[] answer = new int[commands.length];
 
         for (int i = 0; i < commands.length; i++) {
-            int[] command = commands[i];
-            int from = command[0] - 1;
-            int to = command[1];
-            int target = command[2] - 1;
-            
-            int[] sub = Arrays.copyOfRange(array, from, to);
-            Arrays.sort(sub);
-            
-            answer[i] = sub[target];
+            int start = commands[i][0] - 1;
+            int end = commands[i][1];
+            int target = commands[i][2] - 1;
+
+            int[] subArr = Arrays.copyOfRange(array, start, end);
+            Arrays.sort(subArr);
+            answer[i] = subArr[target];
         }
         return answer;
     }
+
 }
