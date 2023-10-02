@@ -1,13 +1,13 @@
 -- 코드를 입력하세요
-SELECT 
-    BOARD.TITLE, 
-    BOARD.BOARD_ID, 
-    REPLY.REPLY_ID, 
-    REPLY.WRITER_ID,
-    REPLY.CONTENTS, 
-    date_format(REPLY.CREATED_DATE, '%Y-%m-%d') as CREATED_DATE
+SELECT  
+    BOARD.TITLE,
+    BOARD.BOARD_ID,
+    REPLAY.REPLY_ID,
+    REPLAY.WRITER_ID,
+    REPLAY.CONTENTS,
+    date_format(REPLAY.created_date, '%Y-%m-%d') as CREATED_DATE
 from USED_GOODS_BOARD as BOARD
-join USED_GOODS_REPLY as REPLY
-on BOARD.BOARD_ID = REPLY.BOARD_ID
-where date_format(BOARD.CREATED_DATE, '%Y-%m') = '2022-10' 
-order by REPLY.CREATED_DATE, BOARD.title
+    inner join USED_GOODS_REPLY as REPLAY
+    on BOARD.board_id = REPLAY.board_id
+where date_format(BOARD.CREATED_DATE, '%Y-%m') = '2022-10'
+order by REPLAY.CREATED_DATE, TITLE
