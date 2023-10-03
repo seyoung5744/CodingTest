@@ -1,9 +1,9 @@
-import java.util.Arrays;
+import java.util.*;
 class Solution {
     public String solution(String s) {
-        char[] cArr = s.toCharArray();
-        Arrays.sort(cArr);
+        char[] chars = s.toCharArray();
+        Arrays.sort(chars);
         
-        return new StringBuffer(new String(cArr)).reverse().toString();
+        return new StringBuilder(new String(chars)).reverse().toString();
     }
 }
