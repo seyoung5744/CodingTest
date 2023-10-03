@@ -1,11 +1,18 @@
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 class Solution {
     public String solution(int[] numbers) {
-        return Arrays.stream(numbers)
-            .mapToObj(String::valueOf)
-            .sorted((s1, s2) -> (s2 + s1).compareTo(s1 + s2))
-            .collect(Collectors.joining())
-            .replaceAll("^0+","0");
+        String[] strArr = Arrays.stream(numbers).mapToObj(String::valueOf).toArray(String[]::new);
+        Arrays.sort(strArr, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return (o2 + o1).compareTo(o1 + o2);
+            }
+        });
+        
+        if(strArr[0].equals("0")) {
+            return "0";
+        }
+        return Arrays.stream(strArr).collect(Collectors.joining());
     }
 }
