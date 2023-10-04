@@ -1,10 +1,10 @@
 # [level 2] 순위 검색 - 72412 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/72412?language=java) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/72412) 
 
 ### 성능 요약
 
-메모리: 285 MB, 시간: 1418.55 ms
+메모리: 266 MB, 시간: 1779.21 ms
 
 ### 구분
 
@@ -12,7 +12,7 @@
 
 ### 채점결과
 
-Empty
+정확성: 40.0<br/>효율성: 60.0<br/>합계: 100.0 / 100.0
 
 ### 문제 설명
 
