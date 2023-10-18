@@ -1,5 +1,6 @@
 import java.util.*;
 import java.util.stream.*;
+
 class Solution {
     
     static class Process {
@@ -13,9 +14,7 @@ class Solution {
     }
     
 
-    public int solution(int[] priorities, int location) {
-        int answer = 0;
-        
+    public int solution(int[] priorities, int location) {        
         Queue<Process> processes = new ArrayDeque<>();
         List<Integer> all = new ArrayList<>();
         
@@ -30,21 +29,19 @@ class Solution {
         while(!processes.isEmpty()) {
             Process cur = processes.poll();
             
-            if(cur.priority == all.get(index))
-            {
+            if(cur.priority == all.get(index)) {
                 if (cur.location == location)
                     break;
-                ++count;
-                ++index;
-            }
-            else
-            {
+                count++;
+                index++;
+                // ++count;
+                // ++index;
+            } else {
                 processes.add(cur);
             }
             
         }
         
-        answer = count;
-        return answer;
+        return count;
     }
 }
