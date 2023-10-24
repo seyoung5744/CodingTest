@@ -6,12 +6,7 @@ public class Solution {
 
         Deque<Integer> progress = new ArrayDeque<>();
         for (int i = 0; i < progresses.length; i++) {
-            int remain = (100 - progresses[i]) % speeds[i];
-            if(remain > 0) {
-                progress.add((100 - progresses[i]) / speeds[i] + 1);
-            }else{
-                progress.add((100 - progresses[i]) / speeds[i]);
-            }
+               progress.add((int) Math.ceil((double) (100 - progresses[i]) / speeds[i]));
         }
         
         int max = progress.peek();
