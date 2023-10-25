@@ -1,62 +1,62 @@
-#include <vector>
-#include <queue>
+#include<vector>
+#include<queue>
+
+const int MAX = 100000;
 
 using namespace std;
 
-#define INF 100001
-
-struct Step
-{
-    int x;
-    int y;
-    int moveCount;
-    
-    Step(int x, int y, int mc) : x(x), y(y), moveCount(mc){}
-};
-
-
-int dx[4] = {0, 0, 1, -1};
-int dy[4] = {1, -1, 0, 0};
-
 int solution(vector<vector<int> > maps)
 {
-    int answer = -1;
-    int endX = maps[0].size()-1;
-    int endY = maps.size()-1;
-    int maxX = maps[0].size();
-    int maxY = maps.size();
-    
-    //vector<vector<int>> visited (maps.size(), vector<int> (maps[1].size(), INF));
-    
-    queue<Step*> q;
-    q.push(new Step(0, 0, 1));
-    maps[0][0] = 0;
-    
-    while(!q.empty())
-    {
-        Step* cur = q.front();
+    int row = maps.size();
+    int col = maps[0].size();
+    bool Done = false;
+
+    vector<vector<int>> dist(row);
+    for (int i = 0; i < row; i++) 
+        for(int j = 0; j < col; j++)
+            dist[i].push_back(MAX);
+
+    queue<pair<int, int>> q;
+    dist[0][0] = 1;
+    q.push(make_pair(0, 0));
+
+    int count = 0;
+    while (!q.empty() && count < row * col) {
+        int r = q.front().first;
+        int c = q.front().second;
         q.pop();
-        
-        for(int i = 0; i < 4; ++i)
-        {
-            int newX = cur->x + dx[i];
-            int newY = cur->y + dy[i];
-            
-            if (newX >= 0 && newX < maxX && newY >= 0 && newY < maxY)
-            {
-                if (maps[newY][newX] != 0)
-                {   
-                    if (newY == endY && newX == endX)
-                        return cur->moveCount + 1;
-                    maps[newY][newX] = 0;
-                    
-                    q.push(new Step(newX, newY, cur->moveCount + 1));
-                    
-                }
-            }
+
+        if (r == row - 1 && c == col - 1) {
+            Done = true;
         }
+
+        if (r < row-1 && maps[r+1][c] == 1) 
+            if (dist[r+1][c] > dist[r][c] + 1) {
+                dist[r+1][c] = dist[r][c] + 1;
+                q.push(make_pair(r+1, c));
+            }
+
+        if (c < col-1 && maps[r][c+1] == 1)
+            if (dist[r][c+1] > dist[r][c] + 1) {
+                dist[r][c+1] = dist[r][c] + 1;
+                q.push(make_pair(r, c+1));
+            }
+
+        if (r > 0 && maps[r-1][c] == 1)
+            if (dist[r-1][c] > dist[r][c] + 1) {
+                dist[r-1][c] = dist[r][c] + 1;
+                q.push(make_pair(r-1, c));
+            }
+
+        if (c > 0 && maps[r][c-1] == 1) 
+            if (dist[r][c-1] > dist[r][c] + 1) {
+                dist[r][c-1] = dist[r][c] + 1;
+                q.push(make_pair(r, c-1));
+            }
+        count++;
     }
-    
-    
-    return answer;
+
+    if (Done)
+        return dist[row-1][col-1];
+    return -1;
 }
