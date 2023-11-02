@@ -13,25 +13,26 @@ class Solution {
             
             if(numbers[i] < numbers[i+1]) {
                 answer[i] = numbers[i+1];
-                parents[i] = i+1;
+                parents[numbers[i]] = numbers[i+1];
             } else {
-                int p = parents[i+1];
-                answer[i] = -1;
-                while(p != -1)
-                {
-                    if (numbers[p] > numbers[i])
-                    {
-                        answer[i] = numbers[p];
-                        parents[i] = p;
-                        break;
-                    }
-                    
-                    p = parents[p];
-                }
+                answer[i] = find(numbers[i+1], numbers[i]);
+                parents[numbers[i]] = answer[i];
             }
         }
         
         return answer;
     }
     
+    public int find(int x, int origin) {
+        
+        if(x > origin) {
+            return x;
+        }
+        
+        if(x == -1) {
+            return -1;
+        }
+        
+        return find(parents[x], origin);
+    }
 }
