@@ -1,10 +1,10 @@
 # [level 2] 두 큐 합 같게 만들기 - 118667 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/118667?language=java) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/118667#qna) 
 
 ### 성능 요약
 
-메모리: 117 MB, 시간: 60.56 ms
+메모리: 112 MB, 시간: 49.55 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2023년 11월 3일 14:38:45
+2023년 11월 3일 14:53:15
 
 ### 문제 설명
 
