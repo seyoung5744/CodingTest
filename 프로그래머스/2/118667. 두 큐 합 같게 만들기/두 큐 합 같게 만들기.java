@@ -16,12 +16,14 @@ class Solution {
 
         while (sum1 != sum2) {
             if (sum1 > sum2) {
+                
                 long remove = q1.poll();
                 sum1 -= remove;
                 sum2 += remove;
                 q2.add(remove);
                 answer++;
             } else {
+            
                 long remove = q2.poll();
                 sum2 -= remove;
                 sum1 += remove;
@@ -29,7 +31,7 @@ class Solution {
                 answer++;
             }
             
-            if(q1.isEmpty() || q2.isEmpty() || answer >= queue1.length * 3){
+            if(answer > (queue1.length + queue2.length) + 2){
                 answer = -1;
                 break;
             }
