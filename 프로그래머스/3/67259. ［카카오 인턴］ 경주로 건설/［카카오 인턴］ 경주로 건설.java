@@ -70,7 +70,7 @@ public class Solution {
                 if (visited[ny][nx] > cost) {
                     visited[ny][nx] = cost;
                     q.add(new Road(nx, ny, cost, cur));
-                } else if (visited[ny][nx] + 500 >= cost) {
+                } else if (visited[ny][nx] + 500 > cost) {
                     q.add(new Road(nx, ny, cost, cur));
                 }
             }
