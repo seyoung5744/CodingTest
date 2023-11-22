@@ -1,10 +1,10 @@
 # [level 2] 숫자 변환하기 - 154538 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/154538) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/154538?language=cpp) 
 
 ### 성능 요약
 
-메모리: 81.9 MB, 시간: 12.47 ms
+메모리: 6.84 MB, 시간: 4.14 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2023년 11월 6일 21:16:16
+2023년 11월 3일 14:35:35
 
 ### 문제 설명
 
