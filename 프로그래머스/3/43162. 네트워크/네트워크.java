@@ -22,8 +22,7 @@ public class Solution {
             }
         }
         
-        for(int i = 0; i < computers.length; ++i)
-        {
+        for(int i = 0; i < computers.length; ++i) {
             find(i);
         }
         
