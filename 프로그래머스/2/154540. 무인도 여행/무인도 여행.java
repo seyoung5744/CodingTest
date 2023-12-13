@@ -1,7 +1,8 @@
 import java.util.*;
 
-class Solution {
-     public static class Point {
+public class Solution {
+
+    public static class Point {
         int x, y;
 
         public Point(int x, int y) {
@@ -16,14 +17,12 @@ class Solution {
     public static int[] solution(String[] maps) {
 
         int[][] map = generateMap(maps);
-        boolean[][] visited = new boolean[maps.length][maps[0].length()];
-
         List<Integer> result = new ArrayList<>();
 
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
-                if(!visited[i][j] && map[i][j] != 0) {
-                    int sum = dfs(new Point(j, i), map, visited);
+                if(map[i][j] != 0) {
+                    int sum = dfs(new Point(j, i), map);
                     result.add(sum);
                 }
             }
@@ -45,22 +44,23 @@ class Solution {
         return map;
     }
 
-    public static int dfs(Point start, int[][] map, boolean[][] visited) {
+    public static int dfs(Point start, int[][] map) {
 
-        visited[start.y][start.x] = true;
         int sum = map[start.y][start.x];
+        map[start.y][start.x] = 0;
 
         for (int i = 0; i < 4; i++) {
             int nx = start.x + dx[i];
             int ny = start.y + dy[i];
 
             if(nx < 0 || nx >= map[0].length || ny < 0 || ny >= map.length) continue;
-            if(map[ny][nx] == 0 || visited[ny][nx]) continue;
+            if(map[ny][nx] == 0 ) continue;
 
 
-            sum += dfs(new Point(nx, ny), map, visited);
+            sum += dfs(new Point(nx, ny), map);
         }
 
         return sum;
     }
+
 }
