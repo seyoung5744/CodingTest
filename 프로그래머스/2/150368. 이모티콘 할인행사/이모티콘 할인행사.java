@@ -5,15 +5,11 @@ public class Solution {
     public static int[] discount = {40, 30, 20, 10};
     public static int[] answer = {0, 0};
     public static int[] solution(int[][] users, int[] emoticons) {
-
-        int[] dis = new int[emoticons.length];
-        dfs(0, dis, new int[users.length], emoticons, users);
-
-
+        dfs(0, new int[users.length], emoticons, users);
         return answer;
     }
 
-    public static void dfs(int depth, int[] dis, int[] totalMoney, int[] emoticons, int[][] users)
+    public static void dfs(int depth, int[] totalMoney, int[] emoticons, int[][] users)
     {
         if (depth == emoticons.length)
         {
@@ -53,7 +49,7 @@ public class Solution {
                 }
             }
 
-            dfs(depth + 1, dis, totalMoney, emoticons, users);
+            dfs(depth + 1, totalMoney, emoticons, users);
 
             for (int j = 0; j < users.length; j++) {
                 if(discount[i] >= users[j][0]) {
@@ -62,6 +58,5 @@ public class Solution {
             }
         }
     }
-
 
 }
