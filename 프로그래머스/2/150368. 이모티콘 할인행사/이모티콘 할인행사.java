@@ -1,4 +1,4 @@
-import java.util.Arrays;
+import java.util.*;
 
 public class Solution {
 
@@ -7,45 +7,29 @@ public class Solution {
     public static int[] solution(int[][] users, int[] emoticons) {
 
         int[] dis = new int[emoticons.length];
-        dfs(0, dis, emoticons, users);
+        dfs(0, dis, new int[users.length], emoticons, users);
 
 
         return answer;
     }
 
-    public static void dfs(int depth, int[] dis, int[] emoticons, int[][] users)
+    public static void dfs(int depth, int[] dis, int[] totalMoney, int[] emoticons, int[][] users)
     {
         if (depth == emoticons.length)
         {
             int pCount = 0;
             int totalCost = 0;
+
             for(int i = 0; i < users.length; ++i)
             {
-                boolean flag = false;
-                int cost = 0;
-                for(int j = 0; j < emoticons.length; ++j)
-                {
-                    if (users[i][0] <= discount[dis[j]])
-                    {
-                        cost += emoticons[j] * ((double)(100 - discount[dis[j]]) / 100);
-                    }
-
-                    if (cost >= users[i][1])
-                    {
-                        flag = true;
-                        break;
-                    }
-                }
-
-                if (flag)
+                if (users[i][1] <= totalMoney[i])
                 {
                     pCount++;
                 }
                 else
                 {
-                    totalCost += cost;
+                    totalCost += totalMoney[i];
                 }
-
             }
 
             if (pCount > answer[0])
@@ -57,14 +41,27 @@ public class Solution {
             {
                 answer[1] = totalCost;
             }
+
             return;
         }
 
         for(int i = 0; i < 4; ++i)
         {
-            dis[depth] = i;
-            dfs(depth + 1, dis, emoticons, users);
+            for (int j = 0; j < users.length; j++) {
+                if(discount[i] >= users[j][0]) {
+                    totalMoney[j] += (emoticons[depth] * (100 - discount[i])) / 100;
+                }
+            }
+
+            dfs(depth + 1, dis, totalMoney, emoticons, users);
+
+            for (int j = 0; j < users.length; j++) {
+                if(discount[i] >= users[j][0]) {
+                    totalMoney[j] -= (emoticons[depth] * (100 - discount[i])) / 100;
+                }
+            }
         }
     }
+
 
 }
