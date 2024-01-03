@@ -28,35 +28,26 @@ public class Solution {
     public static String[] solution(String[][] plans) {
         List<String> answer = new ArrayList<>();
 
-        List<Task> tasks = new ArrayList<>();
+        PriorityQueue<Task> tasks = new PriorityQueue<>();
         for (String[] plan : plans) {
             tasks.add(new Task(plan[0], plan[1], plan[2]));
         }
 
-        Collections.sort(tasks);
-
         Stack<Task> waiting = new Stack<>();
-        int index = 0;
-        Task cur = tasks.get(index++);
 
-        while (true) {
+        Task cur = tasks.poll();
+        while (!tasks.isEmpty()) {
+            Task next = tasks.peek();
 
-            if(index >= tasks.size()) {
-                break;
-            }
-
-            Task next = tasks.get(index);
             if (next.startTime < cur.startTime + cur.playTime) {
                 cur.playTime -= (next.startTime - cur.startTime);
                 waiting.push(cur);
-                cur = next;
-                index++;
+                cur = tasks.poll();
             } else {
                 answer.add(cur.name);
 
                 if(waiting.isEmpty()) {
-                    cur = next;
-                    index++;
+                    cur = tasks.poll();
                     continue;
                 }
                 int newStartTime = cur.playTime + cur.startTime;
@@ -73,5 +64,4 @@ public class Solution {
 
         return answer.toArray(new String[answer.size()]);
     }
-
 }
