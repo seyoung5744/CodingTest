@@ -21,7 +21,8 @@ vector<string> split(string str, char del)
 int solution(vector<string> friends, vector<string> gifts) {
     int answer = 0;
     vector<vector<int>> exel (friends.size(), vector<int>(friends.size(), 0));
-    
+    vector<int> gPoint(friends.size(), 0);
+    vector<int> rPoint(friends.size(), 0);
     map<string, int> p;
     for(int i = 0; i< friends.size(); ++i)
     {
@@ -35,25 +36,15 @@ int solution(vector<string> friends, vector<string> gifts) {
         int receiver = p[temp[1]];
         
         ++exel[giver][receiver];
+        ++gPoint[giver];
+        ++rPoint[receiver];
     }
     
     vector<int> point (friends.size(), 0);
     
     for(int i = 0; i < friends.size(); ++i)
     {
-        int gPoint = 0;
-        for(int j = 0; j < friends.size(); ++j)
-        {
-            gPoint += exel[i][j];
-        }
-        
-        int rPoint = 0;
-        for(int j = 0; j < friends.size(); ++j)
-        {
-            rPoint += exel[j][i];
-        }
-        
-        point[i] = gPoint - rPoint;
+        point[i] = gPoint[i] - rPoint[i];
     }
     
     for(int i = 0; i < friends.size(); ++i)
