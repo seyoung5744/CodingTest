@@ -43,9 +43,9 @@ public class Solution {
                 q.add(next);
             }
         }
-
+        int max = Arrays.stream(distance).max().getAsInt();
         return (int) Arrays.stream(distance)
-            .filter(i -> i == Arrays.stream(distance).max().getAsInt())
+            .filter(i -> i == max)
             .count();
     }
 
