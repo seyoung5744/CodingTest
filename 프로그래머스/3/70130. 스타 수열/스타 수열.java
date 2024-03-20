@@ -1,51 +1,31 @@
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Solution {
 
     public static int solution(int[] a) {
-        int answer = 0;
-
-        int[] cnt = new int[a.length];
+        Map<Integer, Integer> map = new HashMap<>();
 
         for (int num : a) {
-            cnt[num]++;
+            map.put(num, map.getOrDefault(num, 0) + 1);
         }
 
+        int answer = 0;
 
-        for (int i = 0; i < cnt.length; i++) {
-
-            if(cnt[i] <= answer / 2)
+        for (int key : map.keySet()) {
+            if(map.get(key) <= answer)
                 continue;
-
-            int r = 0;
-            int end = 0;
-            for (int j = 0; j < a.length; j++) {
-                if (a[j] == i) {
-                    if (j - 1 >= 0)
-                    {
-                        if (j-1 >= end && a[j-1] != a[j])
-                        {
-                            end = j + 1;
-                            r += 2;
-                            continue;
-                        }
-                    }
-
-                    if (j + 1 < a.length)
-                    {
-                        if (j + 1 < a.length && a[j] != a[j+1])
-                        {
-                            r += 2;
-                            end = j + 2;
-                            continue;
-                        }
-                    }
-                }
+            
+            int cnt = 0;
+            for (int j = 0; j < a.length - 1; j++) {
+                if(a[j] != key && a[j + 1] != key) continue;
+                if(a[j] == a[j + 1]) continue;
+                cnt++;
+                j++;
             }
-
-            answer = Math.max(answer, r);
+            answer = Math.max(cnt, answer);
         }
 
-        return answer;
+        return answer * 2;
     }
 }
