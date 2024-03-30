@@ -10,8 +10,8 @@ import java.util.TreeMap;
 public class Solution{
 
     public static int pickNum, totalLen;
-    public static List<int[]> diceCombA = new LinkedList<>();
-    public static List<int[]> diceCombB = new LinkedList<>();
+    public static List<int[]> diceCombA = new ArrayList<>();
+    public static List<int[]> diceCombB = new ArrayList<>();
     public static Map<Integer, Integer> a = new TreeMap<>();
     public static Map<Integer, Integer> b = new TreeMap<>();
 
