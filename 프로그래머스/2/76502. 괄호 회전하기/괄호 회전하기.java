@@ -8,21 +8,27 @@ public class Solution {
 
     public static int solution(String s) {
         int answer = 0;
+        Deque<Character> queue = new ArrayDeque<>();
+        for (char c : s.toCharArray()) {
+            queue.add(c);
+        }
         
         for (int i = 0; i < s.length(); i++) {
-            String temp = s.substring(i, s.length()) + s.substring(0, i);
-            if(isValid(temp)) {
+            if(isValid(queue)) {
                 answer++;
             }
+            
+            queue.add(queue.poll());
         }
         return answer;
     }
 
-    public static boolean isValid(String s) {
+    public static boolean isValid(Deque<Character> s) {
         Deque<Character> stack = new ArrayDeque<>();
-
-        for (char ch : s.toCharArray()) {
-
+        Deque<Character> queue = new ArrayDeque<>(s);
+        
+        while(!queue.isEmpty()) {
+            char ch = queue.poll();
             if (parenthesis.containsKey(ch)) {
                 stack.push(ch);
             } else {
