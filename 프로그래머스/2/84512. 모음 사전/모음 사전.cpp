@@ -5,17 +5,26 @@
 #include <iostream>
 using namespace std;
 
-map<char, int> mapping = {{'A',0}, {'E',1}, {'I',2}, {'O',3}, {'U',4}};
+map<char, int> m = {{'A', 0}, {'E', 1}, {'I', 2}, {'O', 3}, {'U', 4}};
 
 int solution(string word) {
     int answer = 0;
     
-    int dis = 781;
+    int c = word.length();
     
-    for(int i = 0; i < word.length(); ++i)
+    int max = 0;
+    for(int i = 0; i < 5; ++i)
     {
-        answer += dis * mapping[word[i]] + 1;
-        dis = (dis - 1) / 5;
+        max += pow(5, i);
     }
+    
+    for(int i = 0; i < word.size(); ++i)
+    {
+        
+        answer += m[word[i]] * max + 1;
+        
+        max -= pow(5, 4-i);
+    }
+    
     return answer;
 }
