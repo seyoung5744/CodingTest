@@ -5,8 +5,7 @@
 #include <iostream>
 using namespace std;
 
-int x = 10;
-int x2 = 11;
+
 
 int dx[4] = {0, 0, 1, -1};
 int dy[4] = {1, -1, 0, 0};
@@ -17,6 +16,9 @@ int solution(string dirs) {
     
     int curX = 5;
     int curY = 5;
+    
+    int x = 10;
+    int x2 = 11;
     
     set<int> r;
     
