@@ -1,50 +1,50 @@
 #include <string>
-#include <vector>
 #include <set>
+#include <map>
+#include <cmath>
 #include <iostream>
 using namespace std;
 
+int x = 10;
+int x2 = 11;
+
+int dx[4] = {0, 0, 1, -1};
+int dy[4] = {1, -1, 0, 0};
+
+map<char, int> m = {{'L', 3}, {'R', 2}, {'U', 1}, {'D', 0}};
 int solution(string dirs) {
     int answer = 0;
     
-    vector<vector<int>> map (11, vector<int> (11, 0));
-    set<pair<pair<int, int>, pair<int ,int>>> check;
     int curX = 5;
     int curY = 5;
     
+    set<int> r;
+    
     for(int i = 0; i < dirs.length(); ++i)
     {
-        char dir = dirs[i];
-        int newX = curX;
-        int newY = curY;
+        int dir = m[dirs[i]];
         
-        if (dir == 'U')
-        {
-            --newY;
-        }
-        else if (dir == 'D')
-        {
-            ++newY;
-        }
-        else if (dir == 'R')
-        {
-            ++newX;
-        }
-        else if (dir == 'L')
-        {
-            --newX;
-        }
+        int nx = curX + dx[dir];
+        int ny = curY + dy[dir];
         
-        if (newX < 0 || newX > 10 || newY < 0 || newY > 10)
+        if (nx < 0 || nx > 10 || ny < 0 || ny > 10)
             continue;
         
-        check.insert({{newY, newX}, {curY, curX}});
-        check.insert({{curY, curX}, {newY, newX}});
-        curX = newX;
-        curY = newY;
+        int num = 0;
+        if (nx == curX)
+        {
+            num = max(ny, curY) * (x + x2) - (x2 - nx);
+        }
+        else
+        {
+            num = curY * (x + x2) + min(nx, curX);
+        }
+        r.insert(num);
+        
+        curX = nx;
+        curY = ny;
     }
     
-    answer = check.size() / 2;
-    
+    answer = r.size();
     return answer;
 }
