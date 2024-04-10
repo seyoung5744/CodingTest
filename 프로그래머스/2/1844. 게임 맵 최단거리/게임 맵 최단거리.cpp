@@ -18,24 +18,24 @@ int solution(vector<vector<int> > maps)
     
     while(!q.empty())
     {
-        pair<int, int> cur = q.front();
+        auto& [curX, curY] = q.front();
         q.pop();
         
-        if (cur.first == endX && cur.second == endY)
+        if (curX == endX && curY == endY)
             break;
         
         for(int i = 0; i < 4; ++i)
         {
-            int nx = cur.first + dx[i];
-            int ny = cur.second + dy[i];
+            int nx = curX + dx[i];
+            int ny = curY + dy[i];
             
             if (nx < 0 || nx > endX || ny < 0 || ny > endY || maps[ny][nx] == 0)
                 continue;
             
-            if (visited[ny][nx] <= visited[cur.second][cur.first] + 1)
+            if (visited[ny][nx] <= visited[curY][curX] + 1)
                 continue;
             
-            visited[ny][nx] = visited[cur.second][cur.first] + 1;
+            visited[ny][nx] = visited[curY][curX] + 1;
             q.push({nx, ny});
         }
     }
