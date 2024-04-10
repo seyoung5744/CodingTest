@@ -1,43 +1,36 @@
+
 import java.util.*;
 
 public class Solution {
-    public static int[] solution(String msg) {
-        Map<String, Integer> dict = new HashMap<>();
-        for(int i = 1; i <= 26; i++) {
-            dict.put( Character.toString(64 + i), i);
+
+    public static Map<String, Integer> dictionary = new HashMap<>();
+
+    public static void init() {
+        for (char i = 'A'; i <= 'Z'; i++) {
+            dictionary.put(Character.toString(i), i - 'A' + 1);
         }
+    }
+
+    public static int[] solution(String msg) {
+        init();
 
         List<Integer> answer = new ArrayList<>();
+        String cur = "";
 
-        String key = msg.substring(0, 1);
-        int iter = 0;
-        while(true)
-        {
-            if (iter + 1 < msg.length())
+        for (int i = 0; i < msg.length(); i++) {
+            cur += msg.charAt(i);
+
+            if (!dictionary.containsKey(cur))
             {
-                String temp = key;
-                temp += msg.charAt(iter + 1);
-
-                if (dict.containsKey(temp))
-                {
-                    key = temp;
-                }
-                else
-                {
-                    answer.add(dict.get(key));
-                    dict.put(temp, dict.size() + 1);
-                    key = String.valueOf(msg.charAt(iter + 1));
-                }
-
-                ++iter;
+                dictionary.put(cur, dictionary.size() + 1);
+                answer.add(dictionary.get(cur.substring(0, cur.length() - 1)));
+                cur = "";
+                i--;
             }
-            else {
-                answer.add(dict.get(key));
-                break;
-            }
-
         }
-
+        
+        if(cur.length() > 0)
+            answer.add(dictionary.get(cur));
         return answer.stream().mapToInt(Integer::intValue).toArray();
     }
 
