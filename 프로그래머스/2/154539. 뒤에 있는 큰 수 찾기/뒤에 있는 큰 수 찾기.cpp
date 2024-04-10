@@ -1,42 +1,31 @@
 #include <string>
 #include <vector>
+#include <stack>
 
 using namespace std;
 
 vector<int> solution(vector<int> numbers) {
-    vector<int> answer(numbers.size());
-    vector<int> parent (numbers.size(), -1);
-    answer[numbers.size() - 1] = -1;
+   
+    vector<int> answer (numbers.size(), -1);
+    stack<pair<int, int>> s;
     
-    
-    for(int i = numbers.size() - 2; i >= 0; --i)
+    for(int i = 0; i < numbers.size(); ++i)
     {
-        if (numbers[i] < numbers[i + 1])
+        while(!s.empty())
         {
-            answer[i] = numbers[i+1];
-            parent[i] = i + 1;
-        }
-        else if (numbers[i] == numbers[i + 1])
-        {
-            answer[i] = answer[i+1];
-            parent[i] = parent[i+1];
-        }
-        else
-        {
-            int p = parent[i+1];
-            answer[i] = -1;
-            
-            while(p != -1)
+            if (s.top().first < numbers[i])
             {
-                if (numbers[p] > numbers[i])
-                {
-                    answer[i] = numbers[p];
-                    parent[i] = p;
-                    break;
-                }
-                p = parent[p];
+                auto& [num, idx] = s.top();
+                s.pop();
+                
+                answer[idx] = numbers[i];
+            }
+            else
+            {
+                break;
             }
         }
+        s.push({numbers[i], i});
     }
     
     return answer;
