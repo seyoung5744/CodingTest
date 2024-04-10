@@ -1,26 +1,24 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Solution {
 
     public static int[] solution(String s) {
-        List<Integer> answer = new ArrayList<>();
+        Set<Integer> set = new HashSet<>();
 
         List<List<Integer>> tokens = split(s);
         tokens.sort(Comparator.comparing(List::size));
-
+        int[] answer = new int[tokens.size()];
+        int idx = 0;
         for(List<Integer> token : tokens) {
             for(int num : token) {
-                if(!answer.contains(num)) {
-                    answer.add(num);
+                if(set.add(num)) {
+                    answer[idx++] = num;
                 }
             }
         }
 
-        return answer.stream().mapToInt(Integer::intValue).toArray();
+        return answer;
     }
 
     private static List<List<Integer>> split(String s) {
@@ -37,5 +35,4 @@ public class Solution {
 
         return result;
     }
-
 }
