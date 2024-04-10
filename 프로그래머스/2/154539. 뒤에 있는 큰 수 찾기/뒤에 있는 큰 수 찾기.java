@@ -1,38 +1,33 @@
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Deque;
 
-class Solution {
-    public static int[] parents = new int[1_000_001];
-    
-    public int[] solution(int[] numbers) {
+public class Solution {
+
+    public static int[] solution(int[] numbers) {
         int[] answer = new int[numbers.length];
-        
-        Arrays.fill(parents, -1);
-        answer[numbers.length - 1] = -1;
-        
-        for(int i = numbers.length - 2; i >= 0; i--) {
-            
-            if(numbers[i] < numbers[i+1]) {
-                answer[i] = numbers[i+1];
-                parents[numbers[i]] = numbers[i+1];
-            } else {
-                answer[i] = find(numbers[i+1], numbers[i]);
-                parents[numbers[i]] = answer[i];
+
+        Deque<Integer> stack1 = new ArrayDeque<>();
+
+        for (int i = 0; i < numbers.length; i++) {
+            while (!stack1.isEmpty()) {
+                int idx = stack1.peek();
+
+                if (numbers[idx] < numbers[i]) {
+                    stack1.pop();
+                    answer[idx] = numbers[i];
+                } else {
+                    break;
+                }
             }
+
+            stack1.push(i);
         }
-        
+
+        while (!stack1.isEmpty()) {
+            answer[stack1.poll()] = -1;
+        }
         return answer;
     }
-    
-    public int find(int x, int origin) {
-        
-        if(x > origin) {
-            return x;
-        }
-        
-        if(x == -1) {
-            return -1;
-        }
-        
-        return find(parents[x], origin);
-    }
+
 }
