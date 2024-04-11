@@ -5,7 +5,7 @@ class Solution {
         for (int[] puddle : puddles) {
             map[puddle[0]][puddle[1]] = -1;
         }
-        map[1][1] = 1;
+        map[1][1] = 1;  
 
         for (int i = 1; i <= m; i++) {
             for (int j = 1; j <= n; j++) {
