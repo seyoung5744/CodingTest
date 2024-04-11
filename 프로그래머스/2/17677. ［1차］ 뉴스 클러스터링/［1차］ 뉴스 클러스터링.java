@@ -11,11 +11,7 @@ public class Solution {
 
         int intersectionSize = getIntersectionSize(set1, set2);
         int unionSize = set1.size() + set2.size() - intersectionSize;
-        double answer = 1;
-        if (unionSize != 0) {
-            answer = (double) intersectionSize / unionSize;
-        }
-        return (int) (answer * 65536);
+        return (int) ((unionSize == 0 ? 1 : ((double) intersectionSize / unionSize)) * 65536);
     }
 
     public static List<String> createSet(String s) {
