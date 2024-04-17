@@ -1,30 +1,50 @@
-#include <iostream>
+#include <string>
 #include <vector>
-#include <algorithm>
-#include <climits>
-
+#include <cmath>
 using namespace std;
 
-int solution(int x, int y, int n) {
-    vector<int> dp(y + 1, 1000001);
-    dp[x] = 0;
+int answer = 2100000000;
 
-    for (int i = x + 1; i <= y; i++) {
-        // n을 더하는 경우
-        if (i - n >= x) {
-            dp[i] = min(dp[i], dp[i - n] + 1);
-        }
-
-        // 2를 곱하는 경우
-        if (i % 2 == 0) {
-            dp[i] = min(dp[i], dp[i / 2] + 1);
-        }
-
-        // 3을 곱하는 경우
-        if (i % 3 == 0) {
-            dp[i] = min(dp[i], dp[i / 3] + 1);
-        }
+vector<int> mem (1000001, 210000000);
+void recursive(int cur, int target, int n, int count)
+{
+    mem[cur] = count;
+    
+    if(cur <= 0) 
+        return;
+    
+    if (count >= answer || cur < target)
+        return;
+    
+    if (cur == target)
+    {
+        answer = min(answer, count);
+        return;
     }
+    
+    if (cur % 2 == 0)
+    {
+        if (mem[cur/2] > count + 1)
+            recursive(cur / 2, target, n, count + 1);
+            
+    }
+    
+    if (cur % 3 == 0)
+    {
+        if (mem[cur/3] > count + 1)
+            recursive(cur / 3, target, n, count + 1);
+    }
+    
+    if (cur - n >= target)
+        if (mem[cur - n] > count + 1)
+            recursive(cur - n, target, n, count + 1);
+}
 
-    return (dp[y] == 1000001) ? -1 : dp[y];
+int solution(int x, int y, int n) {
+    recursive(y, x, n, 0);
+    
+    if (answer == 2100000000)
+        answer = -1;
+    
+    return answer;
 }
