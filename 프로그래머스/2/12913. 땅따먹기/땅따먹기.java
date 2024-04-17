@@ -13,7 +13,7 @@ public class Solution {
             for (int j = 0; j < 4; j++) {
                 for(int k = 0; k < 4; ++k)
                 {
-                    if (j == k)
+                    if (k == j)
                         continue;
                     
                     dp[i][j] = Math.max(dp[i][j], land[i][j] + dp[i-1][k]);
