@@ -1,52 +1,51 @@
+
 import java.util.*;
 
 public class Solution {
 
-    static class Cmd {
-        String uuid;
-        String command;
+    static class User {
 
-        public Cmd(String uuid, String command) {
-            this.uuid = uuid;
-            this.command = command;
+        public String status;
+        public String id;
+
+        public User(String status, String id) {
+            this.status = status;
+            this.id = id;
         }
     }
-    public static String[] solution(String[] records) {
 
-        Deque<Cmd> queue = new ArrayDeque<>();
-        List<String> answer = new ArrayList<>();
+    public static List<User> list = new ArrayList<>();
+    public static Map<String, String> nicknameMap = new HashMap<>();
 
-        Map<String, String> commands = new HashMap<>(){{
-            put("Enter", "님이 들어왔습니다.");
-            put("Leave", "님이 나갔습니다.");
-        }};
-
-        Map<String, String> map = new HashMap<>();
-
-        for(String record : records) {
+    public String[] solution(String[] records) {
+        for (String record : records) {
             String[] tokens = record.split(" ");
-            String command = tokens[0];
-            String uuid = tokens[1];
-            String nickname = "";
+            String status = tokens[0];
+            String id = tokens[1];
 
-            if(command.equals("Enter")) {
-                nickname = tokens[2];
-                map.put(uuid, nickname);
-                queue.add(new Cmd(uuid, command));
-            } else if(command.equals("Leave")) {
-                queue.add(new Cmd(uuid, command));
+            if(status.equals("Enter") || status.equals("Change")) {
+                String nickname = tokens[2];
+
+                nicknameMap.put(id, nickname);
+            }
+
+            if(!status.equals("Change"))
+                list.add(new User(status, id));
+        }
+
+        return print().toArray(new String[0]);
+    }
+
+    public static List<String> print() {
+        List<String> answer = new ArrayList<>();
+        for (User user : list) {
+            if(user.status.equals("Enter")) {
+                answer.add(nicknameMap.get(user.id) + "님이 들어왔습니다.");
             } else {
-                nickname = tokens[2];
-                map.put(uuid, nickname);
+                answer.add(nicknameMap.get(user.id) + "님이 나갔습니다.");
             }
         }
-
-        while (!queue.isEmpty()){
-            Cmd cmd = queue.poll();
-            answer.add(map.get(cmd.uuid) + commands.get(cmd.command));
-        }
-
-        return answer.toArray(String[]::new);
+        return answer;
     }
 
 }
