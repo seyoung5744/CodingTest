@@ -1,83 +1,55 @@
 #include <string>
 #include <vector>
 #include <cctype>
-#include <iostream>
 #include <algorithm>
-
+#include <iostream>
 using namespace std;
-
 struct File
 {
-    string fileName;
-    string head;
-    string number;
-    string tail;
     
-    File(string fn, string h, string n, string t) 
-        : fileName(fn), head(h), number(n), tail(t) {}
+    vector<string> name;
+    string origin;
+    File(string o) : origin(o) 
+    {
+        name = vector<string>(3, "");
+    }
 };
 
 vector<string> solution(vector<string> files) {
     vector<string> answer;
-    
-    vector<File> fileList;
+    vector<File*> f;
     for(int i = 0; i < files.size(); ++i)
     {
-        vector<string> file (3, "");
         int target = 0;
-        for(char ch: files[i])
+        File* temp = new File(files[i]);
+        for(int j = 0; j < files[i].length(); ++j)
         {
+            if (target == 0 && isdigit(files[i][j]))
+                ++target;
+            else if (target == 1 && (isdigit(files[i][j]) == false || temp->name[target].length() == 5))
+                ++target;
+            
             if (target == 0)
-            {
-                if (!isdigit(ch))
-                {
-                    file[target] += tolower(ch);
-                    continue;
-                }
-                else
-                {
-                    ++target;
-                }
-            }
-            
-            if (target == 1)
-            {
-                if (file[target].length() == 5)
-                    ++target;
-                else
-                {
-                    if (isdigit(ch))
-                    {
-                        file[target] += ch;
-                    }
-                    else
-                    {
-                        ++target;
-                    } 
-                }
-            }
-            
-            if (target == 2)
-            {
-                file[target] += ch;
-            }
+                temp->name[target] += tolower(files[i][j]);
+            else
+                temp->name[target] += files[i][j];
         }
         
-        fileList.emplace_back(File(files[i], file[0], file[1], file[2]));
+        cout << temp->origin << " " << temp->name[0] << " " << temp->name[1] << " " << temp->name[2] << " " << endl;
+        
+        f.push_back(temp);
     }
     
-    stable_sort(fileList.begin(), fileList.end(), [](File a, File b){
-        if (a.head == b.head)
-        {
-            return stoi(a.number) < stoi(b.number);
-        }
+    stable_sort(f.begin(), f.end(), [](File* a, File* b){
+        if (a->name[0] == b->name[0])
+            return stoi(a->name[1]) < stoi(b->name[1]);
         
-        return a.head < b.head;
+        return a->name[0] < b->name[0];
     });
     
-    for(int i = 0; i < fileList.size(); ++i)
+    for(int i = 0; i < f.size(); ++i)
     {
-        answer.emplace_back(fileList[i].fileName);
+        answer.push_back(f[i]->origin);
     }
     
     return answer;
