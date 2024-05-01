@@ -1,54 +1,38 @@
-import java.util.*;
+import java.util.Arrays;
+import java.util.PriorityQueue;
 
-class Solution {
-    public static class Person implements Comparable<Person> {
-
-        int startTime;
-        int endTime;
-
-        public Person(int startTime, int endTime) {
-            this.startTime = startTime;
-            this.endTime = endTime;
-        }
-
-        @Override
-        public int compareTo(Person o) {
-            return this.endTime - o.endTime;
-        }
-    }
+public class Solution {
 
     public static int solution(String[][] book_time) {
-        int answer = 0;
 
-        List<Person> times = new ArrayList<>();
-
+        int[][] bookTime = new int[book_time.length][2];
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
         for (int i = 0; i < book_time.length; i++) {
-            String[] books = book_time[i];
-            int start = convertTime(books[0]);
-            int end = convertTime(books[1]);
-            times.add(new Person(start, end));
+            bookTime[i] = new int[]{convert(book_time[i][0]), convert(book_time[i][1]) + 10};
         }
 
-        Collections.sort(times, (a, b) -> a.startTime - b.startTime);
+        Arrays.sort(bookTime, (a, b) -> a[0] - b[0]);
 
-        PriorityQueue<Person> pq = new PriorityQueue<>();
+        System.out.println(Arrays.deepToString(bookTime));
 
-        for (Person time : times) {
-            if (!pq.isEmpty()) {
-                while (!pq.isEmpty() && (pq.peek().endTime + 10 <= time.startTime)) {
-                    pq.poll();
-                }
+        int answer = 0;
+
+        for (int i = 0; i < bookTime.length; i++) {
+
+            while(!pq.isEmpty() && bookTime[i][0] >= pq.peek())
+            {
+                pq.poll();
             }
-            pq.add(time);
+            pq.add(bookTime[i][1]);
 
             answer = Math.max(answer, pq.size());
         }
+
         return answer;
     }
-    public static int convertTime(String times) {
-        String[] split = times.split(":");
-        int hour = Integer.parseInt(split[0]) * 60;
-        int min = Integer.parseInt(split[1]);
-        return hour + min;
+
+    public static int convert(String time) {
+        int[] split = Arrays.stream(time.split(":")).mapToInt(Integer::parseInt).toArray();
+        return split[0] * 60 + split[1];
     }
 }
