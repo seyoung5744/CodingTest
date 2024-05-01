@@ -1,38 +1,42 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-class Solution {
-    public static List<Integer> nums = new ArrayList<>();
+public class Solution {
 
     public static int[] solution(int n, long k) {
         int[] answer = new int[n];
+        List<Integer> nums = new ArrayList<>();
 
         for (int i = 1; i <= n; i++) {
             nums.add(i);
         }
 
-        // n 4
-        // k 11
-        --k;
-        int idx = 0;
-        int len = n - 1;
+        long num = 1;
 
-        long num = 1L;
-        for (int i = 1; i <= len; i++) {
+        for(int i = 1; i < n; ++i)
+        {
             num *= i;
         }
-
-        while(len > 0) {
-            long index = k / num; // 몫
-            k = k % num;
-
-            answer[idx++] = nums.get((int) index);
-            nums.remove((int) index);
-            num /= len;
-            len--;
-        }
-
-        answer[idx] = nums.get((int) len);
         
+        --n;
+        --k;
+        int targetIdx = 0;
+        while(!nums.isEmpty())
+        {
+            int idx = (int)(k / num);
+            answer[targetIdx] = nums.get(idx);
+            nums.remove(idx);
+            k %= num;
+            
+            if (n == 0)
+                break;
+            
+            num /= n;
+            --n;
+            ++targetIdx;
+        }
         return answer;
     }
+
 }
