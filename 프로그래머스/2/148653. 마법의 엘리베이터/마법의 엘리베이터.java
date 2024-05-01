@@ -1,13 +1,33 @@
 class Solution {
     public int solution(int storey) {
-        return sol(storey);
-    }
-    
-    public int sol(int storey) {
-        if(storey < 10) return Math.min(storey, 10 - storey + 1);
-        int down = storey % 10;
-        int up = 10 - storey % 10;
+        int answer = 0;
         
-        return Math.min(sol((storey - down) / 10) + down , sol( (storey + up) / 10) + up);
+        while(storey != 0) {
+            int one = storey % 10;
+            storey /= 10;
+            
+            if(one < 5) {
+                answer += one;
+                
+            }else if(one == 5) {
+                int ten = storey % 10;
+                
+                if (ten < 5)
+                {
+                    answer += one;
+                }
+                else
+                {
+                     answer += 10 - one;
+                    ++storey;
+                }
+                
+            }else {
+                answer += 10 - one;
+                ++storey;
+            }
+        }
+        
+        return answer;
     }
 }
