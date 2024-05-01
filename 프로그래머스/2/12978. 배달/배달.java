@@ -6,7 +6,7 @@ public class Solution {
     public static int[][] graph;
 
     public static int solution(int N, int[][] roads, int K) {
-        int answer = 1;
+        int answer = 0;
 
         graph = new int[N + 1][N + 1];
 
@@ -29,13 +29,16 @@ public class Solution {
         for (int k = 1; k <= N; k++) {
             for (int a = 1; a <= N; a++) {
                 for (int b = 1; b <= N; b++) {
+                    if (a == b)
+                        graph[a][b] = 0;
+                    
                     graph[a][b] = Math.min(graph[a][b], graph[a][k] + graph[k][b]);
                 }
             }
         }
 
 
-        for (int a = 2; a <= N; a++) {
+        for (int a = 1; a <= N; a++) {
             if (graph[1][a] <= K) {
                 answer++;
             }
