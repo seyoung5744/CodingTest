@@ -46,6 +46,7 @@ public class Solution {
         Arrays.fill(d, INF);
 
         Queue<Node> pq = new PriorityQueue<>();
+        
         for (int i = 0; i < gates.length; i++) {
             type[gates[i]] = 1; // 입구
             pq.offer(new Node(gates[i], 0));
