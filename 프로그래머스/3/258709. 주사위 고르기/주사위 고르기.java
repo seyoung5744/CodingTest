@@ -30,19 +30,13 @@ public class Solution{
             int winCount = 0;
             int drawCount = 0;
 
-            for(int numA : a.keySet())
-            {
-                for(int numB : b.keySet())
-                {
-                    if (numA > numB)
-                    {
+            for(int numA : a.keySet()) {
+                for(int numB : b.keySet()) {
+                    if (numA > numB) {
                         winCount += a.get(numA) * b.get(numB);
-                    }
-                    else if (numA == numB)
-                    {
+                    } else if (numA == numB) {
                         drawCount += a.get(numA) * b.get(numB);
-                    }
-                    else {
+                    } else {
                         break;
                     }
                 }
@@ -52,18 +46,13 @@ public class Solution{
             int total = (int)Math.pow(6, pickNum) * (int)Math.pow(6, pickNum);
             int loseCount = total - winCount - drawCount;
 
-            if (winCount >= loseCount)
-            {
-                if (max < winCount)
-                {
+            if (winCount >= loseCount) {
+                if (max < winCount) {
                     max = winCount;
                     answer = diceCombA.get(i);
                 }
-            }
-            else
-            {
-                if (max < loseCount)
-                {
+            } else {
+                if (max < loseCount) {
                     max = loseCount;
                     answer = diceCombB.get(diceCombB.size() - i - 1);
                 }
@@ -82,8 +71,7 @@ public class Solution{
             return;
         }
 
-        for(int i = 0; i < 6; ++i)
-        {
+        for(int i = 0; i < 6; ++i) {
             int[] intsA = diceCombA.get(combNum);
             int a = intsA[diceIdx] - 1;
 
