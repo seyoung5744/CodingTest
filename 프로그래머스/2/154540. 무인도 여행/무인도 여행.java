@@ -1,66 +1,66 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 public class Solution {
 
-    public static class Point {
-        int x, y;
-
-        public Point(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
-
-    public static int[] dx = {1, -1, 0, 0}; // 우, 좌, 상, 하
-    public static int[] dy = {0, 0, -1, 1};
+    public static final int[] DX = {0, 0, 1, -1};
+    public static final int[] DY = {-1, 1, 0, 0};
 
     public static int[] solution(String[] maps) {
+        char[][] map = new char[maps.length][maps[0].length()];
 
-        int[][] map = generateMap(maps);
-        List<Integer> result = new ArrayList<>();
-
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[i].length; j++) {
-                if(map[i][j] != 0) {
-                    int sum = dfs(new Point(j, i), map);
-                    result.add(sum);
-                }
-            }
-        }
-
-        return result.size() == 0 ? new int[]{-1} : result.stream().sorted().mapToInt(Integer::intValue).toArray();
-    }
-
-    public static int[][] generateMap(String[] maps) {
-        int[][] map = new int[maps.length][maps[0].length()];
         for (int i = 0; i < maps.length; i++) {
-            char[] c = maps[i].toCharArray();
             for (int j = 0; j < maps[0].length(); j++) {
-                if(c[j] != 'X') {
-                    map[i][j] = c[j] - '0';
-                }
+                map[i][j] = maps[i].charAt(j);
             }
         }
-        return map;
-    }
 
-    public static int dfs(Point start, int[][] map) {
+        boolean[][] visited = new boolean[maps.length][maps[0].length()];
 
-        int sum = map[start.y][start.x];
-        map[start.y][start.x] = 0;
-
-        for (int i = 0; i < 4; i++) {
-            int nx = start.x + dx[i];
-            int ny = start.y + dy[i];
-
-            if(nx < 0 || nx >= map[0].length || ny < 0 || ny >= map.length) continue;
-            if(map[ny][nx] == 0 ) continue;
-
-
-            sum += dfs(new Point(nx, ny), map);
+        List<Integer> answer = new ArrayList<>();
+        for (int i = 0; i < maps.length; i++) {
+            for (int j = 0; j < maps[0].length(); j++) {
+                if (map[i][j] == 'X' || visited[i][j]) {
+                    continue;
+                }
+                answer.add(countMeal(j, i, map, visited));
+            }
         }
 
-        return sum;
+        Collections.sort(answer);
+        
+        if(answer.size() == 0) return new int[]{-1};
+        return answer.stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    public static int countMeal(int x, int y, char[][] map, boolean[][] visited) {
+
+        Queue<int[]> q = new LinkedList<>();
+        q.offer(new int[]{x, y});
+        visited[y][x] = true;
+        
+        int result = map[y][x] - '0';
+        while (!q.isEmpty()) {
+            int[] cur = q.poll();
+
+            for (int i = 0; i < 4; i++) {
+                int nx = cur[0] + DX[i];
+                int ny = cur[1] + DY[i];
+
+                if(nx < 0 || nx >= map[0].length || ny < 0 || ny >= map.length) continue;
+
+                if(map[ny][nx] == 'X' || visited[ny][nx]) continue;
+            
+                result += map[ny][nx] - '0';
+                
+                q.offer(new int[]{nx, ny});
+                visited[ny][nx] = true;
+            }
+        }
+        return result;
     }
 
 }
