@@ -1,51 +1,47 @@
-import java.util.*;
+public class Solution {
 
-class Solution {
-    
     public static int solution(int[] arrayA, int[] arrayB) {
-        Arrays.sort(arrayA);
-        Arrays.sort(arrayB);
+        int answer = 0;
 
-        int[] a = getDivisor(arrayA);
-        int[] b = getDivisor(arrayB);
-
-        return Math.max(getMax(a, arrayB), getMax(b, arrayA));
-    }
-
-    public static int getMax(int[] arr, int[] target) {
-        for (int i = arr.length - 1; i >= 0; i--) {
-
-            boolean flag = true;
-
-            for (int j = 0; j < target.length && flag; j++) {
-                if(target[j] % arr[i] == 0) {
-                    flag = false;
-                }
-            }
-
-            if(flag) {
-                return arr[i];
-            }
-        }
-        return 0;
-    }
-    public static int[] getDivisor(int[] arr) {
-        List<Integer> result = new ArrayList<>();
-
-        for (int i = 2; i <= arr[0]; i++) {
-            boolean flag = true;
-
-            for (int j = 0; j < arr.length && flag; j++) {
-                if(arr[j] % i != 0) {
-                    flag = false;
-                }
-            }
-
-            if(flag) {
-                result.add(i);
-            }
+        int a = 0;
+        for (int i = 0; i < arrayA.length; i++) {
+            a = gcd(a, arrayA[i]);
         }
 
-        return result.stream().mapToInt(Integer::intValue).toArray();
+        int b = 0;
+        for (int i = 0; i < arrayB.length; i++) {
+            b = gcd(b, arrayB[i]);
+        }
+
+        boolean flagA = true;
+        for (int i = 0; i < arrayA.length; i++) {
+            if(arrayA[i] % b == 0) flagA = false;
+        }
+
+        boolean flagB = true;
+        for (int i = 0; i < arrayB.length; i++) {
+            if(arrayB[i] % a == 0) flagB = false;
+        }
+
+        if (flagA) {
+            answer = b;
+        }
+
+        if (flagB) {
+            answer = Math.max(answer, a);
+        }
+
+        return answer;
     }
+
+    public static int gcd(int a, int b) {
+        while (b > 0) {
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+
+        return a;
+    }
+
 }
