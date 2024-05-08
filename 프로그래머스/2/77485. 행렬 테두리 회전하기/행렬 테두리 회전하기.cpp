@@ -1,74 +1,64 @@
 #include <string>
 #include <vector>
-#include <algorithm>
+
 using namespace std;
 
-int dx[4] = {1, 0, -1, 0};
-int dy[4] = {0, 1, 0, -1};
+int dx[4] = { 1, 0, -1, 0 };
+int dy[4] = { 0, 1, 0, -1 };
 
 vector<int> solution(int rows, int columns, vector<vector<int>> queries) {
     vector<int> answer;
-    
-    vector<vector<int>> map(rows + 1, vector<int> (columns + 1));
-    
-    int count = 1;
-    for(int i = 1; i < rows + 1; ++i)
+
+    vector<vector<int>> maps(rows, vector<int>(columns, 1));
+
+    int num = 1;
+    for (int i = 0; i < rows; ++i)
     {
-        for(int j = 1; j < columns + 1; ++j)
+        for (int j = 0; j < columns; ++j)
         {
-            map[i][j] = count;
-            ++count;
+            maps[i][j] = num++;
         }
     }
-    
-    for(int i = 0; i < queries.size(); ++i)
+
+    for (int i = 0; i < queries.size(); ++i)
     {
-        int topLeftI = queries[i][0];
-        int topLeftJ = queries[i][1];
-        int bottomI = queries[i][2];
-        int bottomJ = queries[i][3];
-        
-        int curI = topLeftI;
-        int curJ = topLeftJ;
-        
-        int before = map[curI][curJ];
-        int minimum = before;
-        
-        while(true)
+        int topLeftY = queries[i][0] - 1;
+        int topLeftX = queries[i][1] - 1;
+        int bottomY = queries[i][2] - 1;
+        int bottomX = queries[i][3] - 1;
+
+        int minimum = 1000001;
+
+        int curDir = 0;
+
+        int curX = topLeftX;
+        int curY = topLeftY;
+        int saved = maps[topLeftY][topLeftX];
+        int temp;
+        while (true)
         {
-            int dir;
-            if (curI == topLeftI && curJ != bottomJ)
+            int nx = curX + dx[curDir];
+            int ny = curY + dy[curDir];
+
+            if (nx > bottomX || nx < topLeftX || ny > bottomY || ny < topLeftY)
             {
-                dir = 0;
+                ++curDir;
+                continue;
             }
-            else if (curJ == bottomJ && curI != bottomI)
-            {
-                dir = 1;
-            }
-            else if (curI == bottomI && curJ != topLeftJ)
-            {
-                dir = 2;
-            }
-            else
-            {
-                dir = 3;
-            }
-            
-            int nextI = curI + dy[dir];
-            int nextJ = curJ + dx[dir];
-            
-            int temp = map[nextI][nextJ];
-            map[nextI][nextJ] = before;
-            before = temp;
-            curI = nextI;
-            curJ = nextJ;
-            
-            minimum = min(temp, minimum);
-            
-            if (curI == topLeftI && curJ == topLeftJ)
+
+            temp = maps[ny][nx];
+            maps[ny][nx] = saved;
+            saved = temp;
+            curX = nx;
+            curY = ny;
+
+            minimum = min(minimum, saved);
+
+            if (curX == topLeftX && curY == topLeftY)
                 break;
         }
-        
+
+
         answer.push_back(minimum);
     }
     return answer;
