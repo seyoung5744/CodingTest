@@ -7,20 +7,17 @@ public class Solution {
         return answer;
     }
 
-    public static void func(int left, int right, int n)
-    {
-        if (left == n && right == n)
-        {
+    public static void func(int left, int right, int n) {
+        if (left == n && right == n) {
             ++answer;
             return;
         }
-        if (left < n)
-        {
+        
+        if (left < n) {
             func(left + 1, right, n);
         }
 
-        if (right < left)
-        {
+        if (right < left) {
             func(left, right + 1, n);
         }
     }
