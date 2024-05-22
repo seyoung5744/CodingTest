@@ -1,37 +1,45 @@
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class Solution {
 
+    public static final Map<String, Set<Integer>> matches = new HashMap<>();
+    public static Set<List<String>> result = new HashSet<>();
+
     public static int solution(String[] user_id, String[] banned_id) {
-        String[][] bans = Arrays.stream(banned_id)
-            .map(banned -> banned.replace('*', '.'))
-            .map(banned -> Arrays.stream(user_id)
-                .filter(user -> user.matches(banned))
-                .toArray(String[]::new))
-            .toArray(String[][]::new);
+        int answer = 0;
+        for (int i = 0; i < banned_id.length; i++) {
+            banned_id[i] = banned_id[i].replace("*", ".");
+        }
 
-        Set<Set<String>> banSet = new HashSet<>();
-        count(0, bans, new HashSet<>(), banSet);
+        for (int i = 0; i < banned_id.length; i++) {
+            for (int j = 0; j < user_id.length; j++) {
+                if (user_id[j].matches(banned_id[i])) {
+                    Set<Integer> list = matches.getOrDefault(banned_id[i], new HashSet<>());
+                    list.add(j);
+                    matches.put(banned_id[i], list);
+                }
+            }
+        }
 
-        return banSet.size();
+        combination(banned_id, 0, new boolean[user_id.length], user_id, new ArrayList<>());
+        return result.size();
     }
 
-    public static void count(int index, String[][] bans, Set<String> banned, Set<Set<String>> banSet) {
-        if(index == bans.length) {
-            banSet.add(new HashSet<>(banned));
+    public static void combination(String[] banned, int banIdx, boolean[] visited, String[] users, List<String> candidate) {
+
+        if(banIdx >= banned.length) {
+            Collections.sort(candidate);
+            result.add(candidate);
             return;
         }
 
-        for(String id : bans[index]) {
-            if(banned.contains(id)) continue;
-            banned.add(id);
-            count(index + 1, bans, banned, banSet);
-            banned.remove(id);
+        for(int user : matches.get(banned[banIdx])) {
+            if(visited[user]) continue;
+            visited[user] = true;
+            candidate.add(users[user]);
+            combination(banned, banIdx + 1, visited, users, candidate);
+            visited[user] = false;
+            candidate.remove(users[user]);
         }
     }
-
-
 }
