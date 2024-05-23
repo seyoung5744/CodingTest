@@ -1,65 +1,62 @@
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class Solution {
 
-    public static class Step{
-        String str;
-        Step(String str)
-        {
+    public static class Step {
+
+        public String str;
+
+        public Step(String str) {
             this.str = str;
         }
     }
 
+
+    public static int r ;
     public static int[] solution(long[] numbers) {
         int[] answer = new int[numbers.length];
-        for (int i = 0; i < numbers.length; ++i){
+
+        for (int i = 0; i < numbers.length; ++i) {
             String binaryStr = Long.toString(numbers[i], 2);
-            Queue<Step> q = new LinkedList<>();
-            int result = 1;
 
             int n = 0;
-            while(binaryStr.length() > Math.pow(2, n) - 1) {
+            while (binaryStr.length() > Math.pow(2, n) - 1) {
                 n++;
             }
 
-            while(binaryStr.length() < Math.pow(2, n) - 1)
-            {
+            while (binaryStr.length() < Math.pow(2, n) - 1) {
                 binaryStr = "0" + binaryStr;
             }
 
-            q.offer(new Step(binaryStr));
 
-            while(!q.isEmpty())
-            {
-                Step s = q.poll();
+            r = 1;
 
-                if (s.str.length() == 1)
-                    break;
+            isBinaryTree(binaryStr, 0, binaryStr.length());
 
-                int mid = s.str.length() / 2;
-
-                String leftChild = s.str.substring(0, mid);
-                String rightChild = s.str.substring(mid + 1);
-                if (s.str.charAt(mid) == '1')
-                {
-                    q.add(new Step(leftChild));
-                    q.add(new Step(rightChild));
-                }
-                else
-                {
-                    if (leftChild.contains("1") || rightChild.contains("1"))
-                    {
-                        result = 0;
-                        break;
-                    }
-                }
-            }
-
-            answer[i] = result;
+            answer[i] = r;
         }
-        
         return answer;
     }
+
+    public static char isBinaryTree(String s, int start, int end) { // end는 포함X
+        int mid = (end + start) / 2;
+
+        if (end - start == 1) { // 노드가 1개일 때까지
+
+            return s.charAt(start);
+        }
+
+        char left = isBinaryTree(s, start, mid);
+        char right = isBinaryTree(s, mid + 1, end);
+
+        if (s.charAt(mid) == '0') {
+            if (left == '1' || right == '1')
+                r = 0;
+        }
+
+        return s.charAt(mid);
+        // 부모 검사
+
+    }
+
 }
