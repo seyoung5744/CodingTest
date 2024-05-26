@@ -5,8 +5,8 @@ class Solution {
         if(n > s) {
             return new int[]{-1};
         }
-        for(int i = 0; i < n; ++i)
-        { 
+        
+        for(int i = 0; i < n; ++i) { 
             answer[i] = s / n;
         }
         
