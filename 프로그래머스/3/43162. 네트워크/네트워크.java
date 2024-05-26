@@ -12,6 +12,7 @@ public class Solution {
         for (int i = 0; i < n; i++) {
             parents[i] = i;
         }
+        
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 if(computers[i][j] == 1) {
@@ -24,8 +25,8 @@ public class Solution {
         for (int i = 0; i < n; i++) {
             find(i);
         }
-        Set<Integer> collect = Arrays.stream(parents).boxed().collect(Collectors.toSet());
-        return collect.size();
+        
+        return Arrays.stream(parents).boxed().collect(Collectors.toSet()).size();
     }
 
     public static void union(int a, int b) {
