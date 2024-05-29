@@ -1,37 +1,63 @@
-#include <string>
-#include <vector>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-vector<bool> visited;
 
-void dfs(vector<vector<int>>& computers, int current)
+vector<int> parents;
+
+int Find(int x)
 {
-    for(int i = 0; i < visited.size(); ++i)
+    if (x == parents[x])
+        return x;
+    
+    return parents[x] = Find(parents[x]);
+}
+
+void Union(int a, int b)
+{
+    a = Find(a);
+    b = Find(b);
+    
+    if (a < b)
     {
-        if (i == current || computers[current][i] == 0 || visited[i])
-            continue;
-        
-        visited[i] = true;
-        
-        dfs(computers, i);
+        parents[b] = a;
+    }
+    else
+    {
+        parents[a] = b;
     }
 }
+
+
 
 int solution(int n, vector<vector<int>> computers) {
     int answer = 0;
     
-    visited = vector<bool> (n, false);
+    parents = vector<int> (n);
     
     for(int i = 0; i < n; ++i)
     {
-        if (visited[i])
-            continue;
-        
-        visited[i] = true;
-        dfs(computers, i);
-        ++answer;
+        parents[i] = i;
     }
+    
+
+    for(int i = 0; i < computers.size(); ++i)
+    {
+        for(int j = 0; j < computers[i].size(); ++j)
+        {
+            if (computers[i][j] == 1)
+                Union(i, j);
+        }
+    }
+    
+    set<int> s;
+    
+    for(int i = 0; i < n; ++i)
+    {
+        s.insert(Find(i));
+    }
+    
+    answer = s.size();
     
     return answer;
 }
