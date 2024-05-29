@@ -4,12 +4,14 @@ public class Solution {
         int answer = 0;
 
         for (int length = s.length(); length > 0; length--) {
-            for (int i = 0; i < s.length(); i++) {
+            for (int start = 0; start < s.length(); start++) {
 
-                if (i + length > s.length()) {
+                int end = start + length -1;
+                
+                if (end >= s.length()) {
                     break;
                 }
-                if(isPalindrom(i, i + length, s)) {
+                if(isPalindrom(start, end, s)) {
                     return length;
                 }
             }
@@ -18,15 +20,13 @@ public class Solution {
     }
 
     public static boolean isPalindrom(int start, int end, String s) {
-        int left = start;
-        int right = end - 1;
 
-        while(left < right) {
-            if(s.charAt(left) != s.charAt(right)) {
+        while(start < end) {
+            if(s.charAt(start) != s.charAt(end)) {
                 return false;
             }
-            left++;
-            right--;
+            start++;
+            end--;
         }
         return true;
     }
