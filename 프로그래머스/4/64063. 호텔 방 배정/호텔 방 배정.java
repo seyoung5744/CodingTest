@@ -3,8 +3,8 @@ import java.util.*;
 public class Solution {
     public static Map<Long, Long> roomInfo = new HashMap<>();
 
-    private static long findEmptyRoom(long wantRoom){
-        if(!roomInfo.containsKey(wantRoom)){
+    private static long findEmptyRoom(long wantRoom) {
+        if(!roomInfo.containsKey(wantRoom)) {
             roomInfo.put(wantRoom, wantRoom + 1);
             return wantRoom;
         }
