@@ -60,7 +60,7 @@ public class Solution {
             a[next] += a[curIdx];
             a[curIdx] = 0;
 
-            graph.get(next).linkedNode.remove(Integer.valueOf(curIdx));
+            graph.get(next).linkedNode.remove(curIdx);
 
             if (graph.get(next).linkedNode.size() == 1) {
                 q.offer(next);
