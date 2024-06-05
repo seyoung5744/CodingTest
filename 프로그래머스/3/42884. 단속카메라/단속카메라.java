@@ -1,23 +1,22 @@
-import java.util.*;
+import java.util.Arrays;
 
-class Solution {
-    public int solution(int[][] routes) {
-        int answer = 0;
-        Arrays.sort(routes, (a, b) -> {
-            if(a[0] == b[0]) 
-                return a[1] - b[1];
-            return a[0] - b[0];
-        });
-        
-        int end = -30_001;
-        
-        for(int i = 0; i < routes.length; i++) {
-            
-            if(end < routes[i][0]) {
-                answer++;
-                end = routes[i][1];
+public class Solution {
+
+    public static int solution(int[][] routes) {
+        int answer = 1;
+        Arrays.sort(routes, (a, b) -> a[0] - b[0]);
+
+        int end = routes[0][1];
+
+        for (int i = 1; i < routes.length; i++) {
+            int nextStart = routes[i][0];
+            int nextEnd = routes[i][1];
+
+            if(nextStart <= end) {
+                end = Math.min(end, nextEnd);
             } else {
-                end = Math.min(end, routes[i][1]);
+               end = nextEnd;
+               answer++;
             }
         }
         return answer;
