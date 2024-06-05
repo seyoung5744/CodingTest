@@ -1,60 +1,37 @@
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Solution {
 
-    private static class State {
+    public static Map<String, Integer> m = new HashMap<>();
+    public static int result = Integer.MAX_VALUE;
 
-        private final String word;
-        private final int step;
-
-        public State(String word, int step) {
-            this.word = word;
-            this.step = step;
+    public static int solution(String begin, String target, String[] words) {
+        for (int i = 0; i < words.length; i++) {
+            m.put(words[i], i);
         }
+        find(new StringBuilder(begin),  0, new boolean[words.length], target);
+        return result == Integer.MAX_VALUE? 0 : result;
     }
 
-    public int solution(String begin, String target, String[] words) {
-        boolean[] isVisited = new boolean[words.length];
+    public static void find(StringBuilder str, int count, boolean[] visited, String target) {
 
-        Queue<State> q = new LinkedList<>();
-        q.offer(new State(begin, 0));
+        if(str.toString().equals(target)) {
+            result = Math.min(result, count);
+            return;
+        }
 
-        while (!q.isEmpty()) {
-            State state = q.poll();
-            
-            if(state.word.equals(target)){
-                return state.step;
-            }
-            
-            for (int i = 0; i < words.length; i++) {
-                String next = words[i];
-                
-                if (!isConvertable(state.word, next)) {
-                    continue;
+        for(int idx = 0; idx < str.length(); ++idx) {
+            StringBuilder temp = new StringBuilder(str);
+            for (char c = 'a'; c <= 'z'; c++) {
+                String next = temp.replace(idx, idx + 1, String.valueOf(c)).toString();
+
+                if (m.containsKey(next) && !visited[m.get(next)]) {
+                    visited[m.get(next)] = true;
+                    find(new StringBuilder(next), count + 1, visited, target);
+                    visited[m.get(next)] = false;
                 }
-                
-                if(isVisited[i]) continue;
-                isVisited[i] = true;
-                
-                q.offer(new State(next, state.step + 1));
-
             }
         }
-        
-        return 0;
-    }
-
-    private static boolean isConvertable(String from, String to) {
-        char[] fromArr = from.toCharArray();
-        char[] toArr = to.toCharArray();
-
-        int diff = 0;
-        for (int i = 0; i < fromArr.length; i++) {
-            if (fromArr[i] != toArr[i]) {
-                diff++;
-            }
-        }
-
-        return diff == 1;
     }
 }
