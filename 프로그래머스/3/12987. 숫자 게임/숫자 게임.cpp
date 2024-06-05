@@ -9,22 +9,18 @@ int solution(vector<int> A, vector<int> B) {
     sort(A.rbegin(), A.rend());
     sort(B.rbegin(), B.rend());
     
-    int start = 0;
-    for(int i = 0; i < B.size(); ++i)
+    int Aidx = 0;
+    int Bidx = 0;
+    
+    while(Aidx < A.size())
     {
-        while(start < A.size())
-        {
-            if (A[start] >= B[i])
-                ++start;
-            else
-                break;
-        }
-        
-        if (start < A.size())
+        if (B[Bidx] > A[Aidx])
         {
             ++answer;
-            ++start;
+            ++Bidx;
         }
+       
+        ++Aidx;
     }
     
     return answer;
