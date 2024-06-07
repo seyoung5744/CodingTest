@@ -7,8 +7,7 @@ int solution(vector<int> food_times, long long k) {
     int answer = 0;
     map<int, int> count;
 
-    for (int i = 0; i < food_times.size(); ++i)
-    {
+    for (int i = 0; i < food_times.size(); ++i) {
         count[food_times[i]]++;
     }
 
@@ -18,13 +17,11 @@ int solution(vector<int> food_times, long long k) {
     int target = 0;
     int cycle = 0;
     int totalCycle = 0;
-    for (auto item : count)
-    {
+    for (auto item : count){
         int min = item.first;
         int minCount = item.second;
         
-        while (cycle < min)
-        {
+        while (cycle < min) {
             if (curTime + totalFood > k)
                 break;
 
@@ -34,8 +31,7 @@ int solution(vector<int> food_times, long long k) {
 
         if (cycle == min)
             totalFood -= minCount;
-        else
-        {
+        else {
             target = min;
             break;
         }
@@ -44,8 +40,7 @@ int solution(vector<int> food_times, long long k) {
     if (totalFood == 0)
         return -1;
     
-    for (int i = 0; i < food_times.size(); i++)
-    {
+    for (int i = 0; i < food_times.size(); i++) {
         if (food_times[i] < target) continue;
 
         if (curTime == k)
