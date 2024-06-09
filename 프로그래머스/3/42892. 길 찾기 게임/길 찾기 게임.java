@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Solution {
 
@@ -20,6 +18,7 @@ public class Solution {
 
     public static List<Integer> preOrder = new ArrayList<>();
     public static List<Integer> postOrder = new ArrayList<>();
+    
     public static int[][] solution(int[][] nodeInfo) {
         int[][] answer = {};
 
