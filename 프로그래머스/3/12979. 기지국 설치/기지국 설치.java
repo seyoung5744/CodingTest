@@ -1,30 +1,44 @@
-import java.util.List;
-
 public class Solution {
+
     public static int solution(int n, int[] stations, int w) {
         int answer = 0;
-        int start = 0;
-        int end = 0;
-        
-        for(int station : stations) {
-            end = station - w - 1;
-            if (end > start) {
-                int remian = (end - start) % (w * 2 + 1);
-                answer += (end - start) / (w * 2 + 1);
-                if(remian > 0) {
-                    answer += 1;
-                }
+        int start, end = 0;
+
+        int max = w * 2 + 1;
+
+        for (int i = 0; i < stations.length; i++) {
+            start = end + 1;
+            end = stations[i] - w - 1;
+
+            if (end < start) {
+                end = stations[i] + w;
+                continue;
             }
-            start = station + w;
+            
+            int distance = end - start + 1;
+
+            answer += distance / max;
+
+            if (distance % max != 0) {
+                ++answer;
+            }
+
+            end = stations[i] + w;
         }
-        
-        if(start < n) {
-            int remian = (n - start) % (w * 2 + 1);
-            answer += (n - start) / (w * 2 + 1);
-            if(remian > 0) {
-                answer += 1;
+
+        if (end < n) {
+            start = end + 1;
+            end = n;
+
+            int distance = end - start + 1;
+
+            answer += distance / max;
+
+            if (distance % max != 0) {
+                ++answer;
             }
         }
+
         return answer;
     }
 }
