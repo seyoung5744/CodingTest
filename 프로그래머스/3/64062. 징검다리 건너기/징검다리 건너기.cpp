@@ -1,43 +1,47 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <iostream>
-
 using namespace std;
 
 int solution(vector<int> stones, int k) {
     int answer = 0;
     
-    int left = 0;
-    int right = 200000000;
+    int max = *max_element(stones.begin(), stones.end());
+    int min = 1;
     
-    while(left <= right)
+    while(min <= max)
     {
-        int mid = (left + right) / 2;
-        int count  = 1;
+        int mid = (min + max) / 2;
         
+        int count = 1;
         for(int i = 0; i < stones.size(); ++i)
         {
             if (stones[i] - mid < 0)
+            {
                 ++count;
+            }
             else
+            {
                 count = 1;
+            }
             
             if (count > k)
+            {
                 break;
+            }
         }
-    
         
         if (count > k)
         {
-            right = mid-1;
+            max = mid -1;
         }
         else
         {
-            left = mid + 1;
             answer = mid;
+            min = mid + 1;
         }
     }
+    
     
     return answer;
 }
