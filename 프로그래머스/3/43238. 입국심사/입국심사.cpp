@@ -11,27 +11,21 @@ long long solution(int n, vector<int> times) {
     long long min = 0;
     long long mid;
     
-    while(min < max)
-    {
+    while(min < max) {
         mid = (max + min) / 2;
         
         long long total = 0;
-        for(int i = 0; i < times.size(); ++i)
-        {
+        for(int i = 0; i < times.size(); ++i) {
             total += mid / times[i];
         }
         
-        if (total >= n)
-        {
+        if (total >= n) {
             max = mid;
-            answer = mid;
         }
-        else
-        {
+        else {
             min = mid+1;
         }
     }
     
-    
-    return answer;
+    return min;
 }
