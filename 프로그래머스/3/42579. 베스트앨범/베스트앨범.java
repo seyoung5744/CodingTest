@@ -36,7 +36,6 @@ public class Solution {
             if (this.playTime == o.playTime) {
                 return this.idx - o.idx;
             }
-
             return o.playTime - this.playTime;
         }
 
@@ -57,8 +56,7 @@ public class Solution {
         List<Integer> answer = new ArrayList<>();
         for(Genre genre : list) {
             int count = 0;
-            while(!genre.musics.isEmpty())
-            {
+            while(!genre.musics.isEmpty()) {
                 answer.add(genre.musics.poll().idx);
                 count++;
 
