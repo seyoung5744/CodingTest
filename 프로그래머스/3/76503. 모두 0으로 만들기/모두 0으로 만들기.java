@@ -32,6 +32,7 @@ public class Solution {
         }
 
         Queue<Integer> q = new LinkedList<>();
+        
         for (int i = 0; i < graph.size(); i++) {
             if (graph.get(i).linkedNode.size() == 1) {
                 q.offer(i);
@@ -40,6 +41,7 @@ public class Solution {
 
         int nodeCount = 0;
         int lastIdx = 0;
+        
         while (!q.isEmpty()) {
             int curIdx = q.poll();
             nodeCount++;
