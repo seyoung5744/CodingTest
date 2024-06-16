@@ -1,10 +1,8 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Solution {
 
     static class Node {
-
         public Map<Character, Node> child = new HashMap<>();
         public int wordsCount;
         public boolean isEnd;
@@ -23,16 +21,13 @@ public class Solution {
                 node = node.child.get(str.charAt(i));
                 node.wordsCount++;
             }
-
             node.isEnd = true;
         }
 
-        public int getMinDepth(String str)
-        {
+        public int getMinDepth(String str) {
             Node node = this.rootNode;
 
-            for(int i = 0; i < str.length(); ++i)
-            {
+            for(int i = 0; i < str.length(); ++i) {
                 node = node.child.get(str.charAt(i));
 
                 if (node.wordsCount == 1)
