@@ -1,43 +1,49 @@
-import java.util.*;
+import java.util.PriorityQueue;
 
-class Solution {
-    public String solution(int n, int t, int m, String[] timetable) {
-        String answer = "";
-        
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
-        
-        for(String time : timetable) {
-            String[] tokens = time.split(":");
-            pq.add((Integer.parseInt(tokens[0]) * 60) + Integer.parseInt(tokens[1]));
+public class Solution {
+
+    public static String solution(int n, int t, int m, String[] timetable) {
+        PriorityQueue<Integer> times = new PriorityQueue<>((a, b) -> a - b);
+        for (int i = 0; i < timetable.length; i++) {
+            times.add(convertTime(timetable[i]));
         }
-        
-        int curTime = 9 * 60;
-        int last = 0;
-        
-        for(int i = 0; i < n; i++) {
-            int count = 0;    
-            
-            while(!pq.isEmpty() && pq.peek() <= curTime) {
-                last = pq.peek();
-                pq.poll();
-                count++;
-                if(count >= m) {
+
+        int startBusTime = convertTime("09:00");
+        int maxPerson = m;
+        int lastTime = 0;
+        int curTime = startBusTime;
+
+        for (int i = 0; i < n; i++) {
+            maxPerson = m;
+            curTime = startBusTime + t * i;
+            while (!times.isEmpty()) {
+                if (times.peek() <= curTime) {
+                    lastTime = times.poll() - 1;
+
+                    maxPerson--;
+                } else {
+                    break;
+                }
+                if (maxPerson <= 0) {
                     break;
                 }
             }
-            
-            if(i == n - 1) {
-                 if(count == m) {
-                     last -= 1;
-                 }else {
-                     last = curTime;
-                 }
-            }
-            curTime += t;
         }
-    
-        
-        answer = String.format("%02d", last/60) + ":" + String.format("%02d", last%60);
-        return answer;
+
+        if (maxPerson > 0) {
+            lastTime = curTime;
+        }
+
+        return revertTime(lastTime);
     }
+
+    public static int convertTime(String time) {
+        String[] tokens = time.split(":");
+        return Integer.parseInt(tokens[0]) * 60 + Integer.parseInt(tokens[1]);
+    }
+
+    public static String revertTime(int time) {
+        return String.format("%02d:%02d", time / 60, time % 60);
+    }
+
 }
