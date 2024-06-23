@@ -2,6 +2,7 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int n, String[] words) {
+        
         Set<String> appearedWords = new HashSet<>();
         appearedWords.add(words[0]);
 
