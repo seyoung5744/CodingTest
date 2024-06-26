@@ -1,47 +1,45 @@
 public class Solution {
 
-    public static int[][] skillSum;
-
     public static int solution(int[][] board, int[][] skills) {
-        int answer = 0;
-        skillSum = new int[board.length + 1][board[0].length + 1];
+        int[][] map = new int[board.length + 1][board[0].length + 1];
 
         for (int[] skill : skills) {
-            int motion = skill[0];
-            int startY = skill[1];
-            int startX = skill[2];
+            int type = skill[0];
+            int startI = skill[1];
+            int startJ = skill[2];
+            int endI = skill[3];
+            int endJ = skill[4];
+            int amount = skill[5];
 
-            int endY = skill[3];
-            int endX = skill[4];
-            int damage = skill[5];
-
-            if (motion == 2) {
-                damage *= -1;
+            if (type == 1) {
+                amount *= -1;
             }
 
-            skillSum[startY][startX] += damage;
-            skillSum[startY][endX + 1] -= damage;
-            skillSum[endY + 1][startX] -= damage;
-            skillSum[endY + 1][endX + 1] += damage;
+            map[startI][startJ] += amount;
+            map[startI][endJ + 1] -= amount;
+            map[endI + 1][startJ] -= amount;
+            map[endI + 1][endJ + 1] += amount;
         }
 
-        for (int i = 0; i < skillSum.length; i++) {
-            for (int j = 1; j < skillSum[0].length; j++) {
-                skillSum[i][j] += skillSum[i][j - 1];
-            }
-        }
-
-        for (int i = 0; i < skillSum[0].length; i++) {
-            for (int j = 1; j < skillSum.length; j++) {
-                skillSum[j][i] += skillSum[j - 1][i];
+        for (int i = 0; i < map.length; ++i) {
+            for (int j = 1; j < map[i].length; ++j) {
+                map[i][j] += map[i][j - 1];
             }
         }
 
-       
+        for (int j = 0; j < map[0].length; ++j) {
+            for (int i = 1; i < map.length; ++i) {
+                map[i][j] += map[i - 1][j];
+            }
+        }
+
+
+        int answer = 0;
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
-                if(skillSum[i][j] < board[i][j])
-                    ++answer;
+                if(board[i][j] + map[i][j] > 0) {
+                    answer++;
+                }
             }
         }
         return answer;
