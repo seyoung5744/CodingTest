@@ -2,46 +2,36 @@ import java.util.Arrays;
 
 public class Solution {
 
-    public static int INF = 20_000_001;
-    public static int[][] graph;
+    public static final int INF = 200000000;
 
     public static int solution(int n, int s, int a, int b, int[][] fares) {
-        int answer = Integer.MAX_VALUE;
-
-        graph = new int[n + 1][n + 1];
-
-        for (int i = 1; i <= n; i++) {
+        int answer = 200000000;
+        int[][] graph = new int[n + 1][n + 1];
+        for (int i = 0; i < n + 1; i++) {
             Arrays.fill(graph[i], INF);
+            graph[i][i] = 0;
         }
 
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= n; j++) {
-                if(i == j)
-                    graph[i][j] = 0;
-            }
-        }
-        for (int[] fare : fares) {
-            int start = fare[0];
-            int end = fare[1];
-            int cost = fare[2];
-
-            graph[start][end] = cost;
-            graph[end][start] = cost;
+        for (int[] road : fares) {
+            int from = road[0];
+            int to = road[1];
+            int cost = road[2];
+            graph[from][to] = cost;
+            graph[to][from] = cost;
         }
 
-        for (int k = 1; k <= n; k++) {
-            for (int i = 1; i <= n; i++) {
-                for (int j = 1; j <= n; j++) {
-                    graph[i][j] = Math.min(graph[i][k] + graph[k][j], graph[i][j]);
+        for (int k = 1; k < n + 1; k++) {
+            for (int i = 1; i < n + 1; i++) {
+                for (int j = 1; j < n + 1; j++) {
+                    graph[i][j] = Math.min(graph[i][j], graph[i][k] + graph[k][j]);
                 }
             }
         }
 
-        for (int i = 1; i <= n; i++) {
-            answer = Math.min(graph[s][i] + graph[i][a] + graph[i][b], answer);
+        for (int i = 1; i < n + 1; i++) {
+            answer = Math.min(answer, graph[s][i] + graph[a][i] + graph[b][i]);
         }
 
         return answer;
     }
-
 }
