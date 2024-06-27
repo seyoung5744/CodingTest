@@ -2,6 +2,7 @@ public class Solution {
 
     public static int solution(int n, int k) {
         int answer = 0;
+        
         String[] candidate = Integer.toString(n, k).split("0");
         for(String num : candidate) {
             if(num.length() == 0) continue;
