@@ -5,25 +5,21 @@ using namespace std;
 
 vector<int> parents;
 
-int Find(int x)
-{
+int Find(int x){
     if (x == parents[x])
         return x;
     
     return parents[x] = Find(parents[x]);
 }
 
-void Union(int a, int b)
-{
+void Union(int a, int b){
     a = Find(a);
     b = Find(b);
     
     if (a < b)
     {
         parents[b] = a;
-    }
-    else
-    {
+    } else {
         parents[a] = b;
     }
 }
@@ -35,16 +31,13 @@ int solution(int n, vector<vector<int>> computers) {
     
     parents = vector<int> (n);
     
-    for(int i = 0; i < n; ++i)
-    {
+    for(int i = 0; i < n; ++i){
         parents[i] = i;
     }
     
 
-    for(int i = 0; i < computers.size(); ++i)
-    {
-        for(int j = 0; j < computers[i].size(); ++j)
-        {
+    for(int i = 0; i < computers.size(); ++i) {
+        for(int j = 0; j < computers[i].size(); ++j){
             if (computers[i][j] == 1)
                 Union(i, j);
         }
@@ -52,8 +45,7 @@ int solution(int n, vector<vector<int>> computers) {
     
     set<int> s;
     
-    for(int i = 0; i < n; ++i)
-    {
+    for(int i = 0; i < n; ++i) {
         s.insert(Find(i));
     }
     
