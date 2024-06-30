@@ -18,7 +18,9 @@ public class Solution {
 
         boolean[][] visited = new boolean[board.length][board.length];
         visited[0][0] = true;
+        
         dfs(new int[]{0, 0}, 0, 0, visited, board);
+        
         return result;
     }
 
