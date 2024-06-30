@@ -63,6 +63,7 @@ public class Solution {
                 if(count >= 2) break;
             }
         }
+        
         return answer.stream().mapToInt(Integer::intValue).toArray();
     }
 }
