@@ -1,94 +1,101 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class Solution {
 
     static class Point {
 
-        boolean isPillar;
         boolean isBo;
-
+        boolean isGi;
     }
 
-    private static Point[][] map;
-
     public static int[][] solution(int n, int[][] build_frame) {
-        List<int[]> answer = new ArrayList<>();
-
-        map = new Point[n + 2][n + 2];
-
-        for (int i = 0; i < n + 2; i++) {
-            for (int j = 0; j < n + 2; j++) {
+        Point[][] map = new Point[n + 1][n + 1];
+        for (int i = 0; i < n + 1; i++) {
+            for (int j = 0; j < n + 1; j++) {
                 map[i][j] = new Point();
             }
         }
 
         for (int[] frame : build_frame) {
-            int x = frame[0] + 1;
-            int y = frame[1] + 1;
-            boolean isPillar = frame[2] == 0;
-            boolean isInstall = frame[3] == 1;
+            int x = frame[0];
+            int y = frame[1];
+            int kinds = frame[2]; // 0 : 기둥, 1 : 보
+            int isInstall = frame[3]; // 0 : 삭제, 1 : 설치
 
-            if (isInstall) { // 설치
-                if (isPillar) { // 기둥
-                    if (canInstallPillar(x, y)) {
-                        map[y][x].isPillar = true;
+            if (isInstall == 1) { // 설치
+                if (kinds == 0) { // 기둥
+                    if (x < 0 || x > n || y < 0 || y > n) {
+                        continue;
                     }
+                    if (canInstallGi(map, x, y)) {
+                        map[y][x].isGi = true;
+
+                    }
+
                 } else { // 보
-                    if (canInstallBo(x, y)) {
+                    if (x < 0 || x > n || y < 0 || y > n) {
+                        continue;
+                    }
+
+                    if (canInstallBo(map, x, y, n)) {
                         map[y][x].isBo = true;
                     }
+
                 }
             } else { // 삭제
-                if (isPillar) {
-                    map[y][x].isPillar = false;
+                if (kinds == 0) { // 기둥
+                    map[y][x].isGi = false;
 
-                    if (map[y + 1][x].isPillar) {
-                        if (!canInstallPillar(x, y + 1)) {
-                            map[y][x].isPillar = true;
+                    if (y + 1 < n && map[y + 1][x].isGi) {
+                        if (!canInstallGi(map, x, y + 1)) {
+                            map[y][x].isGi = true;
                             continue;
                         }
                     }
 
-                    if (map[y + 1][x].isBo) {
-                        if (!canInstallBo(x, y + 1)) {
-                            map[y][x].isPillar = true;
+                    if (y + 1 < n && map[y + 1][x].isBo) {
+                        if (!canInstallBo(map, x, y + 1, n)) {
+                            map[y][x].isGi = true;
                             continue;
                         }
                     }
 
-                    if (map[y + 1][x - 1].isBo) {
-                        if (!canInstallBo(x - 1, y + 1)) {
-                            map[y][x].isPillar = true;
+                    if (y + 1 <= n && x - 1 >= 0 && map[y + 1][x - 1].isBo) {
+                        if (!canInstallBo(map, x - 1, y + 1, n)) {
+                            map[y][x].isGi = true;
                             continue;
                         }
                     }
-                } else { // 보 삭제
+                } else { // 보
                     map[y][x].isBo = false;
 
-                    if (map[y][x - 1].isBo) {
-                        if (!canInstallBo(x - 1, y)) {
+                    if (x - 1 >= 0 && map[y][x - 1].isBo) {
+                        if (!canInstallBo(map, x - 1, y, n)) {
+                            map[y][x].isBo = true;
+                            continue;
+                        }
+
+                    }
+
+                    if (x + 1 <= n && map[y][x + 1].isBo) {
+                        if (!canInstallBo(map, x + 1, y, n)) {
                             map[y][x].isBo = true;
                             continue;
                         }
                     }
 
-                    if (map[y][x + 1].isBo) {
-                        if (!canInstallBo(x + 1, y)) {
+                    if (map[y][x].isGi) {
+                        if (!canInstallGi(map, x, y)) {
                             map[y][x].isBo = true;
                             continue;
                         }
                     }
 
-                    if (map[y][x].isPillar) {
-                        if (!canInstallPillar(x, y)) {
-                            map[y][x].isBo = true;
-                            continue;
-                        }
-                    }
-                    if (map[y][x + 1].isPillar) {
-                        if (!canInstallPillar(x + 1, y)) {
+                    if (x + 1 <= n && map[y][x + 1].isGi) {
+                        if (!canInstallGi(map, x + 1, y)) {
                             map[y][x].isBo = true;
                             continue;
                         }
@@ -97,58 +104,53 @@ public class Solution {
             }
         }
 
-        for (int i = 0; i <= n + 1; i++) {
-            for (int j = 0; j <= n + 1; j++) {
+        return print(map);
+    }
 
-                if (map[j][i].isPillar) {
-                    answer.add(new int[]{i - 1, j - 1, 0});
+    public static boolean canInstallGi(Point[][] map, int x, int y) {
+        if (x - 1 >= 0) {
+            if (map[y][x - 1].isBo) {
+                return true;
+            }
+        }
+
+        if (y == 0 || map[y - 1][x].isGi || map[y][x].isBo) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean canInstallBo(Point[][] map, int x, int y, int n) {
+        if (y - 1 >= 0) {
+            if (map[y - 1][x].isGi) {
+                return true;
+            } else if (x + 1 <= n && map[y - 1][x + 1].isGi) {
+                return true;
+            } else if (x - 1 >= 0 && x + 1 < n && map[y][x - 1].isBo && map[y][x + 1].isBo) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static int[][] print(Point[][] map) {
+        List<int[]> result = new ArrayList<>();
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map.length; j++) {
+                if (map[i][j].isBo) {
+                    result.add(new int[]{j, i, 1});
                 }
-
-                if (map[j][i].isBo) {
-                    answer.add(new int[]{i - 1, j - 1, 1});
+                if (map[i][j].isGi) {
+                    result.add(new int[]{j, i, 0});
                 }
             }
         }
 
-        return answer.stream().toArray(int[][]::new);
-
+        return result.stream()
+            .sorted(Comparator.comparing((int[] arr) -> arr[0])
+                .thenComparing(arr -> arr[1])
+                .thenComparing(arr -> arr[2]))
+            .toArray(int[][]::new);
     }
-
-    public static boolean canInstallPillar(int x, int y) {
-        if (y == 1) {
-            return true;
-        }
-
-        if (map[y - 1][x].isPillar) { // 기둥 위 기둥
-            return true;
-        }
-
-        if (map[y][x].isBo || map[y][x - 1].isBo) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public static boolean canInstallBo(int x, int y) {
-
-        if (y <= 1) {
-            return false;
-        }
-
-        if (map[y - 1][x].isPillar) {
-            return true;
-        }
-
-        if (map[y - 1][x + 1].isPillar) {
-            return true;
-        }
-
-        if (map[y][x - 1].isBo && map[y][x + 1].isBo) {
-            return true;
-        }
-        return false;
-    }
-
 
 }
