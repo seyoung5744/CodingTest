@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Solution {
 
-    private static List<List<Integer>> graph = new ArrayList<>();
+    public static List<List<Integer>> graph = new ArrayList<>();
     public static int answer = 0;
     public static int solution(int[] info, int[][] edges) {
 
@@ -11,34 +11,39 @@ public class Solution {
             graph.add(new ArrayList<>());
         }
 
-        for (int[] edge : edges) {
-            int from = edge[0];
-            int to = edge[1];
-            graph.get(from).add(to);
+        for(int[] edge : edges) {
+            int a = edge[0];
+            int b = edge[1];
+            graph.get(a).add(b);
         }
 
-        dfs(0, 0, 0, new ArrayList<>(), info);
+        List<Integer> willVisit = new ArrayList<>(graph.get(0));
+        dfs(0, 0, 1, willVisit, info);
+
         return answer;
     }
 
-    private static void dfs(int cur, int sheep, int wolf, List<Integer> visited, int[] info) {
-        if(info[cur] == 0) { // 양
-            sheep++;
-        } else {
-            wolf++;
+    public static void dfs(int cur, int wolf, int sheep, List<Integer> willVisit, int[] info) {
+
+        if(wolf >= sheep) {
+            return;
         }
 
-        if(wolf >= sheep) return;
+        for (int i = 0; i < willVisit.size(); i++) {
+            int next = willVisit.get(i);
 
-        answer = Math.max(sheep, answer);
-        visited.addAll(graph.get(cur)); // 방문 노드의 자식들 넣기
+            List<Integer> temp = new ArrayList<>(willVisit);
 
-        for (int i = 0; i < visited.size(); i++) {
-            int next = visited.get(i); // 다음 노드
-            List<Integer> nextList = new ArrayList<>(visited);
-            nextList.remove(i);
-            dfs(next, sheep, wolf, nextList, info);
+            temp.remove(Integer.valueOf(next));
+            temp.addAll(graph.get(next));
+
+            if(info[next] == 0) {
+                dfs(next, wolf, sheep + 1, temp, info);
+            } else {
+                dfs(next, wolf + 1, sheep, temp, info);
+            }
         }
+
+        answer = Math.max(answer, sheep);
     }
-
 }
