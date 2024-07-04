@@ -6,8 +6,7 @@ using namespace std;
 int answer = 2100000000;
 
 vector<int> mem (1000001, 210000000);
-void recursive(int cur, int target, int n, int count)
-{
+void recursive(int cur, int target, int n, int count){
     mem[cur] = count;
     
     if(cur <= 0) 
@@ -16,21 +15,18 @@ void recursive(int cur, int target, int n, int count)
     if (count >= answer || cur < target)
         return;
     
-    if (cur == target)
-    {
+    if (cur == target){
         answer = min(answer, count);
         return;
     }
     
-    if (cur % 2 == 0)
-    {
+    if (cur % 2 == 0){
         if (mem[cur/2] > count + 1)
             recursive(cur / 2, target, n, count + 1);
             
     }
     
-    if (cur % 3 == 0)
-    {
+    if (cur % 3 == 0){
         if (mem[cur/3] > count + 1)
             recursive(cur / 3, target, n, count + 1);
     }
