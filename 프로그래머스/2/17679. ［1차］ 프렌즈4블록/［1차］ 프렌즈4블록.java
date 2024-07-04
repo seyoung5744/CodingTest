@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Solution {
 
-    public static int[] dx = {1, 0, 1}; // 우, 하, 아래대각선
+    public static int[] dx = {1, 0, 1}; 
     public static int[] dy = {0, 1, 1};
 
     public static List<List<Block>> maps = new ArrayList<>();
@@ -15,11 +15,6 @@ public class Solution {
 
         public Block(char ch) {
             this.ch = ch;
-        }
-
-        @Override
-        public String toString() {
-            return ch + " ";
         }
     }
 
@@ -85,5 +80,4 @@ public class Solution {
         }
         return flag;
     }
-
 }
