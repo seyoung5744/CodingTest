@@ -1,6 +1,4 @@
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class Solution {
 
@@ -38,10 +36,11 @@ public class Solution {
 
     public static int[] dx = {0, 0, 1, -1};
     public static int[] dy = {1, -1, 0, 0};
-
     public static final int INF = (int) 1e9;
+    
     public static int bfs(int[] start, int[] end) {
         int[][] visited = new int[map.length][map[0].length];
+        
         for (int i = 0; i < visited.length; i++) {
             Arrays.fill(visited[i], INF);
         }
