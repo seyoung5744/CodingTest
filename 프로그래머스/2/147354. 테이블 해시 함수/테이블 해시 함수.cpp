@@ -14,8 +14,7 @@ int solution(vector<vector<int>> data, int col, int row_begin, int row_end) {
         return a[col - 1] < b[col - 1];
          });
     
-    for(int i = row_begin-1; i <= row_end-1; ++i)
-    {
+    for(int i = row_begin-1; i <= row_end-1; ++i){
         int sum = 0;
         
         for(int j = 0; j < data[0].size(); ++j)
