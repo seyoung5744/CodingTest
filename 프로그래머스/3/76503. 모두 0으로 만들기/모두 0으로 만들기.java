@@ -19,6 +19,7 @@ public class Solution {
         long answer = 0;
 
         long[] a = new long[ab.length];
+        
         for (int i = 0; i < ab.length; i++) {
             a[i] = ab[i];
             graph.add(new Node(i));
