@@ -6,6 +6,7 @@ public class Solution {
         long answer = 0;
 
         PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> b - a);
+        
         for (int work : works) {
             pq.offer(work);
         }
@@ -20,6 +21,7 @@ public class Solution {
         while (!pq.isEmpty()) {
             answer += (int) Math.pow(pq.poll(), 2);
         }
+        
         return answer;
     }
 
