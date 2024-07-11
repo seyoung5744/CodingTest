@@ -54,7 +54,6 @@ public class Solution {
             }
 
             check[ny][nx] = Math.min(check[ny][nx], newCost);
-
             visited[ny][nx] = true;
             dfs(new int[]{nx, ny}, newCost, i, visited, board);
             visited[ny][nx] = false;
