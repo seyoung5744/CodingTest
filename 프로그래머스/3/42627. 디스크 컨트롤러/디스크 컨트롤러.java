@@ -1,5 +1,4 @@
-import java.util.Arrays;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class Solution {
 
@@ -23,25 +22,20 @@ public class Solution {
 
         int result = 0;
         while(!pq1.isEmpty()) {
-            while(!pq1.isEmpty() && pq1.peek()[0] <= result)
-            {
+            while(!pq1.isEmpty() && pq1.peek()[0] <= result) {
                 pq2.offer(pq1.poll());
             }
 
-            if (pq2.isEmpty())
-            {
+            if (pq2.isEmpty()) {
                 pq2.offer(pq1.poll());
             }
 
             int[] cur = pq2.poll();
 
-            if (result > cur[0])
-            {
+            if (result > cur[0]) {
                 answer += result - cur[0] + cur[1];
                 result += cur[1];
-            }
-            else
-            {
+            } else {
                 answer += cur[1];
                 result = cur[0] + cur[1];
             }
@@ -50,13 +44,10 @@ public class Solution {
         while (!pq2.isEmpty()) {
             int[] cur = pq2.poll();
 
-            if (result > cur[0])
-            {
+            if (result > cur[0]) {
                 answer += result - cur[0] + cur[1];
                 result += cur[1];
-            }
-            else
-            {
+            } else {
                 answer += cur[1];
                 result += cur[0] + cur[1];
             }
