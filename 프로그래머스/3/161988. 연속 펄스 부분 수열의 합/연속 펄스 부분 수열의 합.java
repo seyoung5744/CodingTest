@@ -29,7 +29,6 @@ public class Solution {
         long leftMax = 0;
         long sum = 0;
         for (int i = mid; i >= l; i--) {
-//        for (int i = l; i <= mid; i++) {
             sum += arr[i];
             leftMax = Math.max(leftMax, sum);
         }
