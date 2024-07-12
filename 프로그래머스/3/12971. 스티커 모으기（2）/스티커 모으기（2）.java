@@ -6,12 +6,9 @@ public class Solution {
     public static int[] dp2;
 
     public static int solution(int[] sticker) {
-        if (sticker.length == 1)
-        {
+        if (sticker.length == 1) {
             return sticker[0];
-        }
-        else if (sticker.length == 2)
-        {
+        } else if (sticker.length == 2) {
             return Math.max(sticker[0], sticker[1]);
         }
         
