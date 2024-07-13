@@ -18,7 +18,7 @@ public class Solution {
         }
 
         for (int mid = 0; mid < a.length; mid++) {
-            int num = a[mid]; // 가능하냐 안하냐;
+            int num = a[mid]; 
 
             if (num > leftMin[mid] && num > rightMin[mid]) {
                 continue;
