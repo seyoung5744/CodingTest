@@ -35,6 +35,7 @@ public class Solution {
 
 
         int answer = 0;
+        
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
                 if(board[i][j] + map[i][j] > 0) {
