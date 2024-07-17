@@ -1,77 +1,69 @@
-
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Deque;
 
 public class Solution {
-    public static class Point {
-        public int x, y;
 
-        public Point(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
+    private static int[] dx = {1, -1, 0, 0}; // 우, 좌, 하, 상
+    private static int[] dy = {0, 0, 1, -1};
 
-    public static int[][] visited;
-    public static int[] dx = {0, 0, 1, -1};
-    public static int[] dy = {1, -1, 0, 0};
+    public static int solution(String[] board) {
 
-    public int solution(String[] board) {
+        int[] start = new int[0];
+        int[] end = new int[0];
 
-        Point start = null;
-        Point end = null;
-        visited = new int[board.length][board[0].length()];
-
-        for(int y = 0; y < board.length; y++) {
-            for(int x = 0; x < board[0].length(); x++) {
-                if(board[y].charAt(x) == 'R') {
-                    start = new Point(x, y);
-                }else if(board[y].charAt(x) == 'G'){
-                    end = new Point(x, y);
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length(); j++) {
+                if (board[i].charAt(j) == 'R') {
+                    start = new int[]{i, j};
+                } else if (board[i].charAt(j) == 'G') {
+                    end = new int[]{i, j};
                 }
             }
         }
 
-        bfs(board, start, end);
-        
-        return visited[end.y][end.x] - 1;
-    }
+        int[][] visited = new int[board.length][board[0].length()];
+        for(int[] visit : visited) {
+            Arrays.fill(visit, 1000000000);
+        }
 
-    public static void bfs(String[] board, Point start, Point end) {
+        visited[start[0]][start[1]] = 0;
+        Deque<int[]> q = new ArrayDeque<>();
+        q.add(start);
 
-        Queue<Point> q = new LinkedList<>();
-        q.offer(start);
-        visited[start.y][start.x] = 1;
+        int answer = 0;
+        while (!q.isEmpty()) {
+            int[] cur = q.poll();
 
-        while(!q.isEmpty()) {
-            Point cur = q.poll();
-
-            if(cur.x == end.x && cur.y == end.y) {
+            if(cur[1] == end[1] && cur[0] == end[0]) {
                 break;
             }
+
             for (int i = 0; i < 4; i++) {
-                int nx = cur.x;
-                int ny = cur.y;
+                int nx = cur[1];
+                int ny = cur[0];
 
-                while(true) {
-
-                    int blockedX = nx + dx[i];
-                    int blockedY = ny + dy[i];
-
-                    if(blockedX < 0 || blockedX >= board[0].length() || blockedY < 0 || blockedY >= board.length) break;
-
-                    if(board[blockedY].charAt(blockedX) == 'D')  break;
-
+                while(nx + dx[i] >= 0 && nx + dx[i] < board[0].length() && ny + dy[i]>= 0 && ny + dy[i]< board.length
+                && board[ny + dy[i]].charAt(nx + dx[i]) != 'D') {
                     nx += dx[i];
                     ny += dy[i];
                 }
-                
-                if(visited[ny][nx] != 0) continue;
-                
-                visited[ny][nx] = visited[cur.y][cur.x] + 1;
-                q.offer(new Point(nx, ny));
+
+                if (visited[ny][nx] <= visited[cur[0]][cur[1]] + 1)
+                    continue;
+
+                visited[ny][nx] = visited[cur[0]][cur[1]] + 1;
+                q.add(new int[]{ny, nx});
             }
         }
+
+        if (visited[end[0]][end[1]] == 1000000000)
+        {
+            return -1;
+        }
+
+
+        return visited[end[0]][end[1]];
     }
 
 }
