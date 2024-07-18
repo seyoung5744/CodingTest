@@ -22,6 +22,7 @@ string solution(string s) {
 
             ch = tolower(ch);
         }
+        
         answer += ch;
     }
     return answer;
