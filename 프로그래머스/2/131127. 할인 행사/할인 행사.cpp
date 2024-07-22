@@ -9,6 +9,7 @@ map<string, int> m;
 int solution(vector<string> want, vector<int> number, vector<string> discount) {
     int answer = 0;
     int days = 0;
+    
     for(int i = 0; i < want.size(); ++i) {
         m.insert(make_pair(want[i], i));
     }
