@@ -8,7 +8,6 @@ public class Solution {
         PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> b - a);
 
         for (int enemy : enemies) {
-            // 일단 싸워
             n = n - enemy;
             pq.add(enemy);
 
