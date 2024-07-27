@@ -8,6 +8,7 @@ public class Solution {
 
         List<List<Integer>> tokens = split(s);
         tokens.sort(Comparator.comparing(List::size));
+        
         int[] answer = new int[tokens.size()];
         int idx = 0;
         for(List<Integer> token : tokens) {
@@ -32,7 +33,6 @@ public class Solution {
                     .collect(Collectors.toList())
             );
         }
-
         return result;
     }
 }
