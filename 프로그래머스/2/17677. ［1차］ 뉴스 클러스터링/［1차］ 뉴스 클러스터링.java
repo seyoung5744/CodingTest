@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Solution {
 
@@ -28,6 +25,7 @@ public class Solution {
     public static int getIntersectionSize(List<String> set1, List<String> set2) {
         int size = 0;
         Map<String, Integer> map = new HashMap<>();
+        
         for(String set : set1) {
             map.put(set, map.getOrDefault(set, 0) + 1);
         }
@@ -40,5 +38,4 @@ public class Solution {
         }
         return size;
     }
-
 }
