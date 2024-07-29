@@ -14,7 +14,6 @@ public class Solution {
     }
 
     public static boolean isPrime(long num) {
-
         if (num <= 1) {
             return false;
         }
