@@ -13,16 +13,12 @@ int solution(string word) {
     int c = word.length();
     
     int max = 0;
-    for(int i = 0; i < 5; ++i)
-    {
+    for(int i = 0; i < 5; ++i){
         max += pow(5, i);
     }
     
-    for(int i = 0; i < word.size(); ++i)
-    {
-        
+    for(int i = 0; i < word.size(); ++i){
         answer += m[word[i]] * max + 1;
-        
         max -= pow(5, 4-i);
     }
     
