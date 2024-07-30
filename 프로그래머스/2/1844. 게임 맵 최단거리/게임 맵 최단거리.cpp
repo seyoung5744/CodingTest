@@ -5,8 +5,7 @@ using namespace std;
 int dx[4] = {0, 0, 1, -1};
 int dy[4] = {1, -1, 0, 0};
 
-int solution(vector<vector<int> > maps)
-{
+int solution(vector<vector<int> > maps){
     int answer = 0;
     int endY = maps.size() - 1;
     int endX = maps[0].size() - 1;
@@ -16,16 +15,14 @@ int solution(vector<vector<int> > maps)
     q.push({0, 0});
     visited[0][0] = 1;
     
-    while(!q.empty())
-    {
+    while(!q.empty()){
         auto& [curX, curY] = q.front();
         q.pop();
         
         if (curX == endX && curY == endY)
             break;
         
-        for(int i = 0; i < 4; ++i)
-        {
+        for(int i = 0; i < 4; ++i){
             int nx = curX + dx[i];
             int ny = curY + dy[i];
             
@@ -40,7 +37,5 @@ int solution(vector<vector<int> > maps)
         }
     }
     
-    answer = visited[endY][endX] == 1000001 ? -1 : visited[endY][endX];
-    
-    return answer;
+    return visited[endY][endX] == 1000001 ? -1 : visited[endY][endX];
 }
