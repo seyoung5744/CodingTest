@@ -5,14 +5,10 @@ public class Solution {
 
     public static Map<String, Integer> dictionary = new HashMap<>();
 
-    public static void init() {
+    public static int[] solution(String msg) {
         for (char i = 'A'; i <= 'Z'; i++) {
             dictionary.put(Character.toString(i), i - 'A' + 1);
         }
-    }
-
-    public static int[] solution(String msg) {
-        init();
 
         List<Integer> answer = new ArrayList<>();
         String cur = "";
