@@ -1,5 +1,4 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Solution {
 
@@ -15,6 +14,7 @@ public class Solution {
         for (int i = 0; i < topping.length; i++) {
             person2.put(topping[i], person2.getOrDefault(topping[i], 0) + 1);
             person1.put(topping[i], person1.getOrDefault(topping[i], 0) - 1);
+            
             if(person1.get(topping[i]) == 0) {
                 person1.remove(topping[i]);
             }
