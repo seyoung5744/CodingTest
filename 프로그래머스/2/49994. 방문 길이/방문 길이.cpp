@@ -5,8 +5,6 @@
 #include <iostream>
 using namespace std;
 
-
-
 int dx[4] = {0, 0, 1, -1};
 int dy[4] = {1, -1, 0, 0};
 
@@ -22,8 +20,7 @@ int solution(string dirs) {
     
     set<int> r;
     
-    for(int i = 0; i < dirs.length(); ++i)
-    {
+    for(int i = 0; i < dirs.length(); ++i){
         int dir = m[dirs[i]];
         
         int nx = curX + dx[dir];
@@ -33,16 +30,13 @@ int solution(string dirs) {
             continue;
         
         int num = 0;
-        if (nx == curX)
-        {
+        if (nx == curX){
             num = max(ny, curY) * (x + x2) - (x2 - nx);
-        }
-        else
-        {
+        }else{
             num = curY * (x + x2) + min(nx, curX);
         }
         r.insert(num);
-        
+    
         curX = nx;
         curY = ny;
     }
