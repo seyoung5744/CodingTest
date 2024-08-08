@@ -11,6 +11,7 @@ int solution(vector<vector<int>> triangle) {
         for(int j = 0; j <= i; ++j) {
             int left = j - 1;
             int right = j;
+            
             if (left < 0) {
                 dp[i][j] += dp[i-1][right];
             } else if (right > i-1) {
@@ -20,7 +21,6 @@ int solution(vector<vector<int>> triangle) {
             }
         }
     }
-    
     for(int i = 0; i < dp.back().size(); ++i) {
         answer = max(answer, dp.back()[i]);
     }
