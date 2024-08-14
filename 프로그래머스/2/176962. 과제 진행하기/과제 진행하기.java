@@ -1,67 +1,74 @@
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.List;
+import java.util.PriorityQueue;
 
 public class Solution {
 
-    public static class Task implements Comparable<Task> {
+    static class Task {
 
         String name;
-        int startTime;
+        int start;
         int playTime;
 
-        public Task(String name, String startTime, String playTime) {
+        public Task(String name, int start, int playTime) {
             this.name = name;
-            this.startTime = convertStrToInt(startTime);
-            this.playTime = Integer.parseInt(playTime);
-        }
-
-        public int convertStrToInt(String time) {
-            int[] tokens = Arrays.stream(time.split(":")).mapToInt(Integer::parseInt).toArray();
-            return tokens[0] * 60 + tokens[1];
-        }
-
-        @Override
-        public int compareTo(Task o) {
-            return this.startTime - o.startTime;
+            this.start = start;
+            this.playTime = playTime;
         }
     }
 
     public static String[] solution(String[][] plans) {
         List<String> answer = new ArrayList<>();
+        PriorityQueue<Task> tasks = new PriorityQueue<>((a, b) -> a.start - b.start);
 
-        PriorityQueue<Task> tasks = new PriorityQueue<>();
         for (String[] plan : plans) {
-            tasks.add(new Task(plan[0], plan[1], plan[2]));
+            tasks.add(new Task(plan[0], convertTimeToMinute(plan[1]), Integer.parseInt(plan[2])));
         }
 
-        Stack<Task> waiting = new Stack<>();
+        Deque<Task> waiting = new ArrayDeque<>();
+        Task curTask = tasks.poll();
 
-        Task cur = tasks.poll();
         while (!tasks.isEmpty()) {
-            Task next = tasks.peek();
-
-            if (next.startTime < cur.startTime + cur.playTime) {
-                cur.playTime -= (next.startTime - cur.startTime);
-                waiting.push(cur);
-                cur = tasks.poll();
+            if ((curTask.start + curTask.playTime) > tasks.peek().start) {
+                int newPlayTime = curTask.playTime - (tasks.peek().start - curTask.start);
+                curTask.playTime = newPlayTime;
+                curTask.start = curTask.start + (tasks.peek().start - curTask.start);
+                waiting.push(curTask);
+                curTask = tasks.poll();
+            } else if((curTask.start + curTask.playTime) == tasks.peek().start) {
+                answer.add(curTask.name);
+                curTask = tasks.poll();
             } else {
-                answer.add(cur.name);
-
-                if(waiting.isEmpty()) {
-                    cur = tasks.poll();
-                    continue;
+                if(!waiting.isEmpty()) {
+                    answer.add(curTask.name);
+                    int newStartTime = curTask.start + curTask.playTime;
+                    curTask = waiting.pop();
+                    curTask.start = newStartTime;
                 }
-                int newStartTime = cur.playTime + cur.startTime;
-                cur = waiting.pop();
-                cur.startTime = newStartTime;
+                else
+                {
+                    answer.add(curTask.name);
+                    curTask = tasks.poll();
+                }
             }
-
         }
-        answer.add(cur.name);
 
-        while(!waiting.isEmpty()) {
+        answer.add(curTask.name);
+
+        while(!waiting.isEmpty())
+        {
             answer.add(waiting.pop().name);
         }
 
-        return answer.toArray(new String[answer.size()]);
+        return answer.stream().toArray(String[]::new);
     }
+
+    public static int convertTimeToMinute(String time) {
+        String[] tokens = time.split(":");
+        return Integer.parseInt(tokens[0]) * 60 + Integer.parseInt(tokens[1]);
+    }
+
 }
