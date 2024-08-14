@@ -1,26 +1,30 @@
-import java.util.*;
+import java.util.PriorityQueue;
 
-class Solution {
-    public int solution(int[][] targets) {
-        Arrays.sort(targets, (o1, o2) -> {
-            if (o1[0] == o2[0]) {
-                return o1[1] - o2[1];
-            }
-            return o1[0] - o2[0];
+public class Solution {
+
+    public static int solution(int[][] targets) {
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> {
+            return a[0] - b[0];
         });
 
-        int end = -1;
-        int answer = 0;
-        for (int i = 0; i < targets.length; i++) {
-
-            if (end <= targets[i][0]) {
-                answer++;
-                end = targets[i][1];
-            } else {
-                end = Math.min(end, targets[i][1]);
-            }
+        for (int[] target : targets) {
+            pq.add(target);
         }
 
+        int answer = 0;
+
+        int end = -1;
+
+        while (!pq.isEmpty()) {
+            int[] cur = pq.poll();
+
+            if (cur[0] >= end) {
+                answer++;
+                end = cur[1];
+            } else {
+                end = Math.min(end, cur[1]);
+            }
+        }
         return answer;
     }
 }
