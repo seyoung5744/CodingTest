@@ -1,33 +1,20 @@
-
 public class Solution {
 
     public static long solution(int r1, int r2) {
+        long answer = 0;
 
-        long inner = getInner1((long)r2) - getInner2((long)r1);
-        long line = r2 - r1 + 1;
-        
-        return inner * 4 + line * 4;
-    }
+        long inner1 = 0;
+        for (int x = 1; x <= r2; x++) {
+            double inY = Math.sqrt((((long) r1 * r1) - ((long) x * x)));
+            double outY = Math.sqrt((((long) r2 * r2) - ((long) x * x)));
 
-    public static long getInner1(long r) {
-        long sum = 0;
-        for (long x = 1; x < r; x++) {
-            sum += (long) Math.sqrt((r * r) - (x * x));
+            if (x >= r1)
+                inY = 0;
+
+            inner1 += Math.floor(outY) - Math.ceil(inY) + 1;
         }
-        return sum;
-    }
-    
-    public static long getInner2(long r) {
-        long sum = 0;
-        for (long x = 1; x < r; x++) {
-            long y = (long)Math.sqrt((r * r) - (x * x));
-            sum += y;
-            
-            if (y*y == ((long)r * r) - (x * x))
-                --sum;
-        }
-        
-        return sum;
+
+        return inner1 * 4;
     }
 
 }
