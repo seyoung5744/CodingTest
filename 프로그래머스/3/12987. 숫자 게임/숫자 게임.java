@@ -1,21 +1,26 @@
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
 
-class Solution {
-    public int solution(int[] A, int[] B) {
+public class Solution {
+
+    public static int solution(int[] A, int[] B) {
         int answer = 0;
-        
-        Arrays.sort(A);
-        Arrays.sort(B);
-        
-        int index = 0;
-        
-        for(int i = 0; i < A.length && index < B.length; ) {
-            if(A[i] < B[index]) {
+
+        Integer[] boxedA = Arrays.stream(A).boxed().sorted(Collections.reverseOrder()).toArray(Integer[]::new);
+        Integer[] boxedB = Arrays.stream(B).boxed().sorted(Collections.reverseOrder()).toArray(Integer[]::new);
+
+        int aIdx = 0;
+        int bIdx = 0;
+
+        while (aIdx < boxedA.length) {
+            if (boxedB[bIdx] > boxedA[aIdx]) {
                 answer++;
-                i++;
+                bIdx++;
             }
-            index++;
+
+            aIdx++;
         }
+
         return answer;
     }
 }
