@@ -8,6 +8,7 @@ class Solution {
         if(num < 1) {
             return new int[]{-1};
         }
+        
         int[] answer = new int[n];
         
         for(int i = 0; i < n; i++) {
