@@ -1,50 +1,49 @@
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class Solution {
 
     public static int[] solution(int m, int n, int startX, int startY, int[][] balls) {
-        List<Integer> answer = new ArrayList<>();
+        int[] answer = new int[balls.length];
 
-        int[][] startPoints = new int[4][];
-        startPoints[0] = new int[]{startX, (2 * n) - startY}; // 위
-        startPoints[1] = new int[]{startX, -startY}; // 아래
-        startPoints[2] = new int[]{-startX, startY}; // 좌
-        startPoints[3] = new int[]{(2 * m) - startX, startY}; // 우
+        int[][] pointXY = new int[][]{ // 상하좌우
+            {startX, 2 * n - startY},
+            {startX, -startY},
+            {-startX, startY},
+            {2 * m - startX, startY}
+        };
 
-        for (int[] ball : balls) {
-
-            int minDistance = Integer.MAX_VALUE;
-
-            // 위
-            if (startX != ball[0] || startY > ball[1]) // 위
+        for (int i = 0; i < balls.length; i++) {
+            int x = balls[i][0];
+            int y = balls[i][1];
+            int distance = Integer.MAX_VALUE;
+            
+            if (!(x == startX && y > startY))
             {
-                minDistance = Math.min(getDistance(startPoints[0][0], startPoints[0][1], ball[0], ball[1]), minDistance);
+                distance = Math.min(getDistance(pointXY[0][0], pointXY[0][1], x, y), distance); // 상
+            }
+            
+            if (!(x == startX && y < startY))
+            {
+                distance = Math.min(getDistance(pointXY[1][0], pointXY[1][1], x, y), distance); // 하
+            }
+            
+            if (!(y == startY && x < startX))
+            {
+                distance = Math.min(getDistance(pointXY[2][0], pointXY[2][1], x, y), distance); // 좌
+            }
+            
+            if (!(y == startY && x > startX))
+            {
+                distance = Math.min(getDistance(pointXY[3][0], pointXY[3][1], x, y), distance); // 우
             }
 
-            if (startX != ball[0] || startY < ball[1]) // 아래
-            {
-                minDistance = Math.min(getDistance(startPoints[1][0], startPoints[1][1], ball[0], ball[1]), minDistance);
-            }
-
-            if (startY != ball[1] || startX < ball[0]) // 왼
-            {
-                minDistance = Math.min(getDistance(startPoints[2][0], startPoints[2][1], ball[0], ball[1]), minDistance);
-            }
-
-            if (startY != ball[1] || startX > ball[0]) // 오
-            {
-                minDistance = Math.min(getDistance(startPoints[3][0], startPoints[3][1], ball[0], ball[1]), minDistance);
-            }
-            answer.add(minDistance);
+            answer[i] = distance;
         }
 
-        return answer.stream().mapToInt(Integer::intValue).toArray();
+        return answer;
     }
 
-    public static int getDistance(int x1, int y1, int x2, int y2) {
-        return ((x1 - x2) * (x1 - x2)) + ((y1 - y2) * (y1 - y2));
+    public static int getDistance(int a, int b, int x, int y) {
+        return (int) Math.pow((a - x), 2) + (int) Math.pow((b - y), 2);
     }
-
 }
