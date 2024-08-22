@@ -1,36 +1,29 @@
-public class Solution {
+class Solution {
+    public int solution(int n, long l, long r) {
+       int answer = 0;
+        long div = (long)Math.pow(5.0, n - 1);
 
-    public static int loop;
-    public static String result;
-
-    public static int solution(int n, long l, long r) {
-
-        int answer = 0;
-        int[] can = {1, 1, 0, 1, 1};
         for(long i = l - 1; i < r; ++i)
         {
-            long idx = i;
-            boolean flag = true;
-
-            while(idx > 4)
+            long num = i;
+            long temp = div;
+            while(num >= 5)
             {
-                long remain = idx % 5;
-
-                idx /= 5;
-
-                if (remain == 2)
-                {
-                    flag = false;
+                if (num / temp == 2) {
+                    num = 2;
                     break;
                 }
+
+                num %= temp;
+                temp /= 5;
             }
 
-            if (!flag)
+            if (num % 5 == 2)
                 continue;
-            
-            answer += can[(int)idx];
 
+            answer++;
         }
+
         return answer;
     }
 }
