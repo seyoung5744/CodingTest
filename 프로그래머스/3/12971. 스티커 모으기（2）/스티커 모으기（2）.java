@@ -1,4 +1,4 @@
-import java.util.Arrays;
+import java.util.*;
 
 public class Solution {
 
@@ -21,7 +21,6 @@ public class Solution {
                 dp1[i] += sticker[i] + dp1[i - 2];
                 continue;
             }
-
             dp1[i] += sticker[i] + Math.max(dp1[i - 2], dp1[i - 3]);
         }
 
@@ -37,5 +36,4 @@ public class Solution {
             Arrays.stream(dp2).max().getAsInt()
         );
     }
-
 }
