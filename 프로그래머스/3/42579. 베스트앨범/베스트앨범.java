@@ -38,19 +38,18 @@ public class Solution {
             }
             return o.playTime - this.playTime;
         }
-
     }
 
     public static Map<String, Genre> album = new HashMap<>();
 
     public static int[] solution(String[] genres, int[] plays) {
+        
         for (int i = 0; i < genres.length; i++) {
             album.putIfAbsent(genres[i], new Genre(genres[i]));
             album.get(genres[i]).addMusic(new Music(i, genres[i], plays[i]));
         }
 
-        List<Genre> list = new ArrayList<>();
-        list.addAll(album.values());
+        List<Genre> list = new ArrayList<>(album.values());
         list.sort((o1, o2) -> o2.total - o1.total);
 
         List<Integer> answer = new ArrayList<>();
