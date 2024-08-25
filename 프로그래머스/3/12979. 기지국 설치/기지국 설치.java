@@ -2,7 +2,7 @@ public class Solution {
 
     public static int solution(int n, int[] stations, int w) {
         int answer = 0;
-        int start, end = 0;
+        int start = 0, end = 0;
 
         int max = w * 2 + 1;
 
