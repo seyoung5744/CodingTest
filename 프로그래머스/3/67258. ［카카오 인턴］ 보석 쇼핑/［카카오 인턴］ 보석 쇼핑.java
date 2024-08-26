@@ -3,12 +3,10 @@ import java.util.*;
 public class Solution {
 
     public static int[] solution(String[] gems) {
-         int[] answer = {0, 0};
+        int[] answer = {0, 0};
         int minLength = gems.length + 1;
 
-        Set<String> kinds = new HashSet<>();
-        kinds.addAll(Arrays.asList(gems));
-
+        Set<String> kinds = new HashSet<>(Arrays.asList(gems));
         Map<String, Integer> map = new HashMap<>();
 
         int start = 0;
