@@ -15,6 +15,7 @@ long long solution(int n, vector<int> times) {
         mid = (max + min) / 2;
         
         long long total = 0;
+        
         for(int i = 0; i < times.size(); ++i) {
             total += mid / times[i];
         }
@@ -26,6 +27,5 @@ long long solution(int n, vector<int> times) {
             min = mid+1;
         }
     }
-    
     return min;
 }
