@@ -29,8 +29,10 @@ public class Solution {
         }
 
         int start = index.get("ICN");
+        
         List<String> result = new ArrayList<>();
         result.add("ICN");
+        
         dfs(start, tickets, new boolean[tickets.length], 0, result);
 
         answer.sort((a, b) -> {
@@ -46,6 +48,7 @@ public class Solution {
     }
 
     public static List<List<String>> answer = new ArrayList<>();
+    
     public static void dfs(int curAirport, String[][] tickets, boolean[] used, int useCnt, List<String> result) {
 
         if (useCnt >= tickets.length) {
