@@ -19,8 +19,8 @@ public class Solution {
             return a[1] - b[1];
         });
 
-
         int result = 0;
+        
         while(!pq1.isEmpty()) {
             while(!pq1.isEmpty() && pq1.peek()[0] <= result) {
                 pq2.offer(pq1.poll());
@@ -55,5 +55,4 @@ public class Solution {
 
         return answer / jobs.length;
     }
-
 }
