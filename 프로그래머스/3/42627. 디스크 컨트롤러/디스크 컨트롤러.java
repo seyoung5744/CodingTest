@@ -2,57 +2,47 @@ import java.util.*;
 
 public class Solution {
 
-    public static int solution(int[][] jobs) {
-        int answer = 0;
+    static class Disk {
 
-        PriorityQueue<int[]> pq1 = new PriorityQueue<>((a, b) -> {
-            if(a[0] == b[0]) {
-                return a[1] - b[1];
-            }
-            return a[0] - b[0];
-        });
-        pq1.addAll(Arrays.asList(jobs));
+        public final int start;
+        public final int jobTime;
 
-        PriorityQueue<int[]> pq2 = new PriorityQueue<>((a, b) -> {
-            if (a[1] == b[1])
-                return a[0] - b[0];
-            return a[1] - b[1];
-        });
+        public Disk(int start, int jobTime) {
+            this.start = start;
+            this.jobTime = jobTime;
+        }
+    }
 
-        int result = 0;
-        
-        while(!pq1.isEmpty()) {
-            while(!pq1.isEmpty() && pq1.peek()[0] <= result) {
-                pq2.offer(pq1.poll());
-            }
+    public int solution(int[][] jobs) {
+        Disk[] disks = new Disk[jobs.length];
 
-            if (pq2.isEmpty()) {
-                pq2.offer(pq1.poll());
-            }
-
-            int[] cur = pq2.poll();
-
-            if (result > cur[0]) {
-                answer += result - cur[0] + cur[1];
-                result += cur[1];
-            } else {
-                answer += cur[1];
-                result = cur[0] + cur[1];
-            }
+        for (int i = 0; i < jobs.length; i++) {
+            disks[i] = new Disk(jobs[i][0], jobs[i][1]);
         }
 
-        while (!pq2.isEmpty()) {
-            int[] cur = pq2.poll();
+        Arrays.sort(disks, (a, b) -> a.start - b.start);
 
-            if (result > cur[0]) {
-                answer += result - cur[0] + cur[1];
-                result += cur[1];
-            } else {
-                answer += cur[1];
-                result += cur[0] + cur[1];
+        Queue<Disk> q = new LinkedList<>(Arrays.asList(disks));
+        PriorityQueue<Disk> pq = new PriorityQueue<>((a, b) -> a.jobTime - b.jobTime);
+
+        int exec = 0; // 누적 시간
+        int time = 0; // 현재 시간
+
+        while(!q.isEmpty() || !pq.isEmpty()) {
+            while(!q.isEmpty() && q.peek().start <= time){
+                pq.add(q.poll());
             }
+
+            if(pq.isEmpty()) {
+                time = q.peek().start;
+                continue;
+            }
+
+            Disk curJob = pq.poll();
+            exec += time + curJob.jobTime - curJob.start;
+            time += curJob.jobTime;
         }
 
-        return answer / jobs.length;
+        return exec / disks.length;
     }
 }
