@@ -18,8 +18,8 @@ public class Solution {
 
         int start = 1;
         int[] visited = bfs(start, n);
-
         int max = Arrays.stream(visited).max().getAsInt();
+        
         return (int) Arrays.stream(visited)
             .filter(value -> value == max)
             .count();
