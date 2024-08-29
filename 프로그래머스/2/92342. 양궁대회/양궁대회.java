@@ -34,15 +34,14 @@ public class Solution {
                 max = Math.max(max, lionScore - apachScore);
                 answer = candidate;
             } else if (lionScore - apachScore == max) {
-                                for (int i = info.length - 1; i >= 0; i--) {
-                    if(answer[i] == candidate[i])
+                for (int i = info.length - 1; i >= 0; i--) {
+                    if (answer[i] == candidate[i]) {
                         continue;
+                    }
                     if (answer[i] < candidate[i]) {
                         answer = candidate;
-                        break;
-                    }else {
-                        break;
                     }
+                    break;
                 }
             }
 
