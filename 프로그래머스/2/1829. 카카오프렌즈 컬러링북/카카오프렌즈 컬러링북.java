@@ -1,72 +1,62 @@
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.ArrayDeque;
 import java.util.Queue;
 
 public class Solution {
 
+
     public static int[] dx = {0, 0, 1, -1};
     public static int[] dy = {1, -1, 0, 0};
+    public static boolean[][] visited;
 
-    static class Point {
+    public int[] solution(int m, int n, int[][] picture) {
+        int numberOfArea = 0;
+        int maxSizeOfOneArea = 0;
 
-        int x, y;
+        visited = new boolean[m][n];
 
-        public Point(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
-
-    public static int[] solution(int m, int n, int[][] picture) {
-        int[] answer = new int[2];
-        boolean[][] visited = new boolean[m][n];
-
-        for (int y = 0; y < m; ++y) {
-            for (int x = 0; x < n; ++x) {
-                if (picture[y][x] == 0 || visited[y][x]) {
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (visited[i][j] || picture[i][j] == 0) {
                     continue;
                 }
 
-                answer[0]++;
-                int areaCount = bfs(x, y, picture[y][x], m, n, visited, picture);
-
-                if (answer[1] < areaCount) {
-                    answer[1] = areaCount;
-                }
+                numberOfArea+=1;
+                maxSizeOfOneArea = Math.max(bfs(m, n, picture, new int[]{i, j}), maxSizeOfOneArea);
             }
         }
-
-        return answer;
+        int[] result = new int[2];
+        result[0] = numberOfArea;
+        result[1] = maxSizeOfOneArea;
+        return result;
     }
 
-    public static int bfs(int x, int y, int target, int m, int n, boolean[][] visited, int[][] picture) {
-        int areaCount = 0;
-
-        Queue<Point> q = new LinkedList<>();
-        q.add(new Point(x, y));
+    public static int bfs(int m, int n, int[][] picture, int[] start) {
+        Queue<int[]> q = new ArrayDeque<>();
+        q.offer(start);
+        visited[start[0]][start[1]] = true;
+        int sizeOfArea = 1;
 
         while (!q.isEmpty()) {
-            Point cur = q.poll();
+            int[] cur = q.poll();
 
             for (int i = 0; i < 4; i++) {
-                int nx = dx[i] + cur.x;
-                int ny = dy[i] + cur.y;
+                int nx = dx[i] + cur[1];
+                int ny = dy[i] + cur[0];
 
                 if (nx < 0 || nx >= n || ny < 0 || ny >= m) {
                     continue;
                 }
 
-                if (picture[ny][nx] != target || visited[ny][nx]) {
+                if (visited[ny][nx] || picture[ny][nx] != picture[start[0]][start[1]]) {
                     continue;
                 }
 
                 visited[ny][nx] = true;
-                q.add(new Point(nx, ny));
-                areaCount++;
+                q.offer(new int[]{ny, nx});
+                sizeOfArea += 1;
             }
         }
-
-        return areaCount;
+        return sizeOfArea;
     }
 
 }
