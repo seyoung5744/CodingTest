@@ -4,66 +4,66 @@ import java.util.List;
 
 public class Solution {
 
-    public final static int MAX_NODES = 1_000_000;
+    public static final int MAX_EDGES_LENGTH = 1_000_001;
     public static List<List<Integer>> graph = new ArrayList<>();
-    public static boolean[] visited = new boolean[MAX_NODES];
-    public static int root;
+    public static boolean[] visited = new boolean[MAX_EDGES_LENGTH];
+    public static boolean[] isRoot = new boolean[MAX_EDGES_LENGTH];
 
     public static int[] solution(int[][] edges) {
         int[] answer = new int[4];
-
-        for (int i = 0; i <= MAX_NODES; i++) {
+        for (int i = 0; i < MAX_EDGES_LENGTH; i++) {
             graph.add(new ArrayList<>());
+            isRoot[i] = true;
         }
 
-        for(int[] edge : edges) {
+        for (int[] edge : edges) {
             int from = edge[0];
             int to = edge[1];
-
             graph.get(from).add(to);
-            visited[to] = true;
+            isRoot[to] = false;
         }
 
-        for (int i = 1; i <= MAX_NODES; i++) {
-            if(graph.get(i).size() >= 2 && !visited[i]) {
+        int root = 0;
+        for (int i = 1; i < graph.size(); i++) {
+            if (isRoot[i] && graph.get(i).size() >= 2) {
                 root = i;
                 break;
             }
         }
-        
         answer[0] = root;
-        Arrays.fill(visited, false);
 
-        for (int i = 0; i < graph.get(root).size(); i++) {
+        int line = 0;
+        int circle = 0;
+        int eight = 0;
+        for (int i = 0; i < graph.get(root).size(); ++i) {
             int cur = graph.get(root).get(i);
-
-
-            while(true) {
-                visited[cur] = true;
-                if (graph.get(cur).size() == 2)
-                {
-                    // 8자
-                    answer[3]++;
+            visited[cur] = true;
+            while (true) {
+                if (graph.get(cur).isEmpty()) {
+                    // 막대
+                    line += 1;
                     break;
-                } else if (graph.get(cur).size() == 0) {
-                    // 1자
-                    answer[2]++;
-                    break;
-                } else if( graph.get(cur).size() == 1) {
-                    // 다음으로 이동
-                    int next = graph.get(cur).get(0);
-
-                    if(visited[next]) {
-                        // 삼각형
-                        answer[1]++;
-                        break;
-                    } else {
-                        cur = next;
-                    }
                 }
+
+                if (graph.get(cur).size() > 1) {
+                    // 팔자
+                    eight += 1;
+                    break;
+                }
+
+                cur = graph.get(cur).get(0);
+                if (visited[cur]) {
+                    // 도넛
+                    circle += 1;
+                    break;
+                }
+                visited[cur] = true;
             }
+
         }
+        answer[1] = circle;
+        answer[2] = line;
+        answer[3] = eight;
         return answer;
     }
-
 }
