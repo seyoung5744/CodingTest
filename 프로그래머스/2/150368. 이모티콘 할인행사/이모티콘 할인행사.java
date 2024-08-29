@@ -1,51 +1,66 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Solution {
 
-    public static int[] discount = {40, 30, 20, 10};
-    public static int[] answer = {0, 0};
-    
-    public static int[] solution(int[][] users, int[] emoticons) {
-        dfs(0, new int[users.length], emoticons, users);
-        return answer;
+    public static final double[] DISCOUNT_RATIO = {0.1, 0.2, 0.3, 0.4};
+    public static List<List<Double>> emoticonRatiosResult = new ArrayList<>();
+
+    public int[] solution(int[][] users, int[] emoticons) {
+        setEmoticonPriceByDiscount(emoticons, new ArrayList<>(), 0);
+        return calculateUser(users, emoticons);
     }
 
-    public static void dfs(int depth, int[] totalMoney, int[] emoticons, int[][] users) {
-        if (depth == emoticons.length) {
-            int pCount = 0;
-            int totalCost = 0;
+    private static int[] calculateUser(int[][] users, int[] emoticons) {
+        int maxPlusUser = Integer.MIN_VALUE;
+        int maxPrice = Integer.MIN_VALUE;
 
-            for(int i = 0; i < users.length; ++i) {
-                if (users[i][1] <= totalMoney[i]) {
-                    pCount++;
+        for (List<Double> ratios : emoticonRatiosResult) {
+
+            int plusUser = 0;
+            int price = 0;
+            for (int[] user : users) {
+                double wantUserRatio = user[0] / 100.0;
+                int totalPay = 0;
+                boolean flag = false;
+                for (int i = 0; i < emoticons.length; i++) {
+                    if (ratios.get(i) >= wantUserRatio) {
+                        totalPay += emoticons[i] * (1 - ratios.get(i));
+                    }
+
+                    if (totalPay >= user[1]) { // 플러스 가입
+                        flag = true;
+                        break;
+                    }
+                }
+
+                if (flag == true) {
+                    plusUser++;
                 } else {
-                    totalCost += totalMoney[i];
+                    price += totalPay;
                 }
             }
 
-            if (pCount > answer[0]) {
-                answer[0] = pCount;
-                answer[1] = totalCost;
-            } else if (pCount == answer[0] && totalCost > answer[1]) {
-                answer[1] = totalCost;
+            if (plusUser > maxPlusUser) {
+                maxPlusUser = plusUser;
+                maxPrice = price;
+            } else if (plusUser == maxPlusUser && price > maxPrice) {
+                maxPrice = price;
             }
+        }
+        return new int[]{maxPlusUser, maxPrice};
+    }
+
+    private static void setEmoticonPriceByDiscount(int[] emoticons, List<Double> emoticonRatios, int depth) {
+        if (depth >= emoticons.length) {
+            emoticonRatiosResult.add(new ArrayList<>(emoticonRatios));
             return;
         }
 
-        for(int i = 0; i < 4; ++i) {
-            for (int j = 0; j < users.length; j++) {
-                if(discount[i] >= users[j][0]) {
-                    totalMoney[j] += (emoticons[depth] * (100 - discount[i])) / 100;
-                }
-            }
-
-            dfs(depth + 1, totalMoney, emoticons, users);
-
-            for (int j = 0; j < users.length; j++) {
-                if(discount[i] >= users[j][0]) {
-                    totalMoney[j] -= (emoticons[depth] * (100 - discount[i])) / 100;
-                }
-            }
+        for (int i = 0; i < DISCOUNT_RATIO.length; i++) {
+            emoticonRatios.add(DISCOUNT_RATIO[i]);
+            setEmoticonPriceByDiscount(emoticons, emoticonRatios, depth + 1);
+            emoticonRatios.remove(emoticonRatios.size() - 1);
         }
     }
 }
