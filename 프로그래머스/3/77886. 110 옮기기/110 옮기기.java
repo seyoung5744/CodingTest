@@ -1,36 +1,51 @@
+
 import java.util.Arrays;
 
 public class Solution {
 
-    public static final String TOKEN = "110";
-    public static final int MIN_LENGTH = 3;
+    public static String remove110(String str) {
+        StringBuilder answer = new StringBuilder();
 
-    public static String[] solution(String[] s) {
-        String[] answer = new String[s.length];
-
-        for (int i = 0; i < s.length; i++) {
-            String str = s[i];
-            StringBuilder temp = new StringBuilder();
-
-            int count = 0;
-
-            for (int j = 0; j < str.length(); ++j) {
-                temp.append(str.charAt(j));
-                if (temp.length() >= MIN_LENGTH) {
-                    int length = temp.length();
-                    if (temp.charAt(length - 1) == '0' && temp.charAt(length - 2) == '1' && temp.charAt(length - 3) == '1') {
-                        temp = temp.delete(length - 3, length);
-                        ++count;
+        for (int i = 0; i < str.length(); ++i) {
+            char c = str.charAt(i);
+            if(answer.length() >= 2) {
+                if (c == '0' ) {
+                    if (answer.charAt(answer.length() - 1) == '1' && answer.charAt(answer.length() - 2) == '1' ) {
+                        answer.delete(answer.length() - 2, answer.length());
+                        continue;
                     }
                 }
             }
 
-            int cur = temp.length() - 1;
+            answer.append(c);
+        }
+        return answer.toString();
+    }
 
-            while (cur >= 0 && temp.charAt(cur) == '1') {
-                --cur;
+    public static String[] solution(String[] s) {
+        String[] answer = new String[s.length];
+        for (int x = 0; x < s.length; x++) {
+            String str = s[x];
+            String temp = remove110(str);
+
+            StringBuilder result = new StringBuilder(temp);
+
+            int count = (str.length() - temp.length()) / 3;
+
+            int target = 0;
+
+            while (target < temp.length()) {
+                if (temp.charAt(target) == '1' ) {
+                    if (target + 1 >= temp.length() || temp.charAt(target + 1) == '1' ) {
+                        break;
+                    }
+                }
+
+                ++target;
             }
-            answer[i] = temp.insert(++cur, TOKEN.repeat(count)).toString();
+
+            result.insert(target, "110".repeat(count));
+            answer[x] = result.toString();
         }
         return answer;
     }
