@@ -1,45 +1,69 @@
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class Solution {
 
-    public static final int[] dx = {0, -1, 1, 0}; // 하, 좌, 우, 상
-    public static final int[] dy = {1, 0, 0, -1}; // 하, 좌, 우, 상
-    public static char[] ch = {'d', 'l', 'r', 'u'};
+    public static int[] dx = {0, -1, 1, 0}; // d l r u
+    public static int[] dy = {1, 0, 0, -1};
+    public static Map<Integer, Character> map = Map.of(
+        0, 'd',
+        1, 'l',
+        2, 'r',
+        3, 'u'
+    );
+
+    public static int getDistance(int startI, int startJ, int endI, int endJ) {
+        return Math.abs(startI - endI) + Math.abs(startJ - endJ);
+    }
 
     public static String solution(int n, int m, int x, int y, int r, int c, int k) {
         String answer = "";
 
-        y--;
-        x--;
-        c--;
-        r--;
-        
-        if (getDistance(x, y, c, r) % 2 != k % 2 || getDistance(x, y, c, r) > k)
+        int curJ = y - 1;
+        int curI = x - 1;
+        int endJ = c - 1;
+        int endI = r - 1;
+
+        if (getDistance(curI, curJ, endI, endJ) % 2 != k % 2 || getDistance(curI, curJ, endI, endJ) > k)
             return "impossible";
 
-        while (k > 0) {
+        int moveCount = 0;
+
+        while (true) {
+
+            int mc = answer.length();
+
             for (int i = 0; i < 4; i++) {
-                int nx = x + dy[i];
-                int ny = y + dx[i];
+                int nextI = curI + dy[i];
+                int nextJ = curJ + dx[i];
 
-                if (nx < 0 || nx >= n || ny < 0 || ny >= m) {
-                    continue;
-                }
-                if (getDistance(ny, nx, c, r) > k-1) {
+                if (nextI < 0 || nextI >= n || nextJ < 0 || nextJ >= m) {
                     continue;
                 }
 
-                x = nx;
-                y = ny;
-                k--;
-                answer += ch[i];
+                if (moveCount + 1 + getDistance(nextI, nextJ, endI, endJ) > k) {
+                    continue;
+                }
+
+                moveCount += 1;
+                curI = nextI;
+                curJ = nextJ;
+                answer += map.get(i);
+                break;
+            }
+
+            if (mc == answer.length()) {
+                return "impossible";
+            }
+
+            if (moveCount == k) {
                 break;
             }
         }
-        return answer;
-    }
 
-    public static int getDistance(int x, int y, int a, int b) {
-        return Math.abs(x - a) + Math.abs(y - b);
+        return answer;
     }
 
 }
