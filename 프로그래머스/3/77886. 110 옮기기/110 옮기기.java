@@ -1,5 +1,4 @@
-
-import java.util.Arrays;
+import java.util.*;
 
 public class Solution {
 
@@ -19,6 +18,7 @@ public class Solution {
 
             answer.append(c);
         }
+        
         return answer.toString();
     }
 
@@ -47,6 +47,7 @@ public class Solution {
             result.insert(target, "110".repeat(count));
             answer[x] = result.toString();
         }
+        
         return answer;
     }
 }
