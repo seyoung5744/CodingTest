@@ -1,17 +1,15 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Solution {
-
+    
+    public static int result = Integer.MAX_VALUE;
+    
     public static int solution(int n, int[] weak, int[] dist) {
         Arrays.sort(dist);
         findWeak(dist.length - 1, Arrays.stream(weak).boxed().collect(Collectors.toList()), dist, n);
         return result == Integer.MAX_VALUE? -1 : result;
     }
-
-    public static int result = Integer.MAX_VALUE;
 
     public static void findWeak(int distIdx, List<Integer> weak, int[] dist, int n) {
 
@@ -22,7 +20,7 @@ public class Solution {
             return;
         }
         
-        if (distIdx < 0) {
+        if (distIdx < 0 || dist.length - distIdx - 1 >= result) {
             return;
         }
 
