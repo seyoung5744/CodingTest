@@ -1,7 +1,5 @@
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Solution {
 
@@ -31,9 +29,7 @@ public class Solution {
 
         int moveCount = 0;
 
-        while (true) {
-
-            int mc = answer.length();
+        while (moveCount < k) {
 
             for (int i = 0; i < 4; i++) {
                 int nextI = curI + dy[i];
@@ -54,16 +50,8 @@ public class Solution {
                 break;
             }
 
-            if (mc == answer.length()) {
-                return "impossible";
-            }
-
-            if (moveCount == k) {
-                break;
-            }
         }
 
         return answer;
     }
-
 }
