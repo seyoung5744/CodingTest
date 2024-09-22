@@ -1,13 +1,11 @@
 public class Solution {
 
-    public static int[] sums;
-
     public static String solution(String play_time, String adv_time, String[] logs) {
         String answer = "";
         int playTime = convertTime(play_time);
         int advTime = convertTime(adv_time);
 
-        sums = new int[360_000];
+        int[] sums = new int[360_000];
 
         for (String log : logs) {
             String[] split = log.split("-");
@@ -40,10 +38,6 @@ public class Solution {
     }
 
     public static String convertTime(int time) {
-//        int hour = time / 3600;
-//        int minute = time % 3600 / 60;
-//        int second = time % 3600 % 60;
-//        return String.format("%02d:%02d:%02d", hour, minute, second);
         return String.format("%02d:%02d:%02d", (time / 60 / 60), (time / 60 % 60), (time % 60));
     }
 
