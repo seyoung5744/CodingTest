@@ -4,10 +4,8 @@ using namespace std;
 
 int MOD = 20170805;
 
-int GetLeftCase(int startI, int startJ, vector<vector<int>>& map, vector<vector<int>>& dp)
-{
-    for(int j = startJ; j >= 0; --j)
-    {
+int GetLeftCase(int startI, int startJ, vector<vector<int>>& map, vector<vector<int>>& dp) {
+    for(int j = startJ; j >= 0; --j) {
         if (map[startI][j] == 2)
             continue;
         
@@ -17,10 +15,8 @@ int GetLeftCase(int startI, int startJ, vector<vector<int>>& map, vector<vector<
     return 0;
 }
 
-int GetTopCase(int startI, int startJ, vector<vector<int>>& map, vector<vector<int>>& dp)
-{
-    for(int i = startI; i >= 0; --i)
-    {
+int GetTopCase(int startI, int startJ, vector<vector<int>>& map, vector<vector<int>>& dp) {
+    for(int i = startI; i >= 0; --i) {
         if (map[i][startJ] == 2)
             continue;
         
@@ -37,15 +33,12 @@ int solution(int m, int n, vector<vector<int>> city_map) {
     vector<vector<int>> dp (m, vector<int> (n, 0));
     dp[0][0] = 1;
     
-    for(int i = 0; i < m; ++i)
-    {
-        for(int j = 0; j < n; ++j)
-        {
+    for(int i = 0; i < m; ++i) {
+        for(int j = 0; j < n; ++j) {
             if (i == 0 && j == 0)
                 continue;
             
-            if (city_map[i][j] == 1)
-            {
+            if (city_map[i][j] == 1) {
                 dp[i][j] = 0;
                 continue;
             }
