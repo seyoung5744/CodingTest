@@ -4,11 +4,11 @@ class Solution {
     public int solution(int[] nums) {
         int selectNum = nums.length / 2;
         
-        Map<Integer, Integer> map = new HashMap<>();
+        Set<Integer> set = new HashSet<>();
         for(int num : nums) {
-            map.put(num, map.getOrDefault(num, 0) + 1);
+            set.add(num);
         }
             
-        return Math.min(selectNum, map.keySet().size());
+        return Math.min(selectNum, set.size());
     }
 }
