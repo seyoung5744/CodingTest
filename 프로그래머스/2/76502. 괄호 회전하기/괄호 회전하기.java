@@ -9,30 +9,27 @@ class Solution {
     
     public int solution(String s) {
         int answer = 0;
-        Deque<Character> queue = new ArrayDeque<>();
-        for (int i = 0; i < s.length(); i++) {
-            queue.offer(s.charAt(i));
-        }
-        for (int i = 0; i < s.length(); i++) {
-            if (isValid(new ArrayDeque<>(queue))) {
+        
+        char[] str = s.toCharArray();
+        for (int offset = 0; offset < str.length; offset++) {
+            if (isValid(str, offset)) {
                 answer++;
             }
-            queue.offer(queue.poll());
         }
         
         return answer;
     }
     
-    private boolean isValid(Deque<Character> queue) {
+    private boolean isValid(char[] str, int offset) {
         Deque<Character> stack = new ArrayDeque<>();
         
-        while(!queue.isEmpty()) {
-            char c = queue.poll();
+        for(int i = 0; i < str.length; i++) {
+            char c = str[(i + offset) % str.length];
             if (!perenthesis.containsKey(c)) {
                 stack.push(c);
             } else {
                 if (stack.isEmpty()) return false;
-                if (perenthesis.get(c) == stack.peek()) stack.pop();
+                if (perenthesis.get(c) != stack.pop()) return false;
             }
         }
         
