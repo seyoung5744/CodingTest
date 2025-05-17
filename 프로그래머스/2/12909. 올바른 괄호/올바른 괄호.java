@@ -2,16 +2,16 @@ import java.util.*;
 
 class Solution {
     boolean solution(String s) {
-        Deque<Character> stack = new ArrayDeque<>();
+        int counter = 0;
         
         for (char p : s.toCharArray()) {
             if (p == '(') {
-                stack.push(p);
+                counter++;
             } else {
-                if (stack.isEmpty()) return false;
-                stack.pop();
+                if (counter == 0) return false;
+                counter--;
             }
         }
-        return stack.isEmpty();
+        return counter == 0;
     }
 }
