@@ -1,29 +1,25 @@
 import java.util.*;
 
-public class Solution {
-
-    public static int solution(int bridge_length, int weight, int[] truck_weights) {
-        int answer = 0;
-
+class Solution {
+    public int solution(int bridge_length, int weight, int[] truck_weights) {
         Deque<Integer> bridge = new ArrayDeque<>();
         for (int i = 0; i < bridge_length; i++) {
             bridge.add(0);
         }
 
-        int idx = 0;
-        int curBridgeWeight = 0;
         int time = 0;
+        int truckIndex = 0;
+        int bridgeWeight = 0;
 
-        while (idx < truck_weights.length) {
+        while (truckIndex < truck_weights.length) {
 
-            curBridgeWeight -= bridge.poll();
+            bridgeWeight -= bridge.poll();
+            int truckWeight = truck_weights[truckIndex];
 
-            int curTruck = truck_weights[idx];
-
-            if (curBridgeWeight + curTruck <= weight) {
-                bridge.add(curTruck);
-                curBridgeWeight += curTruck;
-                idx++;
+            if (bridgeWeight + truckWeight <= weight) {
+                bridge.add(truckWeight);
+                bridgeWeight += truckWeight;
+                truckIndex++;
             } else {
                 bridge.add(0);
             }
@@ -31,11 +27,11 @@ public class Solution {
             time++;
         }
 
-        while (!bridge.isEmpty()) {
+        while(!bridge.isEmpty()) {
             bridge.poll();
             time++;
         }
+
         return time;
     }
-
 }
