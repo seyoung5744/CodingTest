@@ -1,65 +1,65 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class Solution {
-
-    public static final String[] operators = {
-        "+-*",
-        "+*-",
-        "-+*",
-        "-*+",
-        "*+-",
-        "*-+"
+class Solution {
+    public static final String[] operations = {
+            "+-*",
+            "+*-",
+            "-+*",
+            "-*+",
+            "*+-",
+            "*-+"
     };
 
-    public static long solution(String expression) {
+    public long solution(String expression) {
         long answer = 0;
-        StringTokenizer st = new StringTokenizer(expression, "+-*", true);
-        List<String> tokens = new ArrayList<>();
-        while (st.hasMoreTokens()) {
-            tokens.add(st.nextToken());
-        }
 
-        for (String operator : operators) {
-            List<String> original = new ArrayList<>(tokens);
-            for (String op : operator.split("")) {
-                original = calculate(original, op);
+        for (String operation : operations) {
+            List<String> tokens = split(expression);
+            for (char c : operation.toCharArray()) {
+                String op = String.valueOf(c);
+
+                for (int i = 0; i < tokens.size(); i++) {
+                    if (op.equals(tokens.get(i))) {
+                        long num1 = Long.parseLong(tokens.get(i - 1));
+                        long num2 = Long.parseLong(tokens.get(i + 1));
+                        long result = calculate(num1, num2, tokens.get(i));
+
+                        tokens.remove(i);
+                        tokens.remove(i);
+
+                        tokens.set(i - 1, String.valueOf(result));
+                        i--;
+                    }
+                }
             }
-
-            answer = Math.max(answer, Math.abs(Long.parseLong(original.get(0))));
+            answer = Math.max(answer, Math.abs(Long.parseLong(tokens.get(0))));
         }
 
         return answer;
     }
 
-    public static List<String> calculate(List<String> tokens, String op) {
-        List<String> result = new ArrayList<>();
-
-        for (int i = 0; i < tokens.size(); i++) {
-            if (tokens.get(i).equals(op)) {
-                long num1 = Long.parseLong(result.get(result.size() - 1));
-                String operator = tokens.get(i);
-                long num2 = Long.parseLong(tokens.get(i + 1));
-                result.remove(result.size() - 1);
-                result.add(String.valueOf(calculate(num1, num2, operator)));
-                i++;
-            } else {
-                result.add(tokens.get(i));
-            }
+    public long calculate(long num1, long num2, String op) {
+        long result = 0;
+        switch (op) {
+            case "+":
+                result = num1 + num2;
+                break;
+            case "-":
+                result = num1 - num2;
+                break;
+            case "*":
+                result = num1 * num2;
+                break;
         }
         return result;
     }
 
-    public static long calculate(long a, long b, String operator) {
-        switch (operator) {
-            case "+":
-                return a + b;
-            case "-":
-                return a - b;
-            case "*":
-                return a * b;
+    public List<String> split(String expression) {
+        List<String> tokens = new ArrayList<>();
+        StringTokenizer st = new StringTokenizer(expression, "+-*", true);
+        while (st.hasMoreTokens()) {
+            tokens.add(st.nextToken());
         }
-        return 0;
+        return tokens;
     }
 }
