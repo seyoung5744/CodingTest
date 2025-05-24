@@ -1,12 +1,13 @@
 import java.util.*;
 
-public class Solution {
+class Solution {
+    public int solution(int n, int[][] edges) {
+        List<List<Integer>> graph = new ArrayList<>();
+        int[] visited = new int[n + 1];
 
-    public static List<List<Integer>> graph = new ArrayList<>();
-
-    public static int solution(int n, int[][] edges) {
         for (int i = 0; i <= n; i++) {
             graph.add(new ArrayList<>());
+            visited[i] = Integer.MAX_VALUE;
         }
 
         for (int[] edge : edges) {
@@ -16,34 +17,32 @@ public class Solution {
             graph.get(b).add(a);
         }
 
-        int start = 1;
-        int[] visited = bfs(start, n);
-        int max = Arrays.stream(visited).max().getAsInt();
-        
-        return (int) Arrays.stream(visited)
-            .filter(value -> value == max)
-            .count();
-    }
+        int count = 0;
+        int maxDis = 0;
 
-    public static int[] bfs(int start, int n) {
-        int[] visited = new int[n + 1];
-        Queue<Integer> q = new LinkedList<>();
-        q.add(start);
-        visited[start] = 1;
+        Deque<Integer> q = new ArrayDeque<>();
+        q.add(1);
+        visited[1] = 0;
 
         while (!q.isEmpty()) {
             int cur = q.poll();
 
+            if (visited[cur] > maxDis) {
+                maxDis = visited[cur];
+                count = 1;
+            } else if (visited[cur] == maxDis) {
+                count++;
+            }
+
             for (int i = 0; i < graph.get(cur).size(); i++) {
                 int next = graph.get(cur).get(i);
 
-                if (visited[next] == 0 || visited[next] > visited[cur] + 1) {
-                    visited[next] += visited[cur] + 1;
-                    q.add(next);
-                }
+                if (visited[cur] + 1 >= visited[next]) continue;
+
+                visited[next] = visited[cur] + 1;
+                q.add(next);
             }
         }
-
-        return visited;
+        return count;
     }
 }
