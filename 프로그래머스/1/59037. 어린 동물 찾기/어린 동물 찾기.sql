@@ -1,4 +1,4 @@
 -- 코드를 입력하세요
-SELECT ANIMAL_ID, NAME
+SELECT animal_id, name
 from animal_ins
-where INTAKE_CONDITION != 'Aged';
+where intake_condition != 'Aged';
