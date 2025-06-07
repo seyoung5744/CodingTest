@@ -1,50 +1,39 @@
-public class Solution {
-
-    public static int[] dx = {0, 1, -1}; // 아래, 오, 왼위
-    public static int[] dy = {1, 0, -1};
-
+class Solution {
+    public static final int[] dx = {0, 1, -1};
+    public static final int[] dy = {1, 0, -1};
+    
     public int[] solution(int n) {
-        int[][] nums = new int[n][n];
-        int number = 1;
-
+        int[][] triangle = new int[n][n];
         int direction = 0;
+        int x = 0, y = 0;
+        int num = 1;
 
-        int curX = 0;
-        int curY = 0;
+        int loop = (n * (2 + (n - 1))) / 2;
 
-        int end = 0;
-        for (int i = 0; i <= n; i++) {
-            end += i;
-        }
+        while (loop-- > 0) {
+            triangle[y][x] = num++;
 
-        while (number <= end) {
+            int nx = x + dx[direction];
+            int ny = y + dy[direction];
 
-            nums[curY][curX] = number++;
-
-            int nx = curX + dx[direction];
-            int ny = curY + dy[direction];
-
-            if (nx < 0 || nx >= n || ny < 0 || ny >= n || nums[ny][nx] != 0) {
+            if (nx < 0 || nx >= n || ny < 0 || ny >= n || triangle[ny][nx] != 0) {
                 direction = (direction + 1) % 3;
-
-                nx = curX + dx[direction];
-                ny = curY + dy[direction];
+                nx = x + dx[direction];
+                ny = y + dy[direction];
             }
 
-            curX = nx;
-            curY = ny;
-
+            x = nx;
+            y = ny;
         }
 
-        int[] answer = new int[end];
+        int[] answer = new int[(n * (2 + (n - 1))) / 2];
         int idx = 0;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (nums[i][j] != 0) {
-                    answer[idx++] = nums[i][j];
-                }
+        for (int i = 0; i < triangle.length; i++) {
+            for (int j = 0; j <= i; j++) {
+                answer[idx++] = triangle[i][j];
             }
         }
+
         return answer;
     }
 }
