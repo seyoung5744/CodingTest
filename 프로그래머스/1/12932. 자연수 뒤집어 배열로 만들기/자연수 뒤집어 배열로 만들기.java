@@ -1,12 +1,13 @@
 class Solution {
     public int[] solution(long n) {
-        StringBuilder sb = new StringBuilder();
-        while(n > 0) {
-            long rest = n % 10;
-            sb.append(rest);
-            n /= 10;
+        String str = Long.toString(n);
+        String reverse = new StringBuilder(str).reverse().toString();
+        int[] answer = new int[reverse.length()];
+        for (int i = 0; i < answer.length; i++) {
+            answer[i] = reverse.charAt(i) - '0';
         }
+        
 
-        return sb.chars().map(i -> i - '0').toArray();
+        return answer;
     }
 }
