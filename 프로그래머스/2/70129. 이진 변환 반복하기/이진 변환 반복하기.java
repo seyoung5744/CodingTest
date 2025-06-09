@@ -1,16 +1,14 @@
-public class Solution {
-
-    public static int[] solution(String s) {
-        int[] answer = new int[]{0, 0};
-
-        while (!s.equals("1")) {
-            int beforeLength = s.length();
-            s = s.replace("0", "");
-            answer[1] += beforeLength - s.length();
-
-            s = Integer.toString(s.length(), 2);
-            answer[0]++;
+class Solution {
+    public int[] solution(String s) {
+        int count = 0;
+        int zero = 0;
+        while(!s.equals("1")) {
+            String removed = s.replace("0", "");
+            zero += s.length() - removed.length();
+            
+            s = Integer.toString(removed.length(), 2);
+            count++;
         }
-        return answer;
+        return new int[] {count, zero};
     }
 }
