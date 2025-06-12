@@ -12,11 +12,12 @@ class Solution {
             int total = people[left] + people[right];
             answer++;
             right--;
-            
-            if (total <= limit)
-                ++left;
+            if (total <= limit) {
+                left++;
+            }
+
         }
-        
+
         return answer;
     }
 }
