@@ -1,13 +1,14 @@
 class Solution {
     public int[] solution(long n) {
-        String str = Long.toString(n);
-        String reverse = new StringBuilder(str).reverse().toString();
-        int[] answer = new int[reverse.length()];
-        for (int i = 0; i < answer.length; i++) {
-            answer[i] = reverse.charAt(i) - '0';
-        }
+        int digits = (int) Math.log10(n) + 1;
+        int[] answer = new int[digits];
         
-
+        int idx = 0;
+        while (n > 0) {
+            answer[idx] = (int)(n % 10);
+            n /= 10;
+            idx++;
+        }
         return answer;
     }
 }
