@@ -1,20 +1,19 @@
+import java.util.*;
+
 class Solution {
     public int[] solution(String s) {
-        int[] answer = new int[s.length()];
+        int[] pos = new int[26];
+        Arrays.fill(pos, -1);
         
-        for(int i = 0;i < s.length(); i++){
-            if(i != 0){
-                int idx = s.substring(0,i).lastIndexOf(s.charAt(i));
-                if(idx != -1){
-                    answer[i] = i-idx;
-                }
-                else{
-                    answer[i] = idx;
-                }
+        int[] answer = new int[s.length()];
+        for (int i = 0; i < s.length(); i++) {
+            int idx = s.charAt(i) - 'a';
+            if (pos[idx] == -1) {
+                answer[i] = pos[idx];
+            } else {
+                answer[i] = i - pos[idx];                
             }
-            else{
-                answer[i] = -1;
-            }
+            pos[idx] = i;
         }
         
         return answer;
