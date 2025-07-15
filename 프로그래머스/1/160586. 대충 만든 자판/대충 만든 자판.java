@@ -1,37 +1,37 @@
-import java.util.HashMap;
+import java.util.*;
+
 class Solution {
     public int[] solution(String[] keymap, String[] targets) {
-        int[] answer = new int[targets.length];
-        HashMap<String, Integer> keyCount = new HashMap<>();
+        int[] minPress = new int[26];
+        Arrays.fill(minPress, Integer.MAX_VALUE);
         
-        for (int i = 0; i < keymap.length; i++) {
-            String[] str = keymap[i].split("");
-            
-            for (int j = 0; j < str.length; j++) {
-                if (!keyCount.containsKey(str[j])) {
-                    keyCount.put(str[j], j + 1);
-                    continue;
-                }
-                
-                if (keyCount.get(str[j]) > j + 1) {
-                    keyCount.put(str[j], j + 1);
-                }
+        for (String key : keymap) {
+            for (int i = 0; i < key.length(); i++) {
+                int idx = key.charAt(i) - 'A';
+                minPress[idx] = Math.min(minPress[idx], i + 1);
             }
         }
+        
+        int[] answer = new int[targets.length];
         
         for (int i = 0; i < targets.length; i++) {
-            String[] str = targets[i].split("");
-            answer[i] = 0;
-            for (int j = 0; j < str.length; j++) {
-                if (!keyCount.containsKey(str[j])) {
+            int count = 0;
+            boolean flag = true;
+            for (char c : targets[i].toCharArray()) {
+                if (minPress[c - 'A'] == Integer.MAX_VALUE) {
                     answer[i] = -1;
+                    flag = false;
                     break;
-                } else {
-                    answer[i] += keyCount.get(str[j]);   
                 }
+                count += minPress[c - 'A'];
             }
+            if (flag)
+                answer[i] = count;
         }
         
+        // return Arrays.stream(answer)
+        //     .map(i -> i == Integer.MAX_VALUE? -1 : i)
+        //     .toArray();
         return answer;
     }
 }
