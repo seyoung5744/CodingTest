@@ -1,5 +1,5 @@
 -- 코드를 입력하세요
 SELECT animal_id, name
 from animal_ins
-where name like concat('%', 'el', '%') and animal_type='Dog'
+where animal_type='Dog' and name like '%el%'
 order by name;
