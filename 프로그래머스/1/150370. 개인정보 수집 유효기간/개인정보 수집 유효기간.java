@@ -1,41 +1,37 @@
 import java.util.*;
 
-public class Solution {
-
-    private static final int DAY_OF_MONTH = 28;
-    private static final int MONTH_OF_YEAR = 12;
-    
-    public static int[] solution(String today, String[] terms, String[] privacies) {
-
-        List<Integer> answer = new ArrayList<>();
-        Map<String, Integer> map = new HashMap<>();
-
+class Solution {
+    public int[] solution(String today, String[] terms, String[] privacies) {
+        Map<String, Integer> termsMap = new HashMap<>();
         for (String term : terms) {
-            String[] termArr = term.split(" ");
-            map.put(termArr[0], Integer.parseInt(termArr[1]) * DAY_OF_MONTH);
+            String[] tokens = term.split(" ");
+            termsMap.put(tokens[0], Integer.parseInt(tokens[1]));
         }
-
-        int todayDays = calculateDay(Arrays.stream(today.split("\\.")).mapToInt(Integer::parseInt).toArray());
-
+        
+        List<Integer> result = new ArrayList<>();
+        
+        int todayInt = convert(today);
+        
         for (int i = 0; i < privacies.length; i++) {
-
-            String[] privacyArr = privacies[i].split(" ");
-
-            int privacyDays = calculateDay(Arrays.stream(privacyArr[0].split("\\.")).mapToInt(Integer::parseInt).toArray());
-
-            String key = privacyArr[1];
-            privacyDays += map.get(key) - 1;
-
-            if (todayDays > privacyDays) {
-                answer.add(i + 1);
+            String[] tokens = privacies[i].split(" ");
+            int plusMonth = termsMap.get(tokens[1]);
+            int privacy = convert(tokens[0]) + (plusMonth * 28);
+            
+            if (privacy <= todayInt) {
+                result.add(i + 1);
             }
         }
-
-        return answer.stream().mapToInt(Integer::intValue).toArray();
+        return result.stream()
+            .mapToInt(Integer::intValue)
+            .toArray();
     }
-
-    private static int calculateDay(int[] dates) {
-        return (dates[0] * MONTH_OF_YEAR * DAY_OF_MONTH) + (dates[1] * DAY_OF_MONTH) + dates[2];
+    
+    private int convert(String date) {
+        String[] tokens = date.split("\\.");
+        
+        int year = (Integer.parseInt(tokens[0]) - 2000) * (12 * 28);
+        int month = (Integer.parseInt(tokens[1]) - 1) * 28;
+        int day = Integer.parseInt(tokens[2]);
+        return year + month + day;
     }
-
 }
