@@ -2,25 +2,22 @@ import java.util.*;
 
 class Solution {
     public String[] solution(String[] players, String[] callings) {
-        int numOfPlayers = players.length;
-        Map<String, Integer> ranking = new HashMap<>();
-
-        for (int i = 0; i < numOfPlayers; i++) {
-            ranking.put(players[i], i);
+        Map<String, Integer> indices = new HashMap<>();
+        for (int i = 0; i < players.length; i++) {
+            indices.put(players[i], i);
         }
-
-        for (String player : callings) {
-
-            int playerRanking = ranking.get(player);
-            String frontPlayer = players[playerRanking - 1];
-
-            ranking.replace(frontPlayer, playerRanking);
-            players[playerRanking] = frontPlayer;
-
-            ranking.replace(player, playerRanking - 1);
-            players[playerRanking - 1] = player;
+        
+        for (int i = 0; i < callings.length; i++) {
+            int cur = indices.get(callings[i]);
+            
+            String temp = players[cur];
+            players[cur] = players[cur - 1];
+            players[cur - 1] = temp;
+            
+            indices.put(players[cur], cur);
+            indices.put(players[cur - 1], cur - 1);
         }
-
         return players;
     }
+    
 }
