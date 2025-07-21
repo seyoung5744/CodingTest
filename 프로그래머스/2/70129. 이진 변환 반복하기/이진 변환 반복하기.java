@@ -2,13 +2,14 @@ class Solution {
     public int[] solution(String s) {
         int count = 0;
         int zero = 0;
-        while(!s.equals("1")) {
+        
+        while(!"1".equals(s)) {
             String removed = s.replace("0", "");
             zero += s.length() - removed.length();
             
-            s = Integer.toString(removed.length(), 2);
             count++;
+            s = Integer.toString(removed.length(), 2);
         }
-        return new int[] {count, zero};
+        return new int[]{count, zero};
     }
 }
