@@ -1,38 +1,47 @@
 import java.util.*;
 
 class Solution {
-    private static final Map<Character, Character> perenthesis = Map.of(
-        ')','(',
-        ']','[',
-        '}','{'
-    );
     
+    public static final Map<Character, Character> parenthesis = Map.of('(', ')', '{', '}', '[', ']');
+
     public int solution(String s) {
         int answer = 0;
-        
-        char[] str = s.toCharArray();
-        for (int offset = 0; offset < str.length; offset++) {
-            if (isValid(str, offset)) {
+
+        Deque<Character> deque = new ArrayDeque<>();
+        for (char c : s.toCharArray()) {
+            deque.add(c);
+        }
+
+        for (int i = 0; i < s.length(); i++) {
+            if (isValid(deque)) {
                 answer++;
             }
+            deque.add(deque.poll());
         }
-        
         return answer;
     }
-    
-    private boolean isValid(char[] str, int offset) {
+
+    private boolean isValid(Deque<Character> deque) {
         Deque<Character> stack = new ArrayDeque<>();
-        
-        for(int i = 0; i < str.length; i++) {
-            char c = str[(i + offset) % str.length];
-            if (!perenthesis.containsKey(c)) {
-                stack.push(c);
+        Deque<Character> queue = new ArrayDeque<>(deque);
+
+        while (!queue.isEmpty()) {
+            char cur = queue.poll();
+
+            if (parenthesis.containsKey(cur)) {
+                stack.push(cur);
             } else {
-                if (stack.isEmpty()) return false;
-                if (perenthesis.get(c) != stack.pop()) return false;
+                if (stack.isEmpty()) {
+                    return false;
+                } else {
+                    if (parenthesis.get(stack.peek()) != cur) {
+                        return false;
+                    } else {
+                        stack.pop();
+                    }
+                }
             }
         }
-        
         return stack.isEmpty();
     }
 }
