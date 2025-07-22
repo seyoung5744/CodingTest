@@ -3,13 +3,16 @@ import java.util.*;
 class Solution {
     public int solution(int[] elements) {
         Set<Integer> set = new HashSet<>();
-        for (int len = 1; len <= elements.length; len++) {
-            for (int i = 0; i < elements.length; i++) {
-                int sum = 0;
-                for (int j = i; j < i + len; j++) {
-                    sum += elements[j % elements.length];
-                }
+        for (int startIdx = 0; startIdx < elements.length; startIdx++) {
+            int idx = startIdx;
+            int length = 0;
+            
+            int sum = 0;
+            while (length < elements.length) {
+                sum += elements[idx % elements.length];
                 set.add(sum);
+                length++;
+                idx++;
             }
         }
         return set.size();
