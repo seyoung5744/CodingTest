@@ -2,30 +2,25 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int[] progresses, int[] speeds) {
-        Deque<Integer> q = new ArrayDeque<>();
-        for (int progress : progresses) {
-            q.add(progress);
-        }
-        
-        List<Integer> list = new ArrayList<>();
-        
-        int speedIdx = 0;
-        int preDay = (int) Math.ceil((100.0 - q.poll()) / speeds[speedIdx++]);
-        int count = 1;
-        
-        while (!q.isEmpty()) {  
-            int progress = q.poll();
-            int day = (int) Math.ceil((100.0 - progress) / speeds[speedIdx++]);
-            if(day <= preDay) {
-                count++;
-            } else {
-                list.add(count);
-                count = 1;
+        int[] completedDays = new int[speeds.length];
+        for (int i = 0; i < speeds.length; i++) {
+            completedDays[i] = (100 - progresses[i]) / speeds[i];
+            if ((100 - progresses[i]) % speeds[i] != 0) {
+                completedDays[i]++;
             }
-            
-            preDay = Math.max(day, preDay);
-        } 
-        list.add(count);
-        return list.stream().mapToInt(Integer::intValue).toArray();
+        }
+        List<Integer> answer = new ArrayList<>();
+        int max = completedDays[0];
+        int count = 0;
+        for (int i = 0; i < completedDays.length; i++) {
+            if (completedDays[i] > max) {
+                answer.add(count);
+                max = Math.max(max, completedDays[i]);
+                count = 0;
+            } 
+            count++;
+        }
+        answer.add(count);
+        return answer.stream().mapToInt(Integer::intValue).toArray();
     }
 }
