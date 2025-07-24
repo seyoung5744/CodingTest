@@ -1,45 +1,28 @@
-
 import java.util.*;
 
-public class Solution {
-
-    static class Process {
-
-        int priority;
-        int index;
-
-        public Process(int priority, int index) {
-            this.priority = priority;
-            this.index = index;
-        }
-    }
-
-    public static int solution(int[] priorities, int location) {
-        int answer = 1;
-        Queue<Process> q = new LinkedList<>();
-
+class Solution {
+    public int solution(int[] priorities, int location) {
+        Queue<int[]> q = new ArrayDeque<>();
         PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> b - a);
         for (int i = 0; i < priorities.length; i++) {
-            q.offer(new Process(priorities[i], i));
+            q.offer(new int[]{i, priorities[i]});
             pq.offer(priorities[i]);
         }
 
+        int answer = 1;
         while (!q.isEmpty()) {
-            Process cur = q.poll();
+            int[] cur = q.poll();
 
-            if (cur.priority == pq.peek()) {
+            if (cur[1] == pq.peek()) {
                 pq.poll();
-
-                if (cur.index == location)
+                if (cur[0] == location) {
                     break;
-
-                ++answer;
+                }
+                answer++;
             } else {
                 q.offer(cur);
             }
-
         }
         return answer;
     }
-
 }
