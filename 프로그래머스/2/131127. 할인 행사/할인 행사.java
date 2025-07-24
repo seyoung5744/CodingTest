@@ -1,28 +1,33 @@
 import java.util.*;
 
 class Solution {
-        public int solution(String[] want, int[] number, String[] discount) {
-            int answer = 0;
-            int left = 0;
-            int right = 9;
-            Map<String, Integer> map = new HashMap<>();
-            for(int i =0;i<10;i++) map.put(discount[i], map.getOrDefault(discount[i],0)+1);
-            while(right < discount.length){
-                if(check(map,want,number)) answer++;
+    public int solution(String[] want, int[] number, String[] discount) {
+        Map<String, Integer> wantedCount = new HashMap<>();
+        for (int i = 0; i < want.length; i++) {
+            wantedCount.put(want[i], number[i]);
+        }
 
+        Map<String, Integer> discountCount = new HashMap<>();
+        
+        int answer = 0;
+        int right = 0;
+        for (int left = 0; left <= discount.length - 10; left++) {
+
+            while(right - left < 10) {
+                discountCount.put(discount[right], discountCount.getOrDefault(discount[right], 0) + 1);
                 right++;
-                if(right < discount.length)
-                    map.put(discount[right], map.getOrDefault(discount[right],0)+1);
-                map.put(discount[left],map.get(discount[left])-1);
-                left++;
+            }
+            if (discountCount.equals(wantedCount)) {
+                answer++;
             }
 
-            return answer;
-        }
-        private boolean check(Map<String,Integer> map,String[] want,int[] number){
-            for(int i =0;i<want.length;i++){
-                if(map.getOrDefault(want[i],0) != number[i]) return false;
+            int cnt = discountCount.get(discount[left]) - 1;
+            if (cnt <= 0) {
+                discountCount.remove(discount[left]);
+            } else {
+                discountCount.put(discount[left], cnt);
             }
-            return true;
         }
+        return answer;
     }
+}
