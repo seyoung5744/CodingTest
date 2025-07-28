@@ -1,23 +1,23 @@
 import java.util.*;
 
-public class Solution {
-
-    public static String[] alphabet = {"A", "E", "I", "O", "U"};
-    public static List<String> words = new ArrayList<>();
-
-    public static int solution(String word) {
+class Solution {
+    
+    private static final String[] alphabet = {"A", "E", "I", "O", "U"};
+    private static List<String> words = new ArrayList<>();
+    
+    public int solution(String word) {
         generate("");
         return words.indexOf(word);
     }
-
-    public static void generate(String s) {
+    
+    private void generate(String s) {
         words.add(s);
-        if (s.length() == 5) {
+        if (s.length() > 4) {
             return;
         }
-
-        for (int i = 0; i < alphabet.length; i++) {
-            generate(s + alphabet[i]);
+        
+        for (String word : alphabet) {
+            generate(s + word);
         }
     }
 }
