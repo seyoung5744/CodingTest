@@ -1,76 +1,74 @@
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
-
-public class Solution {
-
-    static class Car {
-
+class Solution {
+    private static class Car {
         String status;
-        int time;
+        int totalTime;
+        int inTime;
 
-        public Car(String status, int time) {
+        public Car(String status, int totalTime, int inTime) {
             this.status = status;
-            this.time = time;
+            this.totalTime = totalTime;
+            this.inTime = inTime;
         }
     }
 
-    private static final int LAST_TIME = 23 * 60 + 59;
-
-    public static int[] solution(int[] fees, String[] records) {
-
-        Map<String, Car> map = new HashMap<>();
-
+    public int[] solution(int[] fees, String[] records) {
+        Map<String, Car> history = new HashMap<>();
         for (String record : records) {
-            String[] split = record.split(" ");
-            String[] times = split[0].split(":");
-            int time = Integer.parseInt(times[0]) * 60 + Integer.parseInt(times[1]);
-            String car = split[1];
-            String status = split[2];
+            String[] tokens = record.split(" ");
+            String time = tokens[0];
+            String carNum = tokens[1];
+            String status = tokens[2];
 
             if (status.equals("IN")) {
-                Car inCar = map.getOrDefault(car, new Car("", 0));
-                inCar.time -= time;
-                inCar.status = status;
-                map.put(car, inCar);
-            } else { // OUT
-                Car outCar = map.get(car);
-                outCar.time = time + outCar.time;
-                outCar.status = status;
-
-                map.put(car, outCar);
+                if (!history.containsKey(carNum)) {
+                    int inTime = convert(time);
+                    history.put(carNum, new Car(status, 0, inTime));
+                } else {
+                    Car car = history.get(carNum);
+                    car.status = status;
+                    car.inTime = convert(time);
+                    history.put(carNum, car);
+                }
+            } else {
+                if (history.containsKey(carNum)) {
+                    Car car = history.get(carNum);
+                    int outTime = convert(time);
+                    car.status = status;
+                    car.totalTime += outTime - car.inTime;
+                }
             }
         }
 
-        for (Map.Entry<String, Car> entry : map.entrySet()) {
-            Car curCar = entry.getValue();
-            if (curCar.status.equals("IN")) {
-                curCar.time += LAST_TIME;
-                curCar.status = "OUT";
-                map.put(entry.getKey(), curCar);
+        for (String carNum : history.keySet()) {
+            Car car = history.get(carNum);
+            if (car.status.equals("IN")) {
+                car.status = "OUT";
+                car.totalTime += convert("23:59") - car.inTime;
             }
         }
 
-        int baseTime = fees[0];
-        int baseMoney = fees[1];
-        int baseMin = fees[2];
-        int unitMoney = fees[3];
-        
-        List<String> keys = map.keySet().stream().sorted().collect(Collectors.toList());
-        List<Integer> answer = new ArrayList<>();
+        List<Integer> result = new ArrayList<>();
+        List<String> carNums = new ArrayList<>(history.keySet());
+        Collections.sort(carNums);
 
-        for (String key : keys) {
-            Car car = map.get(key);
-
-            int sum = baseMoney;
-            if (car.time > baseTime) {
-                sum += (int) Math.ceil((double) (car.time - baseTime) / baseMin) * unitMoney;
+        for (String carNum : carNums) {
+            Car car = history.get(carNum);
+            int price = 0;
+            if (car.totalTime <= fees[0]) {
+                price = fees[1];
+            } else {
+                price = fees[1] + (int) Math.ceil((double) (car.totalTime - fees[0]) / fees[2]) * fees[3];
             }
-
-            answer.add(sum);
+            result.add(price);
         }
-
-        return answer.stream().mapToInt(Integer::intValue).toArray();
+        return result.stream().mapToInt(Integer::intValue).toArray();
     }
 
+    private int convert(String time) {
+        String[] tokens = time.split(":");
+        return Integer.parseInt(tokens[0]) * 60 + Integer.parseInt(tokens[1]);
+    }
 }
