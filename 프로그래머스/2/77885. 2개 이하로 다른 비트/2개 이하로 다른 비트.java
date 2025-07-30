@@ -1,34 +1,26 @@
-import java.util.Arrays;
-
-public class Solution {
-
-    public static long[] solution(long[] numbers) {
+class Solution {
+    public long[] solution(long[] numbers) {
         long[] answer = new long[numbers.length];
-        int idx = 0;
-        for (long number : numbers) {
 
-            if (number % 2 == 0)
-            {
-                answer[idx++] = number + 1;
+        for (int i = 0; i < numbers.length; i++) {
+
+            if (numbers[i] % 2 == 0) {
+                answer[i] = numbers[i] + 1;
                 continue;
             }
 
-            String originBits = Long.toString(number, 2);
-            originBits = '0' + originBits;
-            char[] next = originBits.toCharArray();
-            for(int i = next.length - 1; i > 0; --i)
-            {
-                if (next[i-1] == '0')
-                {
-                    next[i-1] = '1';
-                    next[i] = '0';
+            String binaryString = Long.toBinaryString(numbers[i]);
+            char[] next = ('0' + binaryString).toCharArray();
+            for (int j = next.length - 1; j >= 0; j--) {
+                if (next[j] == '0') {
+                    next[j + 1] = '0';
+                    next[j] = '1';
                     break;
                 }
             }
+            answer[i] = Long.parseLong(String.valueOf(next), 2);
 
-            answer[idx++] = Long.parseLong(String.valueOf(next), 2);
         }
-
         return answer;
     }
 }
