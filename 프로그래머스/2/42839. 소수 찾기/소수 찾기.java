@@ -1,42 +1,40 @@
 import java.util.*;
 
 class Solution {
-    public static Set<Integer> set = new HashSet<>();
-    
     public int solution(String numbers) {
-        String[] tokens = numbers.split("");
-        int[] nums = Arrays.stream(tokens).mapToInt(Integer::parseInt).toArray();
-        generate(0, new boolean[nums.length], nums);
-        return set.size();
+        int answer = 0;
+
+        Set<Integer> sample = new HashSet<>();
+        for (int size = 1; size <= numbers.length(); size++) {
+            generate("", size, sample, new boolean[numbers.length()], numbers);
+        }
+
+        for (int num : sample) {
+            if (isPrime(num)) answer++;
+        }
+        return answer;
     }
 
-    public void generate(int num, boolean[] visited, int[] nums) {
-
-        if(isPrime(num)) {
-            set.add(num);
+    private void generate(String temp, int size, Set<Integer> sample, boolean[] visited, String numbers) {
+        if (temp.length() >= size) {
+            sample.add(Integer.parseInt(temp));
+            return;
         }
-        for (int i = 0; i < nums.length; i++) {
-            if (visited[i]) {
-                continue;
-            }
-            int nextNum = num * 10 + nums[i];
 
+        for (int i = 0; i < numbers.length(); i++) {
+            if (visited[i]) continue;
             visited[i] = true;
-            generate(nextNum, visited, nums);
+            generate(temp + numbers.charAt(i), size, sample, visited, numbers);
             visited[i] = false;
         }
     }
 
-    public boolean isPrime(int num) {
-        if (num < 2) {
-            return false;
-        }
+    private boolean isPrime(int num) {
+        if (num < 2) return false;
 
-        for (int i = 2; i <= num / 2; i++) {
-            if (num % i == 0)
-                return false;
+        for (int i = 2; i <= (int) Math.sqrt(num); i++) {
+            if (num % i == 0) return false;
         }
-
         return true;
     }
 }
