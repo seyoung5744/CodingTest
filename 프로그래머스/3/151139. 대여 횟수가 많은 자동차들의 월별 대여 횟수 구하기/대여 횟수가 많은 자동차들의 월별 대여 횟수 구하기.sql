@@ -15,4 +15,3 @@ where date_format(start_date, '%Y-%m') between '2022-08' and '2022-10' and
     )
 group by month(start_date), car_id
 order by month, car_id desc
-
