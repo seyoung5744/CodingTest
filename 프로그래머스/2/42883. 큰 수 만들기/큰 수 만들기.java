@@ -2,33 +2,33 @@ import java.util.*;
 
 class Solution {
     public String solution(String number, int k) {
-        Stack<Integer> s = new Stack<>();
+        Deque<Integer> stack = new ArrayDeque<>();
 
-        for (int i = 0; i < number.length(); ++i) {
-            int num = number.charAt(i) - '0';
+        // 4 1 7 7 2 5 2 8 4 1
+        for (int i = 0; i < number.length(); i++) {
+            int cur = number.charAt(i) - '0';
 
-            if (s.isEmpty()) {
-                s.push(num);
+            if (stack.isEmpty()) {
+                stack.push(cur);
             } else {
-                while(k > 0 && !s.isEmpty() && num > s.peek())
-                {
-                    s.pop();
+
+                while (k > 0 && !stack.isEmpty() && stack.peek() < cur) {
+                    stack.pop();
                     k--;
                 }
-
-                s.push(num);
+                stack.push(cur);
             }
         }
 
         StringBuilder sb = new StringBuilder();
-        while(!s.isEmpty()) {
-            if (k > 0)
-            {
-                --k;
-                s.pop();
+        
+        while (!stack.isEmpty()) {
+            if (k > 0) {
+                k--;
+                stack.pop();
                 continue;
             }
-            sb.append(s.pop());
+            sb.append(stack.pop());
         }
         return sb.reverse().toString();
     }
