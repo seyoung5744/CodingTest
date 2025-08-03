@@ -1,36 +1,31 @@
 class Solution {
     public int[] solution(int[] sequence, int k) {
         int[] answer = new int[2];
-        answer[1] = sequence.length;
+        answer[1] = 1_000_001;
+
         int left = 0;
         int right = 0;
-        int sum = sequence[left];
+        int sum = 0;
 
-        while(sequence[right] <= k)
-        {
-            if (sum < k)
-            {
-                right++;
+        while (right < sequence.length) {
 
-                if (right >= sequence.length)
-                    break;
+            sum += sequence[right];
 
-                sum += sequence[right];
-            }
-            else if (sum >= k)
-            {
-                if (sum == k)
-                {
-                    if (right - left < answer[1] - answer[0])
-                    {
+            while (left <= right && sum >= k) {
+                
+                if(sum == k) {
+                    int len = right - left;
+                    if (len < answer[1] - answer[0]) {
                         answer[0] = left;
                         answer[1] = right;
                     }
                 }
-                sum -= sequence[left];
-                ++left;
+                sum -= sequence[left++];
             }
+
+            right++;
         }
+
         
         return answer;
     }
