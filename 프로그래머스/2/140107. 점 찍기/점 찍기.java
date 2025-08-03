@@ -3,7 +3,7 @@ class Solution {
         long answer = 0;
         for(long i = 0; i <= d; i += k)
         {
-            answer += (long)(Math.floor(Math.sqrt((long) d * d - i * i)) / k) + 1;
+            answer += (long)(Math.sqrt((long) d * d - i * i)) / k + 1;
         }
         return answer;
     }
