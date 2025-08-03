@@ -1,49 +1,39 @@
 import java.util.*;
 
 class Solution {
-    public static int solution(int[] queue1, int[] queue2) {
-        int answer = 0;
-        Deque<Long> q1 = new ArrayDeque<>();
-        Deque<Long> q2 = new ArrayDeque<>();
+    public int solution(int[] queue1, int[] queue2) {
+        long sum1 = 0;
+        long sum2 = 0;
 
-        for(int i = 0; i < queue1.length; i++) {
-            q1.add((long)queue1[i]);
-            q2.add((long)queue2[i]);
+        Deque<Integer> q1 = new ArrayDeque<>();
+        Deque<Integer> q2 = new ArrayDeque<>();
+        for (int i = 0; i < queue1.length; ++i) {
+            sum1 += queue1[i];
+            q1.offer(queue1[i]);
+            sum2 += queue2[i];
+            q2.offer(queue2[i]);
         }
 
-        long sum1 = sum(q1);
-        long sum2 = sum(q2);
+        int answer = 0;
 
         while (sum1 != sum2) {
             if (sum1 > sum2) {
-                long remove = q1.poll();
-                sum1 -= remove;
-                sum2 += remove;
-                q2.add(remove);
-                
-            } else {
-                long remove = q2.poll();
-                sum2 -= remove;
-                sum1 += remove;
-                q1.add(remove);
+                int q1Num = q1.poll();
+                sum1 -= q1Num;
+                sum2 += q1Num;
+                q2.add(q1Num);
+            } else if (sum1 < sum2) {
+                int q2Num = q2.poll();
+                sum2 -= q2Num;
+                sum1 += q2Num;
+                q1.add(q2Num);
             }
             
-            answer++;
-            
-            if(answer > queue1.length * 3){
+            if (answer >= queue1.length * 3)
                 return -1;
-            }
-        
+            answer++;
         }
 
         return answer;
-    }
-
-    public static long sum(Deque<Long> arr) {
-        long result = 0;
-        for(long num : arr){
-            result += num;
-        }
-        return result;
     }
 }
