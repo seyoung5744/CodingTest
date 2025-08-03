@@ -1,38 +1,42 @@
-import java.util.Arrays;
-import java.util.PriorityQueue;
+import java.util.*;
+import java.util.stream.*;
 
-public class Solution {
-
-    public static int solution(String[][] book_time) {
-
-        int[][] bookTime = new int[book_time.length][2];
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
-        for (int i = 0; i < book_time.length; i++) {
-            bookTime[i] = new int[]{convert(book_time[i][0]), convert(book_time[i][1]) + 10};
-        }
-
-        Arrays.sort(bookTime, (a, b) -> a[0] - b[0]);
-
-        System.out.println(Arrays.deepToString(bookTime));
-
+class Solution {
+    public int solution(String[][] book_time) {
+        int[][] bookTime = Arrays.stream(book_time)
+                .map(strings -> Arrays.stream(strings)
+                        .mapToInt(this::convert)
+                        .toArray())
+                .sorted((o1, o2) -> {
+                    if (o1[0] == o2[0]) {
+                        return Integer.compare(o1[1], o2[1]);
+                    }
+                    return Integer.compare(o1[0], o2[0]);
+                })
+                .toArray(int[][]::new);
+        
         int answer = 0;
 
+        PriorityQueue<Integer> endTime = new PriorityQueue<>();
         for (int i = 0; i < bookTime.length; i++) {
+            int[] time = bookTime[i];
+            int start = time[0];
+            int end = time[1];
 
-            while(!pq.isEmpty() && bookTime[i][0] >= pq.peek())
-            {
-                pq.poll();
+            if (!endTime.isEmpty()) {
+                if (endTime.peek() + 10 <= start) {
+                    endTime.poll();
+                }
             }
-            pq.add(bookTime[i][1]);
+            endTime.add(end);
 
-            answer = Math.max(answer, pq.size());
+            answer = Math.max(answer, endTime.size());
         }
-
         return answer;
     }
-
-    public static int convert(String time) {
-        int[] split = Arrays.stream(time.split(":")).mapToInt(Integer::parseInt).toArray();
-        return split[0] * 60 + split[1];
+    
+    public int convert(String time) {
+        String[] tokens = time.split(":");
+        return Integer.parseInt(tokens[0]) * 60 + Integer.parseInt(tokens[1]);
     }
 }
