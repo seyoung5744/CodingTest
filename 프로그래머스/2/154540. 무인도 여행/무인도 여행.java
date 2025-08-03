@@ -1,66 +1,45 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
+import java.util.stream.*;
 
-public class Solution {
+class Solution {
+    public static final int[] dx = {0, 0, 1, -1};
+    public static final int[] dy = {1, -1, 0, 0};
 
-    public static final int[] DX = {0, 0, 1, -1};
-    public static final int[] DY = {-1, 1, 0, 0};
-
-    public static int[] solution(String[] maps) {
-        char[][] map = new char[maps.length][maps[0].length()];
-
-        for (int i = 0; i < maps.length; i++) {
-            for (int j = 0; j < maps[0].length(); j++) {
-                map[i][j] = maps[i].charAt(j);
-            }
-        }
-
-        boolean[][] visited = new boolean[maps.length][maps[0].length()];
-
+    public int[] solution(String[] maps) {
         List<Integer> answer = new ArrayList<>();
+        
+        boolean[][] visited = new boolean[maps.length][maps[0].length()];
         for (int i = 0; i < maps.length; i++) {
             for (int j = 0; j < maps[0].length(); j++) {
-                if (map[i][j] == 'X' || visited[i][j]) {
-                    continue;
-                }
-                answer.add(countMeal(j, i, map, visited));
+                char point = maps[i].charAt(j);
+                if (point == 'X' || visited[i][j]) continue;
+
+                int foods = searchLand(j, i, visited, maps);
+                answer.add(foods);
             }
         }
-
-        Collections.sort(answer);
-        
-        if(answer.size() == 0) return new int[]{-1};
-        return answer.stream().mapToInt(Integer::intValue).toArray();
+        if (answer.isEmpty()) return new int[]{-1};
+        return answer.stream()
+                .sorted()
+                .mapToInt(Integer::intValue)
+                .toArray();
     }
 
-    public static int countMeal(int x, int y, char[][] map, boolean[][] visited) {
+    public int searchLand(int x, int y, boolean[][] visited, String[] maps) {
 
-        Queue<int[]> q = new LinkedList<>();
-        q.offer(new int[]{x, y});
         visited[y][x] = true;
-        
-        int result = map[y][x] - '0';
-        while (!q.isEmpty()) {
-            int[] cur = q.poll();
 
-            for (int i = 0; i < 4; i++) {
-                int nx = cur[0] + DX[i];
-                int ny = cur[1] + DY[i];
+        int food = maps[y].charAt(x) - '0';
+        for (int i = 0; i < 4; i++) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
 
-                if(nx < 0 || nx >= map[0].length || ny < 0 || ny >= map.length) continue;
-
-                if(map[ny][nx] == 'X' || visited[ny][nx]) continue;
+            if (nx < 0 || nx >= maps[0].length() || ny < 0 || ny >= maps.length || maps[ny].charAt(nx) == 'X') continue;
             
-                result += map[ny][nx] - '0';
-                
-                q.offer(new int[]{nx, ny});
-                visited[ny][nx] = true;
-            }
+            if (visited[ny][nx]) continue;
+            food += searchLand(nx, ny, visited, maps);
         }
-        return result;
-    }
 
+        return food;
+    }
 }
