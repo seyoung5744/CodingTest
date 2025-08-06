@@ -1,48 +1,46 @@
-public class Solution {
-
-    public static int solution(int[] arrayA, int[] arrayB) {
+class Solution {
+    public int solution(int[] arrayA, int[] arrayB) {
         int answer = 0;
 
-        int gcdA = gcd(arrayA);
-        int gcdB = gcd(arrayB);
+        int gcbA = gcb(arrayA);
+        int gcbB = gcb(arrayB);
 
-        if (canDivided(arrayA, gcdB)) {
-            answer = gcdB;
+        if (!canDivided(arrayA, gcbB) && !canDivided(arrayB, gcbA)) {
+            return Math.max(gcbA, gcbB);   
         }
-
-        if (canDivided(arrayB, gcdA)) {
-            answer = Math.max(answer, gcdA);
+        
+        if (!canDivided(arrayA, gcbB)) {
+            return gcbB;
         }
-
+        
+        if(!canDivided(arrayB, gcbA)) {
+            return gcbA;
+        }
+        
         return answer;
     }
 
-    public static boolean canDivided(int[] arr, int target) {
+    private boolean canDivided(int[] arr, int oppositeTarget) {
         for (int i = 0; i < arr.length; i++) {
-            if (arr[i] % target == 0) {
-                return false;
-            }
+            if (arr[i] % oppositeTarget == 0) return true;
         }
-        return true;
+        return false;
     }
 
-    public static int gcd(int[] arr) {
-        int result = 0;
-
-        for (int i = 0; i < arr.length; i++) {
-            result = gcd(result, arr[i]);
+    private int gcb(int[] arr) {
+        int gcb = arr[0];
+        for (int i = 1; i < arr.length; i++) {
+            gcb = gcb(gcb, arr[i]);
         }
-        return result;
+        return gcb;
     }
 
-    private static int gcd(int a, int b) {
+    private int gcb(int a, int b) {
         while (b > 0) {
-            int temp = b;
-            b = a % b;
-            a = temp;
+            int temp = a % b;
+            a = b;
+            b = temp;
         }
-
         return a;
     }
-
 }
