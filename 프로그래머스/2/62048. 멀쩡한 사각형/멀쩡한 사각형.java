@@ -1,21 +1,17 @@
-public class Solution {
-
-    public static long solution(int w, int h) {
-        int gcb = gcb(w, h); // 최대 공약수
-
+class Solution {
+    public long solution(int w, int h) {
+        int gcb = gcb(w, h);
         int ww = w / gcb;
         int hh = h / gcb;
 
-        int count = (ww * hh) - (ww - 1) * (hh - 1);
-
-        return ((long) w * h) - (count * gcb);
+        return (long) w * h - ((long) (ww + hh - 1) * gcb);
     }
 
-    public static int gcb(int a, int b) {
+    private int gcb(int a, int b) {
         while (b > 0) {
-            int temp = b;
-            b = a % b;
-            a = temp;
+            int temp = a % b;
+            a = b;
+            b = temp;
         }
         return a;
     }
