@@ -1,26 +1,19 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-public class Solution {
-
-    public static List<int[]> answer = new ArrayList<>();
-
-    public static int[][] solution(int n) {
-        recursive(n, 1, 3, 2);
-        return answer.stream().toArray(int[][]::new);
+class Solution {
+    public int[][] solution(int n) {
+        List<int[]> answer = new ArrayList<>();
+        hanoi(n, 1, 3, 2, answer);
+        return answer.stream()
+                .toArray(int[][]::new);
     }
 
-    public static void recursive(int n, int start, int end, int mid) {
-
-        if (n == 0) {
+    private void hanoi(int num, int start, int end, int mid, List<int[]> answer) {
+        if (num == 0)
             return;
-        }
 
-        recursive(n - 1, start, mid, end);
+        hanoi(num - 1, start, mid, end, answer);
         answer.add(new int[]{start, end});
-
-        recursive(n - 1, mid, end, start);
+        hanoi(num - 1, mid, end, start, answer);
     }
-
 }
