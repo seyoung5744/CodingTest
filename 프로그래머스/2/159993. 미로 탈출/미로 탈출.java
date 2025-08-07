@@ -1,77 +1,78 @@
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Deque;
 
 public class Solution {
 
-    public static char[][] map;
+    private static final int[] dx = {0, 0, 1, -1};
+    private static final int[] dy = {1, -1, 0, 0};
+    private static final int INF = (int) 1e9;
 
-    public static int solution(String[] maps) {
-        map = new char[maps.length][maps[0].length()];
-
-        int[] start = new int[2];
-        int[] end = new int[2];
-        int[] lever = new int[2];
-
+    public int solution(String[] maps) {
+        char[][] map = new char[maps.length][maps[0].length()];
         for (int i = 0; i < maps.length; i++) {
-            for (int j = 0; j < maps[0].length(); j++) {
-                char c = maps[i].charAt(j);
-                map[i][j] = c;
-                if (c == 'S') {
-                    start = new int[]{j, i};
-                } else if (c == 'E') {
-                    end = new int[]{j, i};
-                } else if (c == 'L') {
-                    lever = new int[]{j, i};
-                }
-            }
+            map[i] = maps[i].toCharArray();
         }
 
-        int result1 = bfs(start, lever);
-        int result2 = bfs(lever, end);
+        int[] start = getPosition(map, 'S');
+        int[] lever = getPosition(map, 'L');
+        int[] end = getPosition(map, 'E');
 
-        if(result1 == INF || result2 == INF) {
+
+        int search1 = search(start, lever, map);
+        int search2 = search(lever, end, map);
+
+        if (search1 == INF || search2 == INF) {
             return -1;
         }
-        return result1 + result2;
+        return search1 + search2;
     }
 
-    public static int[] dx = {0, 0, 1, -1};
-    public static int[] dy = {1, -1, 0, 0};
-    public static final int INF = (int) 1e9;
-    
-    public static int bfs(int[] start, int[] end) {
+    private int search(int[] start, int[] end, char[][] map) {
+
         int[][] visited = new int[map.length][map[0].length];
-        
         for (int i = 0; i < visited.length; i++) {
             Arrays.fill(visited[i], INF);
         }
 
-        Queue<int[]> q = new LinkedList<>();
-        q.offer(start);
+        Deque<int[]> q = new ArrayDeque<>();
+        q.add(start);
         visited[start[1]][start[0]] = 0;
 
-        while(!q.isEmpty()) {
+        while (!q.isEmpty()) {
             int[] cur = q.poll();
+            int curX = cur[0];
+            int curY = cur[1];
 
-            if(cur[0] == end[0] && cur[1] == end[1]) {
+            if (curX == end[0] && curY == end[1]) {
                 break;
             }
 
             for (int i = 0; i < 4; i++) {
-                int nx = cur[0] + dx[i];
-                int ny = cur[1] + dy[i];
+                int nx = curX + dx[i];
+                int ny = curY + dy[i];
 
-                if(nx < 0 || nx >= map[0].length || ny < 0 || ny >= map.length) continue;
+                if (nx < 0 || nx >= map[0].length || ny < 0 || ny >= map.length) continue;
+                if (map[ny][nx] == 'X') continue;
+                if (visited[ny][nx] <= visited[curY][curX] + 1) continue;
 
-                if(map[ny][nx] == 'X') continue;
-
-                if(visited[ny][nx] <= visited[cur[1]][cur[0]] + 1) continue;
-
-                visited[ny][nx] = visited[cur[1]][cur[0]] + 1;
+                visited[ny][nx] = visited[curY][curX] + 1;
                 q.offer(new int[]{nx, ny});
             }
+
         }
 
         return visited[end[1]][end[0]];
     }
 
+    private int[] getPosition(char[][] map, char target) {
+        for (int y = 0; y < map.length; y++) {
+            for (int x = 0; x < map[0].length; x++) {
+                if (map[y][x] == target) {
+                    return new int[]{x, y};
+                }
+            }
+        }
+        return new int[]{-1, -1};
+    }
 }
