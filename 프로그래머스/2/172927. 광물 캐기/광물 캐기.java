@@ -2,65 +2,50 @@ import java.util.*;
 
 public class Solution {
 
-    public static int answer = Integer.MAX_VALUE;
-    public static Map<String, Integer> map = new HashMap<>();
-    public static int[][] cost = new int[][]{
-        {1, 1, 1},
-        {5, 1, 1},
-        {25, 5, 1}
+    private static final Map<String, Integer> mineralIdxTable = Map.of(
+            "diamond", 0,
+            "iron", 1,
+            "stone", 2
+    );
+    private static final int[][] costTable = {
+            {1, 1, 1},
+            {5, 1, 1},
+            {25, 5, 1}
     };
 
-    public static int solution(int[] picks, String[] minerals) {
-        map.put("diamond", 0);
-        map.put("iron", 1);
-        map.put("stone", 2);
+    public static int answer = Integer.MAX_VALUE;
 
-        int totalPicksCount = 0;
+    public int solution(int[] picks, String[] minerals) {
+        int totalPicks = 0;
         for (int i = 0; i < picks.length; i++) {
-            totalPicksCount += picks[i];
+            totalPicks += picks[i];
         }
-
-        for (int i = 0; i < picks.length; i++) {
-            if (picks[i] == 0) continue;
-
-            picks[i]--;
-            dfs(minerals, picks, i, 0, totalPicksCount - 1, 5, 0);
-            picks[i]++;
-        }
-
+        miningMinerals(0, 0, 0, 0, totalPicks, picks, minerals);
         return answer;
     }
 
-    public static void dfs(String[] minerals, int[] picks, int currentPick,
-        int mineralIdx, int totalPicks, int curPickCount, int tired) {
-        if (mineralIdx >= minerals.length || (totalPicks == 0 && curPickCount == 0))
-        {
-            if (tired < answer)
-            {
-                answer = tired;
+    private void miningMinerals(int pickIdx, int mineralIdx, int fatigue, int count, int totalPicks, int[] picks, String[] minerals) {
+
+        if (mineralIdx >= minerals.length || (count == 0 && totalPicks == 0)) {
+            answer = Math.min(answer, fatigue);
+            return;
+        }
+
+        int mineral = mineralIdxTable.get(minerals[mineralIdx]);
+
+        if (mineralIdx % 5 != 0) {
+            int cost = costTable[pickIdx][mineral];
+            miningMinerals(pickIdx, mineralIdx + 1, fatigue + cost, count - 1, totalPicks, picks, minerals);
+            return;
+        } else {
+            for (int i = 0; i < picks.length; i++) {
+                if (picks[i] == 0) continue;
+
+                picks[i]--;
+                int cost = costTable[i][mineral];
+                miningMinerals(i, mineralIdx + 1, fatigue + cost, 4, totalPicks - 1, picks, minerals);
+                picks[i]++;
             }
-
-            return;
         }
-
-        if (curPickCount > 0)
-        {
-            int m = map.get(minerals[mineralIdx]);
-            dfs(minerals, picks, currentPick, mineralIdx+1, totalPicks , curPickCount-1, tired + cost[currentPick][m]);
-
-            return;
-        }
-
-        for(int i = 0; i < 3; ++i)
-        {
-            if (picks[i] == 0) continue;
-
-            picks[i]--;
-            dfs(minerals, picks, i, mineralIdx, totalPicks - 1, 5, tired);
-            picks[i]++;
-        }
-
     }
-
-   
 }
