@@ -1,36 +1,44 @@
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
-public class Solution {
+class Solution {
+     public int solution(int[] cards) {
+        boolean[] opened = new boolean[cards.length];
 
-    public static boolean[] visited;
-    public static PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> b - a);
-
-    public static int solution(int[] cards) {
-        int answer = 0;
-        visited = new boolean[cards.length];
-
+        List<List<Integer>> cardSet = new ArrayList<>();
         for (int i = 0; i < cards.length; i++) {
-            if(!visited[i]) {
-                dfs(i, 0, cards);
-            }
+            if (opened[i]) continue;
+
+            List<Integer> openedBoxes = inOrderOpen(i, cards, opened);
+            cardSet.add(openedBoxes);
         }
-        
-        if(pq.size() == 1){
+
+        Collections.sort(cardSet, (a, b) -> Integer.compare(a.size(), b.size()));
+        int size = cardSet.size();
+        if (size < 2) {
             return 0;
         }
-        return pq.poll() * pq.poll();
+        return cardSet.get(size - 1).size() * cardSet.get(size - 2).size();
     }
 
-    public static void dfs(int idx, int len, int[] cards) {
+    private List<Integer> inOrderOpen(int num, int[] cards, boolean[] opened) {
+        List<Integer> openedBox = new ArrayList<>();
+        openedBox.add(num);
 
-        if(visited[idx]) {
-            pq.add(len);
-            return;
+        Deque<Integer> q = new ArrayDeque<>();
+        q.offer(num);
+        opened[num] = true;
+
+        while (!q.isEmpty()) {
+            int cur = q.poll();
+
+            int next = cards[cur] - 1;
+            if (opened[next]) continue;
+
+            opened[next] = true;
+            q.offer(next);
+            openedBox.add(next);
         }
 
-        visited[idx] = true;
-        dfs(cards[idx] - 1, len + 1, cards);
+        return openedBox;
     }
-
 }
