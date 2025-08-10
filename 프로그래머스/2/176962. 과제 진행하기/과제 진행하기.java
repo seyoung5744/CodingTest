@@ -1,74 +1,66 @@
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Deque;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
-public class Solution {
-
-    static class Task {
-
+class Solution {
+   private static class Task {
         String name;
-        int start;
+        int startTime;
         int playTime;
 
-        public Task(String name, int start, int playTime) {
+        public Task(String name, int startTime, int playTime) {
             this.name = name;
-            this.start = start;
+            this.startTime = startTime;
             this.playTime = playTime;
         }
+
     }
 
-    public static String[] solution(String[][] plans) {
-        List<String> answer = new ArrayList<>();
-        PriorityQueue<Task> tasks = new PriorityQueue<>((a, b) -> a.start - b.start);
-
-        for (String[] plan : plans) {
-            tasks.add(new Task(plan[0], convertTimeToMinute(plan[1]), Integer.parseInt(plan[2])));
+    public String[] solution(String[][] plans) {
+        Task[] tasks = new Task[plans.length];
+        for (int i = 0; i < plans.length; i++) {
+            tasks[i] = new Task(plans[i][0], convert(plans[i][1]), Integer.parseInt(plans[i][2]));
         }
 
-        Deque<Task> waiting = new ArrayDeque<>();
-        Task curTask = tasks.poll();
+        Arrays.sort(tasks, (a, b) -> a.startTime - b.startTime);
 
-        while (!tasks.isEmpty()) {
-            if ((curTask.start + curTask.playTime) > tasks.peek().start) {
-                int newPlayTime = curTask.playTime - (tasks.peek().start - curTask.start);
-                curTask.playTime = newPlayTime;
-                curTask.start = curTask.start + (tasks.peek().start - curTask.start);
-                waiting.push(curTask);
-                curTask = tasks.poll();
-            } else if((curTask.start + curTask.playTime) == tasks.peek().start) {
-                answer.add(curTask.name);
-                curTask = tasks.poll();
-            } else {
-                if(!waiting.isEmpty()) {
-                    answer.add(curTask.name);
-                    int newStartTime = curTask.start + curTask.playTime;
-                    curTask = waiting.pop();
-                    curTask.start = newStartTime;
-                }
-                else
-                {
-                    answer.add(curTask.name);
-                    curTask = tasks.poll();
+        List<String> answer = new ArrayList<>();
+
+        Deque<Task> recentStoppedTask = new ArrayDeque<>();
+        PriorityQueue<Task> playingTask = new PriorityQueue<>((a, b) -> a.startTime - b.startTime);
+        for (int i = 0; i < tasks.length; i++) {
+            playingTask.offer(tasks[i]);
+        }
+
+        int curTime = -1;
+        while (!playingTask.isEmpty()) {
+            Task nextTask = playingTask.poll();
+
+            if (nextTask.startTime > curTime) {
+                while (!recentStoppedTask.isEmpty()) {
+                    Task mostRecentStoppedTask = recentStoppedTask.pop();
+
+                    if (curTime + mostRecentStoppedTask.playTime <= nextTask.startTime) {
+                        answer.add(mostRecentStoppedTask.name);
+                        curTime += mostRecentStoppedTask.playTime;
+                    } else {
+                        mostRecentStoppedTask.playTime -= nextTask.startTime - curTime;
+                        recentStoppedTask.push(mostRecentStoppedTask);
+                        break;
+                    }
                 }
             }
+
+            recentStoppedTask.push(nextTask);
+            curTime = nextTask.startTime;
         }
 
-        answer.add(curTask.name);
-
-        while(!waiting.isEmpty())
-        {
-            answer.add(waiting.pop().name);
+        while (!recentStoppedTask.isEmpty()) {
+            answer.add(recentStoppedTask.pop().name);
         }
-
         return answer.stream().toArray(String[]::new);
     }
 
-    public static int convertTimeToMinute(String time) {
+    private int convert(String time) {
         String[] tokens = time.split(":");
         return Integer.parseInt(tokens[0]) * 60 + Integer.parseInt(tokens[1]);
     }
-
 }
