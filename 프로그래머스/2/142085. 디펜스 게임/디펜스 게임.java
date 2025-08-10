@@ -1,28 +1,27 @@
-import java.util.PriorityQueue;
+import java.util.*;
 
-public class Solution {
-
-    public static int solution(int n, int k, int[] enemies) {
+class Solution {
+    public int solution(int n, int k, int[] enemy) {
+        int life = n;
         int round = 0;
-
         PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> b - a);
+        
+        for (int i = 0; i < enemy.length; i++) {
+            int e = enemy[i];
+            pq.offer(e);
 
-        for (int enemy : enemies) {
-            n = n - enemy;
-            pq.add(enemy);
-
-            if (n < 0) {
+            if (life >= e) {
+                life -= e;
+            } else {
                 if (k <= 0) {
                     break;
                 }
-
-                n += pq.poll();
-                k--;
+                life = life + pq.poll();
+                k -= 1;
+                life -= e;
             }
-
-            round += 1;
+            round++;
         }
-
         return round;
     }
 }
