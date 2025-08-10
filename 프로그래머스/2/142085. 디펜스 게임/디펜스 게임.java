@@ -10,16 +10,16 @@ class Solution {
             int e = enemy[i];
             pq.offer(e);
 
-            if (life >= e) {
-                life -= e;
-            } else {
+            if (life < e) {
                 if (k <= 0) {
                     break;
                 }
+                
                 life = life + pq.poll();
                 k -= 1;
-                life -= e;
             }
+            
+            life -= e;
             round++;
         }
         return round;
