@@ -1,51 +1,50 @@
-import java.io.*;
-import java.util.HashMap;
-import java.util.Stack;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Map;
 
 public class Main {
+
+    private static final Map<Character, Character> parenthesis = Map.of(
+            '(', ')',
+            '[', ']'
+    );
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        HashMap<Character, Character> hashMap = new HashMap<>() {{
-            put('(', ')');
-            put('[', ']');
-        }};
+        String str;
+        while (!(str = br.readLine()).equals(".")) {
+            if (isValid(str)) {
+                System.out.println("yes");
+            } else {
+                System.out.println("no");
+            }
+        }
 
-        String str = br.readLine();
-        while (!str.equals(".")) {
-            Stack<Character> stack = new Stack<>();
-            boolean flag = true;
+        br.close();
+    }
 
-            for (char ch : str.toCharArray()) {
-                if (hashMap.containsKey(ch)) {
-                    stack.push(ch);
-                } else if (hashMap.containsValue(ch)) {
-                    if (stack.isEmpty()) {
-                        flag = false;
-                        break;
+    private static boolean isValid(String str) {
+        Deque<Character> stack = new ArrayDeque<>();
+
+        for (char c : str.toCharArray()) {
+            if (parenthesis.containsKey(c)) {
+                stack.push(c);
+            } else if (parenthesis.containsValue(c)) {
+                if (stack.isEmpty()) {
+                    return false;
+                } else {
+                    if (parenthesis.get(stack.peek()) == c) {
+                        stack.pop();
                     } else {
-                        char data = stack.pop();
-                        if (ch != hashMap.get(data)) {
-                            flag = false;
-                            break;
-                        }
+                        return false;
                     }
                 }
             }
-
-            if (flag && stack.isEmpty()) {
-                bw.write("yes" + "\n");
-            } else {
-                bw.write("no" + "\n");
-            }
-
-            str = br.readLine();
         }
-
-
-        bw.flush();
-        br.close();
-        bw.close();
+        return stack.isEmpty();
     }
 }
