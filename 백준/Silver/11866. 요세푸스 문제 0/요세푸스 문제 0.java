@@ -1,48 +1,45 @@
-import java.io.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        String[] input = br.readLine().split(" ");
-        int n = Integer.parseInt(input[0]);
-        int k = Integer.parseInt(input[1]);
+        int N = Integer.parseInt(st.nextToken());
+        int K = Integer.parseInt(st.nextToken());
 
-        ArrayList<Integer> result = new ArrayList<>();
-        Queue<Integer> queue = new LinkedList<>();
-        for (int i = 0; i < n; i++) {
-            queue.add(i + 1);
+        int[] nums = new int[N];
+        for (int i = 0; i < N; i++) {
+            nums[i] = i + 1;
         }
 
-        int idx = 0;
-
-        while (!queue.isEmpty()) {
-            int data = queue.poll();
-            idx += 1;
-            if(idx == k){
-                idx = 0;
-                result.add(data);
-            }else{
-                queue.add(data);
+        StringBuilder sb = new StringBuilder();
+        sb.append("<");
+        int loop = N;
+        int cur = 0;
+        while (loop-- > 0) {
+            int count = K;
+            while (count > 0) {
+                if (nums[cur % N] != -1) {
+                    count--;
+                }
+                cur++;
             }
-        }
-
-        bw.write("<");
-        for (int i = 0; i < result.size(); i++) {
-            if (i < result.size() - 1) {
-                bw.write(result.get(i) + ", ");
-            } else {
-                bw.write(result.get(i) + "");
+            sb.append(nums[(cur - 1) % N]);
+            if (loop > 0) {
+                sb.append(",");
+                sb.append(" ");
             }
+            nums[(cur - 1) % N] = -1;
         }
-        bw.write(">");
+        sb.append(">");
+        System.out.println(sb);
 
-        bw.flush();
+
         br.close();
-        bw.close();
     }
 }
