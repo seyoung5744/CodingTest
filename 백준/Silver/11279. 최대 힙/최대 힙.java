@@ -1,59 +1,50 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main {
 
-    static int[] array;
-    static int lastIndex = 0;
-    static int size = 0;
+    private static int[] array;
+    private static int lastIndex = 0;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        int n = Integer.parseInt(br.readLine());
-        array = new int[n + 1];
-
-        for (int i = 0; i < n; i++) {
-            int data = Integer.parseInt(br.readLine());
-            insert(data);
-            if(data == 0){
+        int N = Integer.parseInt(br.readLine());
+        array = new int[N + 1];
+        while (N-- > 0) {
+            int num = Integer.parseInt(br.readLine());
+            insert(num);
+            if(num == 0) {
                 System.out.println(delete());
             }
         }
-        
-        bw.flush();
         br.close();
-        bw.close();
     }
 
-    public static boolean insert(int data) {
-        array[++lastIndex] = data;
+    public static void insert(int num) {
+        array[++lastIndex] = num;
 
         int curData = array[lastIndex];
-        int cur = lastIndex;
+        int curIdx = lastIndex;
 
-        while (cur > 1 && array[cur] > array[cur / 2]) {
-            int parentVal = array[cur / 2];
+        while (curIdx > 1 && array[curIdx] > array[curIdx / 2]) {
+            int parentVal = array[curIdx / 2];
 
-            array[cur / 2] = curData;
-            array[cur] = parentVal;
-            cur /= 2;
+            array[curIdx / 2] = curData;
+            array[curIdx] = parentVal;
+            curIdx /= 2;
         }
-
-        size++;
-        return true;
     }
 
-    public static Integer delete() {
+    public static int delete() {
         if (array.length == 1) {
             System.out.println(0);
-            return null;
+            return -1;
         }
 
         int target = array[1];
-
         array[1] = array[array.length - 1];
-
         array[array.length - 1] = 0;
 
         int cur = 1;
@@ -70,10 +61,11 @@ public class Main {
                 break;
             }
 
-            if(array[cur] > array[targetIdx]){
+            if (array[cur] > array[targetIdx]) {
                 break;
-            }else{
+            } else {
                 int parentVal = array[cur];
+
                 array[cur] = array[targetIdx];
                 array[targetIdx] = parentVal;
                 cur = targetIdx;
@@ -81,4 +73,6 @@ public class Main {
         }
         return target;
     }
+
+
 }
