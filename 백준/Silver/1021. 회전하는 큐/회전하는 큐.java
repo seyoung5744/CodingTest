@@ -1,88 +1,92 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.StringTokenizer;
 
 public class Main {
 
-    public static Deque<Integer> deque = new ArrayDeque<>();
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
+        int n = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
 
-        for (int i = 1; i < N + 1; i++) {
-            deque.offerLast(i);
+        Deque<Integer> deque = new ArrayDeque<>();
+
+        for (int i = 1; i <= n; i++) {
+            deque.offer(i);
         }
 
+        int[] targets = new int[m];
         st = new StringTokenizer(br.readLine());
-        int[] targets = new int[M];
-        for (int i = 0; i < M; i++) {
+        for (int i = 0; i < m; i++) {
             targets[i] = Integer.parseInt(st.nextToken());
         }
-        int cnt = 0;
-        int result = 0;
+        int answer = 0;
+        for (int target : targets) {
 
-        while (cnt < M) {
-            int target = targets[cnt];
-            int a = op2Count(target, deque);
-            int b = op3Count(target, deque);
-            if(a < b){
-                result += a;
-                operation2(target);
-            }else{
-                result += b;
-                operation3(target);
+            int front = front(new ArrayDeque<>(deque), target);
+            int back = back(new ArrayDeque<>(deque), target);
+
+            if (front < back) {
+                removeFrontTarget(deque, target);
+            } else {
+                removeBackTarget(deque, target);
             }
-            cnt += 1;
-            deque.pollFirst();
+            answer += Math.min(front, back);
         }
-        System.out.println(result);
-
-        bw.flush();
+        System.out.println(answer);
         br.close();
-        bw.close();
     }
 
-    public static int operation2(int target) {
+    public static int front(Deque<Integer> deque, int target) {
         int count = 0;
-        while (deque.peek() != target) {
-            deque.offerLast(deque.pollFirst());
-            count += 1;
+
+        while (!deque.isEmpty()) {
+            int num = deque.poll();
+            if (num == target) {
+                break;
+            }
+            count++;
+            deque.offer(num);
         }
         return count;
     }
 
-    public static int operation3(int target) {
+    public static void removeFrontTarget(Deque<Integer> deque, int target) {
+        while (!deque.isEmpty()) {
+            int num = deque.poll();
+            if (num == target) {
+                break;
+            }
+            deque.offer(num);
+        }
+    }
+
+    public static int back(Deque<Integer> deque, int target) {
         int count = 0;
-        while (deque.peek() != target) {
-            deque.offerFirst(deque.pollLast());
-            count += 1;
+
+        while (!deque.isEmpty()) {
+            int num = deque.pollLast();
+            count++;
+            if (num == target) {
+                break;
+            }
+            deque.offerFirst(num);
         }
         return count;
     }
 
-    public static int op2Count(int target, Deque<Integer> origin) {
-        Deque<Integer> deque = new ArrayDeque<>(origin);
-        int count = 0;
-        while (deque.peek() != target) {
-            deque.offerLast(deque.pollFirst());
-            count += 1;
+    public static void removeBackTarget(Deque<Integer> deque, int target) {
+        while (!deque.isEmpty()) {
+            int num = deque.pollLast();
+            if (num == target) {
+                break;
+            }
+            deque.offerFirst(num);
         }
-        return count;
-    }
-
-    public static int op3Count(int target, Deque<Integer> origin) {
-        Deque<Integer> deque = new ArrayDeque<>(origin);
-        int count = 0;
-        while (deque.peek() != target) {
-            deque.offerFirst(deque.pollLast());
-            count += 1;
-        }
-        return count;
     }
 }
