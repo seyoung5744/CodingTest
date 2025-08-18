@@ -9,22 +9,26 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int n = Integer.parseInt(br.readLine());
-        int[] arr = new int[n];
+        int N = Integer.parseInt(br.readLine());
+        int[] nums = new int[N];
+
         StringTokenizer st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < n; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
+        for (int i = 0; i < N; i++) {
+            nums[i] = Integer.parseInt(st.nextToken());
         }
 
-        Arrays.sort(arr);
-
+        Arrays.sort(nums);
         int sum = 0;
-        for (int i = 1; i < arr.length; i++) {
-            arr[i] += arr[i-1];
-            sum += arr[i];
+
+        for (int i = 1; i < N; i++) {
+            nums[i] += nums[i - 1];
         }
-        
-        sum += arr[0];
+
+        for (int i = 0; i < N; i++) {
+            sum += nums[i];
+        }
         System.out.println(sum);
+
+        br.close();
     }
 }
