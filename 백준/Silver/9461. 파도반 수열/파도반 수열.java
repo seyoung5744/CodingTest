@@ -5,29 +5,21 @@ import java.util.Arrays;
 
 public class Main {
 
-    public static long[] dp = new long[101];
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int T = Integer.parseInt(br.readLine());
 
-        Arrays.fill(dp, -1);
-        dp[0] = 0;
+        long[] dp = new long[101];
         dp[1] = 1;
         dp[2] = 1;
-
+        for (int i = 3; i <= 100; i++) {
+            dp[i] = dp[i - 2] + dp[i - 3];
+        }
         while (T-- > 0) {
             int N = Integer.parseInt(br.readLine());
-            System.out.println(triangle(N));
+            System.out.println(dp[N]);
         }
+        br.close();
     }
-
-    public static long triangle(int N) {
-        if (dp[N] == -1) {
-            return dp[N] = triangle(N - 2) + triangle(N - 3);
-        }
-        return dp[N];
-    }
-
 }
