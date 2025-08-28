@@ -1,36 +1,45 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
 
 public class Main {
 
-    public static int[] dp;
+    private static final int INF = (int) 1e9;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int N = Integer.parseInt(br.readLine());
-        dp = new int[N + 1];
-        
-        Arrays.fill(dp, -1);
-        dp[0] = dp[1] = 0;
-        
-        System.out.println(find(N));
-    }
 
-    public static int find(int N) {
-        if (dp[N] == -1) {
-            if (N % 6 == 0) {
-                dp[N] = 1 + Math.min(find(N / 3), Math.min(find(N / 2), find(N - 1)));
-            } else if (N % 3 == 0) {
-                dp[N] = 1 + Math.min(find(N / 3), find(N - 1));
-            } else if (N % 2 == 0) {
-                dp[N] = 1 + Math.min(find(N / 2), find(N - 1));
-            } else {
-                dp[N] = 1 + find(N - 1);
-            }
+        int[] dp = new int[N + 1];
+        if (N == 1) {
+            System.out.println(0);
+            return;
         }
+        if (N <= 3) {
+            System.out.println(1);
+            return;
+        }
+        // x % 3 == 0 ? x /= 3
+        // x % 2 == 0 ? x /= 2
+        // else x -= 1
 
-        return dp[N];
+        Arrays.fill(dp, INF);
+        dp[2] = 1;
+        dp[3] = 1;
+        for (int x = 4; x < N + 1; x++) {
+            if (x % 3 == 0) {
+                dp[x] = Math.min(dp[x], dp[x / 3] + 1);
+            }
+
+            if (x % 2 == 0) {
+                dp[x] = Math.min(dp[x], dp[x / 2] + 1);
+            }
+
+            dp[x] = Math.min(dp[x], dp[x - 1] + 1);
+        }
+        System.out.println(dp[N]);
+        br.close();
     }
-
 }
