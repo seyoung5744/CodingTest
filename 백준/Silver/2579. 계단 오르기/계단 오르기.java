@@ -16,7 +16,7 @@ public class Main {
         int[] dp = new int[stairCount + 1];
         dp[1] = scores[1];
 
-        if (stairCount >= 2) {
+        if (stairCount > 1) {
             dp[2] = scores[1] + scores[2];
         }
 
