@@ -9,22 +9,21 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int n = Integer.parseInt(br.readLine());
-        int[][] board = new int[n][n];
+        int[][] nums = new int[n][n];
         for (int i = 0; i < n; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
             int idx = 0;
             while (st.hasMoreTokens()) {
-                board[i][idx++] = Integer.parseInt(st.nextToken());
+                nums[i][idx++] = Integer.parseInt(st.nextToken());
             }
         }
 
-        for (int i = n - 2; i >= 0; i--) { // 3
+        for (int i = n - 2; i >= 0; i--) {
             for (int j = 0; j < i + 1; j++) {
-                board[i][j] += Math.max(board[i + 1][j], board[i + 1][j + 1]);
+                nums[i][j] += Math.max(nums[i + 1][j], nums[i + 1][j + 1]);
             }
         }
-
-        System.out.println(board[0][0]);
+        System.out.println(nums[0][0]);
         br.close();
     }
 }
