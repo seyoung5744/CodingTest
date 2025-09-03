@@ -1,39 +1,29 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 
 public class Main {
-
-    public static Integer[] dp;
-    public static int[] arr;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int N = Integer.parseInt(br.readLine());
-        dp = new Integer[N + 1];
+        int n = Integer.parseInt(br.readLine());
+        int[] wines = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            wines[i] = Integer.parseInt(br.readLine());
+        }
+        int[] dp = new int[n + 1];
+        dp[1] = wines[1];
+        if (n > 1)
+            dp[2] = wines[2] + wines[1];
 
-        arr = new int[N + 1];
-        for (int i = 1; i <= N; i++) {
-            arr[i] = Integer.parseInt(br.readLine());
+        for (int i = 3; i <= n; i++) {
+            dp[i] = Math.max(wines[i] + dp[i - 2], Math.max(dp[i - 1], dp[i - 3] + wines[i - 1] + wines[i]));
         }
 
-        dp[0] = 0;
-        dp[1] = arr[1];
+        System.out.println(dp[n]);
 
-        if (N > 1) {
-            dp[2] = arr[1] + arr[2];
-        }
-
-        System.out.println(recur(N));
+        br.close();
     }
-
-    public static int recur(int N) {
-        if (dp[N] == null) {
-            dp[N] = Math.max(recur(N - 1), Math.max(recur(N - 2), recur(N - 3) + arr[N - 1]) + arr[N]);
-        }
-
-        return dp[N];
-    }
-
 }
