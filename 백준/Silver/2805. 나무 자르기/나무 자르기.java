@@ -16,34 +16,31 @@ public class Main {
         int[] heights = new int[N];
         st = new StringTokenizer(br.readLine());
 
-        int maxLen = -1;
+        int maxHeight = -1;
         for (int i = 0; i < N; i++) {
             heights[i] = Integer.parseInt(st.nextToken());
-            if(maxLen < heights[i]){
-                maxLen = heights[i];
-            }
+            maxHeight = Math.max(maxHeight, heights[i]);
         }
 
-        System.out.println(binarySearch(heights, target, maxLen));
+        System.out.println(binary(maxHeight, target, heights));
         br.close();
     }
 
-    private static int binarySearch(int[] nums, int target, int maxLen){
+    private static int binary(int end, int target, int[] heights) {
         int start = 0;
-        int end = maxLen;
 
-        while(start < end){
-            int mid = (end + start) / 2;
-            long count = 0;
-            for(int num : nums){
-                if(num > mid) {
-                    count += num - mid;
-                }
+        while (start < end) {
+            int mid = start + (end - start) / 2;
+
+            long sum = 0;
+            for (int i = heights.length - 1; i >= 0; i--) {
+                if (heights[i] <= mid) continue;
+                sum += heights[i] - mid;
             }
 
-            if(count < target){
+            if (sum < target) {
                 end = mid;
-            }else{
+            } else {
                 start = mid + 1;
             }
         }
