@@ -2,50 +2,59 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Main {
 
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] nc = br.readLine().split(" ");
-        int n = Integer.parseInt(nc[0]);
-        int target = Integer.parseInt(nc[1]);
 
-        int[] points = new int[n];
-        for (int i = 0; i < n; i++) {
-            points[i] = Integer.parseInt(br.readLine());
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        int count = Integer.parseInt(st.nextToken());
+
+        int[] heights = new int[N];
+
+        for (int i = 0; i < N; i++) {
+            heights[i] = Integer.parseInt(br.readLine());
         }
 
-        Arrays.sort(points);
-
-        System.out.println(binarySearch(points, target));
+        Arrays.sort(heights);
+        System.out.println(binary(count, heights));
+        br.close();
     }
 
-    private static int binarySearch(int[] points, int target) {
-        int start = 1;
-        int end = points[points.length - 1] - points[0] + 1;
+    private static int binary(int count, int[] heights) {
+        int start = 0;
+        int end = 1_000_000_001;
 
         while (start < end) {
-            int mid = (end + start) / 2;
+            int mid = start + (end - start) / 2;
 
-            int count = 1;
-            int value = points[0];
-
-            for (int i = 1; i < points.length; i++) {
-                if(points[i] >= value + mid){
-                    value = points[i];
-                    count += 1;
+            int prev = heights[0];
+            int remain = count - 1;
+            for (int i = 1; i < heights.length; i++) {
+                if (heights[i] - prev >= mid)
+                {
+                    remain--;
+                    prev= heights[i];
                 }
+
+                if (remain == 0)
+                    break;
             }
 
-            if(count < target){
-                end = mid;
-            }else{
+            if (remain == 0)
+            {
                 start = mid + 1;
+            }
+            else
+            {
+                end = mid;
             }
         }
 
         return end - 1;
     }
-
 }
