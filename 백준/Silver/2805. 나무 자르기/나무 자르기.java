@@ -1,37 +1,31 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        
-        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int n = Integer.parseInt(st.nextToken());
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
         int target = Integer.parseInt(st.nextToken());
 
-        int[] nums = new int[n];
-        int maxLen = 0;
+        int[] heights = new int[N];
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < n; i++) {
-            nums[i] = Integer.parseInt(st.nextToken());
-            if(maxLen < nums[i]){
-                maxLen = nums[i];
+
+        int maxLen = -1;
+        for (int i = 0; i < N; i++) {
+            heights[i] = Integer.parseInt(st.nextToken());
+            if(maxLen < heights[i]){
+                maxLen = heights[i];
             }
         }
 
-        //bw.write(binarySearch(nums, target, maxLen) + "");
-        System.out.println(binarySearch(nums, target, maxLen));
-        
-        //bw.flush();
-        //bw.close();
-        //br.close();
+        System.out.println(binarySearch(heights, target, maxLen));
+        br.close();
     }
 
     private static int binarySearch(int[] nums, int target, int maxLen){
@@ -56,5 +50,4 @@ public class Main {
 
         return end - 1;
     }
-
 }
